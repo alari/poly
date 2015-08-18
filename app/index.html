@@ -128,7 +128,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <iron-autogrow-textarea value="{{test}}"></iron-autogrow-textarea>
                 <render-remarkable input="{{test}}">{{test}}</render-remarkable>
 
-                <auth-ajax auto url="http://dgtl.pro/api/auth"></auth-ajax>
+                <auth-token value="Bearer some"></auth-token>
+
+                <auth-fetch auto url="/manifest.json"></auth-fetch>
               </paper-material>
 
               <paper-material elevation="1" class="paper-font-body2">

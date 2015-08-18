@@ -1,0 +1,229 @@
+<dom-module id="auth-token">
+    <script>
+        (function(){
+            "use strict";
+
+            var token = "";
+
+            var AuthToken = Polymer({
+                is: "auth-token",
+
+                properties: {
+                    value: {
+                        type: String,
+                        value: token,
+                        observer: "_valueChanged"
+                    }
+                },
+
+                _valueChanged: function(){
+                    token = this.value;
+                }
+            });
+        })();
+    </script>
+</dom-module>
+
+<dom-module id="auth-fetch">
+    <script src="../../bower_components/es6-promise/promise.min.js"></script>
+    <script src="../../bower_components/fetch/fetch.js"></script>
+    <template>
+        <iron-meta id="meta"></iron-meta>
+        <auth-token id="token" value="{{authToken}}"></auth-token>
+    </template>
+    <script>
+        (function(){
+            "use strict";
+
+            function clone(obj) {
+                var copy;
+
+                // Handle the 3 simple types, and null or undefined
+                if (null == obj || "object" != typeof obj) return obj;
+
+                // Handle Date
+                if (obj instanceof Date) {
+                    copy = new Date();
+                    copy.setTime(obj.getTime());
+                    return copy;
+                }
+
+                // Handle Array
+                if (obj instanceof Array) {
+                    copy = [];
+                    for (var i = 0, len = obj.length; i < len; i++) {
+                        copy[i] = clone(obj[i]);
+                    }
+                    return copy;
+                }
+
+                // Handle Object
+                if (obj instanceof Object) {
+                    copy = {};
+                    for (var attr in obj) {
+                        if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
+                    }
+                    return copy;
+                }
+
+                throw new Error("Unable to copy obj! Its type isn't supported.");
+            }
+
+            var AuthFetch = Polymer({
+                is: "auth-fetch",
+
+                properties: {
+                    url: {
+                        type: String,
+                        value: ''
+                    },
+
+                    params: {
+                        type: Object,
+                        value: null
+                    },
+
+                    auto: {
+                        type: Boolean,
+                        value: false
+                    },
+
+                    handleAs: {
+                        type: String,
+                        value: 'json'
+                    },
+
+                    loading: {
+                        type: Boolean,
+                        notify: true,
+                        readOnly: true
+                    },
+
+                    respError: {
+                        type: Object,
+                        readOnly: true
+                    },
+
+                    lastStatus: {
+                        type: Number,
+                        readOnly: true
+                    },
+
+                    lastSuccess: {
+                        type: Object,
+                        readOnly: true
+                    },
+
+                    lastError: {
+                        type: Object,
+                        readOnly: true
+                    },
+
+                    lastJson: {
+                        type: Object,
+                        readOnly: true
+                    },
+
+                    lastText: {
+                        type: String,
+                        readOnly: true
+                    },
+
+                    debounceDuration: {
+                        type: Number,
+                        value: 0,
+                        notify: true
+                    }
+                },
+
+                get options(){
+                    if(!!this.authToken) {
+                        var p = clone(this.params) || {};
+                        p.headers = p.headers || {};
+                        p.headers[this.authHeaderName] = this.authToken;
+                        return p;
+                    } else {
+                        return this.params;
+                    }
+                },
+
+                get authToken(){
+                    return this.$.token.value;
+                },
+
+                set authToken(v){
+                    this.$.token.value = v;
+
+                    this.fire("auth-token", this.authToken);
+                },
+
+                get authHeaderName(){
+                    var ahn = this.$.meta.byKey("auth-header-name");
+                    return ahn || "Authorization";
+                },
+
+                observers: [
+                        "_requestParamsChanged(url, params, auto)"
+                ],
+
+                generateRequest: function(){
+                    window.fetch(this.url, this.options).then(function(response){
+                        console.log("response", response);
+
+                        this.fire("resp", response);
+
+                        if(response.status == 401) {
+                            this.authToken = null;
+                            this.fire("unauthenticated", response);
+                        } else if(response.headers.has(this.authHeaderName)) {
+                            var respAuthToken = response.headers.get(this.authHeaderName);
+                            if(respAuthToken != this.authToken) {
+                                this.authToken = respAuthToken;
+                            }
+                        }
+
+                        this._setLastStatus(response.status);
+
+                        if (response.status >= 200 && response.status < 300) {
+                            this._setLastSuccess(response);
+                            this._setLastError(null);
+                        } else {
+                            this._setLastSuccess(null);
+                            this._setLastError(response);
+                        }
+
+                        this._setLastJson(null);
+                        this._setLastText('');
+
+                        if(response.headers.get("content-type").indexOf("json") > 0) {
+                            return response.json();
+                        } else {
+                            return response.text();
+                        }
+                    }.bind(this)).then(function(body){
+                        if(body instanceof Object) {
+                            this._setLastJson(body);
+                        }
+                        if(typeof body === "string") {
+                            this._setLastText(body);
+                        }
+                    }.bind(this)).catch(function(err){
+                        this._setLastError(err);
+                    }.bind(this));
+                },
+
+                _requestParamsChanged: function(url, params, auto) {
+                    this.debounce("auth-fetch", function(){
+                        if (!this.url && this.url !== '') {
+                            return;
+                        }
+
+                        if (this.auto) {
+                            this.generateRequest();
+                        }
+                    }, this.debounceDuration)
+                }
+            });
+        })();
+    </script>
+</dom-module>
