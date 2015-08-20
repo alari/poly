@@ -181,7 +181,7 @@ gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 gulp.task('serve', ['styles', 'elements', 'images'], function () {
   browserSync({
     notify: false,
-    logPrefix: 'PSK',
+    logPrefix: 'MR',
     snippetOptions: {
       rule: {
         match: '<span id="browser-sync-binding"></span>',
@@ -214,7 +214,7 @@ gulp.task('serve', ['styles', 'elements', 'images'], function () {
 gulp.task('serve:dist', ['default'], function () {
   browserSync({
     notify: false,
-    logPrefix: 'PSK',
+    logPrefix: 'MR',
     snippetOptions: {
       rule: {
         match: '<span id="browser-sync-binding"></span>',

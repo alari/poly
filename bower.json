@@ -9,7 +9,8 @@
     "page": "visionmedia/page.js#~1.6.3",
     "remarkable": "~1.6.0",
     "es6-promise": "~3.0.2",
-    "fetch": "~0.9.0"
+    "fetch": "~0.9.0",
+    "ramda": "~0.17.1"
   },
   "devDependencies": {
     "web-component-tester": "*",

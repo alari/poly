@@ -1,0 +1,147 @@
+<dom-module id="auth-buttons">
+    <link rel="import" href="../../bower_components/paper-input/paper-input.html">
+    <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+    <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+    <template>
+        <auth-fetch url="/api/auth?expand=user" auto last-json="{{authResponse}}" params="{{params}}"></auth-fetch>
+        <auth-token id="token"></auth-token>
+        <auth-user id="user" value="{{user}}"></auth-user>
+
+        <is-auth>
+            <span>{{user.name}}</span>
+            <paper-icon-button icon="icons:settings-power" on-tap="signOut"></paper-icon-button>
+        </is-auth>
+
+        <not-auth>
+            <paper-icon-button icon="icons:perm-identity" on-tap="toggleAuth"></paper-icon-button>
+            <paper-icon-button icon="icons:power-settings-new" on-tap="toggleSignup"></paper-icon-button>
+        </not-auth>
+
+        <paper-dialog id="authDialog">
+
+            <h2>Вход</h2>
+
+            <paper-input label="email" value="{{email}}" type="email" required autofocus></paper-input>
+            <paper-input label="password" value="{{password}}" type="password" required></paper-input>
+
+            <div class="buttons">
+                <paper-button on-tap="postAuth">Вход</paper-button>
+            </div>
+        </paper-dialog>
+
+        <paper-dialog id="signupDialog">
+
+            <h2>Регистрация</h2>
+
+            <paper-input label="email" value="{{email}}" required id="email" on-blur="checkEmailAvailable" error-message="Адрес занят, возможно, вы забыли пароль?"></paper-input>
+            <paper-input label="emailVerify" value="{{emailVerify}}" required id="emailVerify" on-blur="checkEmailVerify" error-message="Адреса не совпадают"></paper-input>
+            <paper-input label="password" value="{{password}}" type="password" required></paper-input>
+
+            <div class="buttons">
+                <paper-button on-tap="postSignup">Создать аккаунт</paper-button>
+            </div>
+        </paper-dialog>
+    </template>
+    <script>
+        (function () {
+            "use strict";
+            Polymer({
+                is: "auth-buttons",
+                properties: {
+                    authResponse: {
+                        type: Object,
+                        observer: "authResp",
+                        notify: true
+                    },
+                    email: {
+                        type: String,
+                        value: null,
+                        notify: true
+                    },
+                    user: {
+                        type: Object,
+                        notify: true
+                    },
+                    emailVerify: {
+                        type: String,
+                        value: null,
+                        notify: true
+                    },
+                    password: {
+                        type: String,
+                        value: null,
+                        notify: true
+                    },
+                    params: {
+                        type: Object,
+                        value: null,
+                        readOnly: true,
+                        notify: true
+                    }
+                },
+                authResp: function () {
+                    console.log("got auth resp", this.authResponse);
+
+                    if(!!this.authResponse) {
+                        this.$.user.setUser(this.authResponse.user);
+                        this.$.user.setRoles(this.authResponse.roles);
+                    } else {
+                        this.$.user.setUser(null);
+                        this.$.user.setRoles([]);
+                    }
+
+                    this.$.authDialog.close();
+                    this.$.signupDialog.close();
+                },
+                toggleAuth: function() {
+                    this.$.signupDialog.close();
+                    this.$.authDialog.toggle();
+                },
+                toggleSignup: function() {
+                    this.$.signupDialog.toggle();
+                    this.$.authDialog.close();
+                },
+                postAuth: function() {
+                    this._setParams({
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            provider: "email",
+                            email: this.email,
+                            password: this.password
+                        })
+                    })
+                },
+                postSignup: function() {
+
+                    this._setParams({
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            provider: "email",
+                            email: this.email,
+                            password: this.password
+                        })
+                    })
+                },
+                checkEmailVerify: function() {
+                    if(this.email != this.emailVerify) {
+                        this.$.emailVerify.invalid = true;
+                        console.log("not verified")
+                    }
+                },
+                checkEmailAvailable: function() {
+                    if(this.email) true;
+                },
+                signOut: function() {
+                    this.$.token.setValue(null);
+                }
+            })
+        })();
+    </script>
+</dom-module>

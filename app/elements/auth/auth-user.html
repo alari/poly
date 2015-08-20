@@ -1,0 +1,53 @@
+<dom-module id="auth-user">
+    <script>
+        (function(){
+            "use strict";
+
+            var user = null, roles = [], elements = [];
+
+            Polymer({
+                is: "auth-user",
+
+                properties: {
+                    value: {
+                        type: Object,
+                        value: null,
+                        notify: true,
+                        readOnly: true
+                    },
+
+                    roles: {
+                        type: Array,
+                        value: [],
+                        notify: true,
+                        readOnly: true
+                    }
+                },
+
+                attached: function(){
+                    elements.push(this);
+                },
+
+                detached: function(){
+                    var t = this;
+                    elements = R.reject(function(v){return v === t}, elements);
+                },
+
+                setUser: function(v) {
+                    user = v;
+                    R.map(function(u){
+                        u._setValue(v);
+                    }, elements);
+                },
+
+                setRoles: function(v) {
+                    roles = v;
+                    R.map(function(u){
+                        u._setRoles(v);
+                    }, elements);
+                }
+
+            })
+        })();
+    </script>
+</dom-module>
