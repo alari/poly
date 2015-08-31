@@ -1,0 +1,27 @@
+<dom-module id="nodes-route">
+    <template>
+        <auth-fetch auto url="/api/nodes?expand=items.{text,user}" last-json="{{lastJson}}"></auth-fetch>
+
+
+        <template is="dom-repeat" items="{{lastJson.items}}">
+            <paper-material elevation="1">
+
+                <h2>{{item.title}}</h2>
+
+                <div><render-remarkable input="{{item.text.content}}"></render-remarkable></div>
+
+                <div><a href$="[[itemHref(item)]]" data-route="node">{{item.id}}</a></div>
+            </paper-material>
+
+        </template>
+
+    </template>
+    <script>
+        Polymer({
+            is: "nodes-route",
+        itemHref: function(item){
+            return "/nodes/"+item.id;
+        }
+        })
+    </script>
+</dom-module>

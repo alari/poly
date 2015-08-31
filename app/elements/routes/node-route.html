@@ -1,0 +1,30 @@
+<dom-module id="node-route">
+    <template>
+        <paper-material elevation="1">
+            <auth-fetch auto url="{{nodeHref}}" last-json="{{lastJson}}"></auth-fetch>
+
+            <h2>{{lastJson.title}}</h2>
+
+            <div>
+                <render-remarkable input="{{lastJson.text.content}}"></render-remarkable>
+            </div>
+        </paper-material>
+    </template>
+    <script>
+        Polymer({
+            is: "node-route",
+            properties: {
+                nodeId: {
+                    type: String,
+                    notify: true
+                },
+                nodeHref: {
+                    computed: "computeNodeHref(nodeId)"
+                }
+            },
+            computeNodeHref: function(nodeId){
+                return "/api/nodes/"+nodeId+"?expand=user,text";
+            }
+        })
+    </script>
+</dom-module>
