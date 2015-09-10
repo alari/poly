@@ -1,0 +1,39 @@
+<dom-module is="routing-root">
+    <script>
+        Polymer({
+            is: "routing-root",
+            properties: {
+                route: {
+                    type: String,
+                    notify: true,
+                    default: "home-route"
+                },
+                params: {
+                    type: Object,
+                    notify: true,
+                    default: null
+                },
+                routeChanging: {
+                    type: Boolean,
+                    notify: true,
+                    default: false
+                }
+            },
+            observers: [
+                    '_progressRoute(routeChanging)'
+            ],
+            _progressRoute: function(routeChanging) {
+                var root = Polymer.dom(this.root);
+                if(routeChanging) {
+                    R.forEach(function(n){
+                        root.removeChild(n);
+                    }, root.childNodes);
+                } else {
+                    var r = document.createElement(this.route);
+                    r.params = this.params;
+                    root.appendChild(r);
+                }
+            }
+        })
+    </script>
+</dom-module>

@@ -56,7 +56,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </head>
 
 <body unresolved class="fullbleed layout vertical">
-<sp an id="browser-sync-binding"></span>
 <template is="dom-bind" id="app">
 
     <paper-drawer-panel id="paperDrawerPanel">
@@ -112,27 +111,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             <!-- Main Content -->
             <div class="content">
-                <iron-pages attr-for-selected="data-route" selected="{{route}}">
-
-                    <section data-route="home">
-                        <home-route></home-route>
-                    </section>
-
-                    <section data-route="add-post">
-                        <add-post></add-post>
-                    </section>
-
-
-                    <section data-route="nodes">
-                        <nodes-route></nodes-route>
-                    </section>
-
-                    <section data-route="node">
-                        <node-route node-id="{{params.name}}"></node-route>
-                    </section>
-
-
-                </iron-pages>
+                <routing-root route="{{route}}" params="{{params}}" route-changing="{{routeChanging}}"></routing-root>
             </div>
         </paper-scroll-header-panel>
     </paper-drawer-panel>

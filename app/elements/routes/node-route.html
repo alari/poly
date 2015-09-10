@@ -14,16 +14,19 @@
         Polymer({
             is: "node-route",
             properties: {
-                nodeId: {
-                    type: String,
+                params: {
+                    type: Object,
                     notify: true
                 },
                 nodeHref: {
-                    computed: "computeNodeHref(nodeId)"
+                    computed: "computeNodeHref(params)"
                 }
             },
-            computeNodeHref: function(nodeId){
-                return "/api/nodes/"+nodeId+"?expand=user,text";
+            attached: function () {
+                console.log("node route attached, params = ", this.params);
+            },
+            computeNodeHref: function (params) {
+                return "/api/nodes/" + params.name + "?expand=user,text";
             }
         })
     </script>
