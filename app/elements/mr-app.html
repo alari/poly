@@ -1,0 +1,97 @@
+<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+<link rel="import" href="../../bower_components/paper-drawer-panel/paper-drawer-panel.html">
+<link rel="import" href="../../bower_components/paper-header-panel/paper-header-panel.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+
+<!--
+Extended Header + List Left + Card Over Toolbar
+ -->
+<dom-module id="mr-app">
+
+  <link rel="import" type="css" href="mr-app.css">
+
+  <template>
+
+    <auth-fetch auto url="/api/nodes?expand=items.{text,user}" last-json="{{lastJson}}"></auth-fetch>
+
+    <paper-drawer-panel id="paperDrawerPanel">
+      <!-- Drawer Scroll Header Panel -->
+      <paper-scroll-header-panel drawer fixed>
+
+        <!-- Drawer Toolbar -->
+        <paper-toolbar id="drawerToolbar">
+          <span class="paper-font-title">Menu</span>
+        </paper-toolbar>
+
+        <!-- Drawer Content -->
+        <paper-menu class="list" on-iron-activate="_listTap">
+          <template is="dom-repeat" items="{{lastJson.items}}">
+            <paper-item><a href$="[[itemHref(item)]]" data-route="node">{{item.title}}</a></paper-item>
+          </template>
+        </paper-menu>
+      </paper-scroll-header-panel>
+
+      <!-- Main Area -->
+      <paper-scroll-header-panel main condenses keep-condensed-header>
+
+        <!-- Main Toolbar -->
+        <paper-toolbar id="mainToolbar" class="tall">
+          <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
+          <span class="flex"></span>
+
+          <!-- Toolbar icons -->
+          <auth-buttons></auth-buttons>
+
+          <!-- Application name -->
+          <div class="middle middle-container center horizontal layout">
+            <div class="app-name"></div>
+          </div>
+
+          <!-- Application sub title -->
+          <div class="bottom bottom-container center horizontal layout">
+            <div class="bottom-title paper-font-subhead"></div>
+          </div>
+
+        </paper-toolbar>
+
+        <!-- Main Content -->
+        <div class="content">
+          <content></content>
+
+        </div>
+      </paper-scroll-header-panel>
+    </paper-drawer-panel>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'mr-app',
+      properties: {
+        _isMobile: {
+          type: Boolean,
+          observer: '_isMobileChanged'
+        }
+      },
+      _listTap: function () {
+        this.$.drawerPanel.closeDrawer();
+      },
+      _isMobileChanged: function (isMobile) {
+        this.mainMode = isMobile ? 'seamed' : 'cover';
+        this.drawerWidth = isMobile ? '100%' : '320px';
+        this.toolbarClass = isMobile ? '' : 'tall';
+        this.updateStyles();
+      },
+      itemHref: function (item) {
+        return "/nodes/" + item.id;
+      }
+    });
+  </script>
+
+</dom-module>

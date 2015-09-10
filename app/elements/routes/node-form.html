@@ -1,0 +1,96 @@
+<dom-module id="node-form">
+  <style>
+    paper-material {
+      background-color: white;
+      min-height: 120px;
+      max-width: 720px;
+      margin: auto;
+    }
+    :host .container {
+      padding: 2em;
+    }
+    iron-autogrow-textarea {
+      width: 100%;
+      padding: 2em;
+      border: 0;
+      min-height: 200px;
+    }
+  </style>
+  <template>
+    <auth-fetch id="fetch" url="/api/nodes" params="{{fetchParams}}" last-json="{{node}}"></auth-fetch>
+
+    <paper-material elevation="1">
+
+      <paper-input title="Title" placeholder="Название" value="{{node.title}}" on-input="_setTitle"></paper-input>
+
+      <iron-autogrow-textarea placeholder="Текст" bind-value="{{node.text.content}}"></iron-autogrow-textarea>
+
+      <paper-button raised on-tap="createPost">Опубликовать</paper-button>
+    </paper-material>
+  </template>
+  <script>
+    Polymer({
+      is: "node-form",
+      properties: {
+        node: {
+          type: Object,
+          notify: true,
+          value: {
+            kind: "Post",
+            title: "",
+            text: {
+              content: "",
+              version: 1
+            }
+          }
+        },
+        fetchParams: {
+          type: Object,
+          notify: true
+        },
+        params: {
+          type: Object,
+          notify: true
+        },
+        saving: {
+          type: Boolean,
+          default: false
+        }
+      },
+      observers: [
+          "_setTitle(node)",
+          "_saved(node)",
+          "_params(params)"
+      ],
+      _setTitle: function(node) {
+        document.title = (this.node && this.node.title) || "Add Post";
+        this.notifyPath("node.title", this.node.title);
+        this.notifyPath("node.text.content", this.node.text.content);
+      },
+      _params: function(params) {
+        if(params && params.name) {
+          this.fetchParams = {method: "GET"};
+          this.$.fetch.url = "/api/nodes/"+params.name+"?expand=text";
+          this.$.fetch.generateRequest();
+        }
+      },
+      createPost: function () {
+        console.log(this.title, this.text);
+        this.fetchParams = {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(this.node)
+        };
+        this.saving = true;
+        this.$.fetch.generateRequest();
+      },
+      _saved: function(lastJson) {
+        if(lastJson && lastJson.id && this.saving) {
+          page("/nodes/"+lastJson.id);
+        }
+      }
+    })
+  </script>
+</dom-module>

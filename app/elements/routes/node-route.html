@@ -1,32 +1,76 @@
 <dom-module id="node-route">
+  <style>
+    paper-material {
+      background-color: white;
+      min-height: 120px;
+      max-width: 720px;
+      margin: 0px auto;
+    }
+    :host .container {
+      padding: 2em;
+    }
+  </style>
   <template>
+    <auth-fetch auto url="{{nodeHref}}" last-json="{{lastJson}}"></auth-fetch>
+
     <paper-material elevation="1">
-      <auth-fetch auto url="{{nodeHref}}" last-json="{{lastJson}}"></auth-fetch>
+      <div class="container">
 
-      <h2>{{lastJson.title}}</h2>
+        <h1>{{lastJson.title}}</h1>
 
-      <div>
-        <render-remarkable input="{{lastJson.text.content}}"></render-remarkable>
+        <div>
+          <render-remarkable input="{{lastJson.text.content}}"></render-remarkable>
+        </div>
+
+        <div>
+          <if-auth>
+            <a href$="{{nodeEditHref}}">Редактировать</a>
+          </if-auth>
+        </div>
       </div>
     </paper-material>
   </template>
   <script>
     Polymer({
       is: "node-route",
+
       properties: {
         params: {
           type: Object,
           notify: true
         },
+        lastJson: {
+          type: Object,
+          notify: true
+        },
         nodeHref: {
           computed: "computeNodeHref(params)"
+        },
+        nodeEditHref: {
+          computed: "computeNodeEditHref(params)"
         }
       },
+
+      observers: [
+        "_nodeLoad(lastJson)"
+      ],
+
       attached: function () {
         console.log("node route attached, params = ", this.params);
       },
+
       computeNodeHref: function (params) {
         return "/api/nodes/" + params.name + "?expand=user,text";
+      },
+
+      computeNodeEditHref: function (params) {
+        return "/nodes/" + params.name + "/edit";
+      },
+
+      _nodeLoad: function (lastJson) {
+        if (!!lastJson && lastJson.title) {
+          document.title = lastJson.title;
+        }
       }
     })
   </script>
