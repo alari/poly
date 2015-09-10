@@ -1,26 +1,26 @@
 <dom-module id="is-auth">
-    <template>
-        <auth-token non-empty="{{isAuth}}"></auth-token>
-        <span>{{!isAuth}}</span>
-        <template is="dom-if" if="{{isAuth}}" respawn>
-            <div hidden$="{{!isAuth}}">
-                <content></content>
-            </div>
-        </template>
+  <template>
+    <auth-token non-empty="{{isAuth}}"></auth-token>
+    <span>{{!isAuth}}</span>
+    <template is="dom-if" if="{{isAuth}}" respawn>
+      <div hidden$="{{!isAuth}}">
+        <content></content>
+      </div>
     </template>
-    <script>
-        (function() {
-            "use strict";
+  </template>
+  <script>
+    (function () {
+      "use strict";
 
-            Polymer({
-                is: "is-auth",
-                properties: {
-                    isAuth: {
-                        type: Boolean,
-                        notify: true
-                    }
-                }
-            })
-        })();
-    </script>
+      Polymer({
+        is: "is-auth",
+        properties: {
+          isAuth: {
+            type: Boolean,
+            notify: true
+          }
+        }
+      })
+    })();
+  </script>
 </dom-module>

@@ -1,63 +1,65 @@
 <dom-module id="auth-token">
-    <script>
-        (function(){
-            "use strict";
+  <script>
+    (function () {
+      "use strict";
 
-            var token = "",
-                    elements = [],
-                    storageLoaded = false;
+      var token = "",
+          elements = [],
+          storageLoaded = false;
 
-            var AuthToken = Polymer({
-                is: "auth-token",
+      var AuthToken = Polymer({
+        is: "auth-token",
 
-                properties: {
-                    isEmpty: {
-                        type: Boolean,
-                        value: true,
-                        notify: true,
-                        readOnly: true
-                    },
-                    nonEmpty: {
-                        type: Boolean,
-                        value: false,
-                        notify: true,
-                        readOnly: true
-                    }
-                },
+        properties: {
+          isEmpty: {
+            type: Boolean,
+            value: true,
+            notify: true,
+            readOnly: true
+          },
+          nonEmpty: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            readOnly: true
+          }
+        },
 
-                attached: function(){
-                    elements.push(this);
-                    if(!storageLoaded && window.localStorage) {
-                        this.setValue(window.localStorage.getItem("auth.token"));
-                    }
-                },
+        attached: function () {
+          elements.push(this);
+          if (!storageLoaded && window.localStorage) {
+            this.setValue(window.localStorage.getItem("auth.token"));
+          }
+        },
 
-                detached: function(){
-                    var t = this;
-                    elements = R.reject(function(v){return v === t}, elements);
-                },
+        detached: function () {
+          var t = this;
+          elements = R.reject(function (v) {
+            return v === t
+          }, elements);
+        },
 
-                getValue: function() {
-                    return token;
-                },
+        getValue: function () {
+          return token;
+        },
 
-                setValue: function(v) {
-                    token = v;
-                    R.map(function(e){
-                        e._setNonEmpty(!!v);
-                        e._setIsEmpty(!e.nonEmpty);
-                    }, elements);
-                    if(window.localStorage) {
-                        this.debounce("store-ls", function(){
-                            if(!!token) {
-                                window.localStorage.setItem("auth.token", token);
-                            } else {
-                                window.localStorage.removeItem("auth.token");
-                            }
-                        });
-                    }
-                }
+        setValue: function (v) {
+          token = v;
+          R.map(function (e) {
+            e._setNonEmpty(!!v);
+            e._setIsEmpty(!e.nonEmpty);
+          }, elements);
+          if (window.localStorage) {
+            this.debounce("store-ls", function () {
+              if (!!token) {
+                window.localStorage.setItem("auth.token", token);
+              } else {
+                window.localStorage.removeItem("auth.token");
+              }
             });
-        })();
-    </script>
+          }
+        }
+      });
+    })();
+  </script>
 </dom-module>

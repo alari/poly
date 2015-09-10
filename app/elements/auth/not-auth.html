@@ -1,25 +1,25 @@
 <dom-module id="not-auth">
-    <template>
-        <auth-token is-empty="{{notAuth}}"></auth-token>
-        <template is="dom-if" if="{{notAuth}}" respawn>
-            <div hidden$="{{!notAuth}}">
-                <content></content>
-            </div>
-        </template>
+  <template>
+    <auth-token is-empty="{{notAuth}}"></auth-token>
+    <template is="dom-if" if="{{notAuth}}" respawn>
+      <div hidden$="{{!notAuth}}">
+        <content></content>
+      </div>
     </template>
-    <script>
-        (function() {
-            "use strict";
+  </template>
+  <script>
+    (function () {
+      "use strict";
 
-            Polymer({
-                is: "not-auth",
-                properties: {
-                    notAuth: {
-                        type: Boolean,
-                        notify: true
-                    }
-                }
-            })
-        })();
-    </script>
+      Polymer({
+        is: "not-auth",
+        properties: {
+          notAuth: {
+            type: Boolean,
+            notify: true
+          }
+        }
+      })
+    })();
+  </script>
 </dom-module>

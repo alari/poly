@@ -1,182 +1,182 @@
 <dom-module id="auth-fetch">
-    <script src="../../bower_components/es6-promise/promise.min.js"></script>
-    <script src="../../bower_components/fetch/fetch.js"></script>
-    <script src="../../bower_components/ramda/dist/ramda.min.js"></script>
-    <template>
-        <iron-meta id="meta"></iron-meta>
-        <auth-token id="token"></auth-token>
-    </template>
-    <script>
-        (function(){
-            "use strict";
+  <script src="../../bower_components/es6-promise/promise.min.js"></script>
+  <script src="../../bower_components/fetch/fetch.js"></script>
+  <script src="../../bower_components/ramda/dist/ramda.min.js"></script>
+  <template>
+    <iron-meta id="meta"></iron-meta>
+    <auth-token id="token"></auth-token>
+  </template>
+  <script>
+    (function () {
+      "use strict";
 
-            var AuthFetch = Polymer({
-                is: "auth-fetch",
+      var AuthFetch = Polymer({
+        is: "auth-fetch",
 
-                properties: {
-                    url: {
-                        type: String,
-                        value: ''
-                    },
+        properties: {
+          url: {
+            type: String,
+            value: ''
+          },
 
-                    params: {
-                        type: Object,
-                        value: null
-                    },
+          params: {
+            type: Object,
+            value: null
+          },
 
-                    auto: {
-                        type: Boolean,
-                        value: false
-                    },
+          auto: {
+            type: Boolean,
+            value: false
+          },
 
-                    handleAs: {
-                        type: String,
-                        value: 'json'
-                    },
+          handleAs: {
+            type: String,
+            value: 'json'
+          },
 
-                    loading: {
-                        type: Boolean,
-                        notify: true,
-                        readOnly: true
-                    },
+          loading: {
+            type: Boolean,
+            notify: true,
+            readOnly: true
+          },
 
-                    respError: {
-                        type: Object,
-                        readOnly: true,
-                        notify: true
-                    },
+          respError: {
+            type: Object,
+            readOnly: true,
+            notify: true
+          },
 
-                    lastStatus: {
-                        type: Number,
-                        readOnly: true,
-                        notify: true
-                    },
+          lastStatus: {
+            type: Number,
+            readOnly: true,
+            notify: true
+          },
 
-                    lastSuccess: {
-                        type: Object,
-                        readOnly: true,
-                        notify: true
-                    },
+          lastSuccess: {
+            type: Object,
+            readOnly: true,
+            notify: true
+          },
 
-                    lastError: {
-                        type: Object,
-                        readOnly: true,
-                        notify: true
-                    },
+          lastError: {
+            type: Object,
+            readOnly: true,
+            notify: true
+          },
 
-                    lastJson: {
-                        type: Object,
-                        readOnly: true,
-                        notify: true
-                    },
+          lastJson: {
+            type: Object,
+            readOnly: true,
+            notify: true
+          },
 
-                    lastText: {
-                        type: String,
-                        readOnly: true,
-                        notify: true
-                    },
+          lastText: {
+            type: String,
+            readOnly: true,
+            notify: true
+          },
 
-                    debounceDuration: {
-                        type: Number,
-                        value: 0,
-                        notify: true
-                    }
-                },
+          debounceDuration: {
+            type: Number,
+            value: 0,
+            notify: true
+          }
+        },
 
-                get options(){
-                    if(!!this.authToken) {
-                        var p = R.clone(this.params) || {};
-                        p.headers = p.headers || {};
-                        p.headers[this.authHeaderName] = this.authToken;
-                        return p;
-                    } else {
-                        return this.params;
-                    }
-                },
+        get options() {
+          if (!!this.authToken) {
+            var p = R.clone(this.params) || {};
+            p.headers = p.headers || {};
+            p.headers[this.authHeaderName] = this.authToken;
+            return p;
+          } else {
+            return this.params;
+          }
+        },
 
-                get authToken(){
-                    return this.$.token.getValue();
-                },
+        get authToken() {
+          return this.$.token.getValue();
+        },
 
-                set authToken(v){
-                    this.$.token.setValue(v);
+        set authToken(v) {
+          this.$.token.setValue(v);
 
-                    this.fire("auth-token", this.authToken);
-                },
+          this.fire("auth-token", this.authToken);
+        },
 
-                get authHeaderName(){
-                    var ahn = this.$.meta.byKey("auth-header-name");
-                    return ahn || "Authorization";
-                },
+        get authHeaderName() {
+          var ahn = this.$.meta.byKey("auth-header-name");
+          return ahn || "Authorization";
+        },
 
-                observers: [
-                        "_requestParamsChanged(url, params, auto)"
-                ],
+        observers: [
+          "_requestParamsChanged(url, params, auto)"
+        ],
 
-                generateRequest: function(){
-                    window.fetch(this.url, this.options).then(function(response){
-                        console.log("response", response);
+        generateRequest: function () {
+          window.fetch(this.url, this.options).then(function (response) {
+            console.log("response", response);
 
-                        this.fire("resp", response);
+            this.fire("resp", response);
 
-                        if(response.status == 401) {
-                            this.authToken = null;
-                            this.fire("unauthenticated", response);
-                        } else if(response.headers.has(this.authHeaderName)) {
-                            var respAuthToken = response.headers.get(this.authHeaderName);
-                            if(respAuthToken != this.authToken) {
-                                this.authToken = respAuthToken;
-                            }
-                        }
+            if (response.status == 401) {
+              this.authToken = null;
+              this.fire("unauthenticated", response);
+            } else if (response.headers.has(this.authHeaderName)) {
+              var respAuthToken = response.headers.get(this.authHeaderName);
+              if (respAuthToken != this.authToken) {
+                this.authToken = respAuthToken;
+              }
+            }
 
-                        this._setLastStatus(response.status);
+            this._setLastStatus(response.status);
 
-                        if (response.status >= 200 && response.status < 300) {
-                            this._setLastSuccess(response);
-                            this._setLastError(null);
-                        } else {
-                            this._setLastSuccess(null);
-                            this._setLastError(response);
-                        }
+            if (response.status >= 200 && response.status < 300) {
+              this._setLastSuccess(response);
+              this._setLastError(null);
+            } else {
+              this._setLastSuccess(null);
+              this._setLastError(response);
+            }
 
-                        this._setLastJson(null);
-                        this._setLastText('');
+            this._setLastJson(null);
+            this._setLastText('');
 
-                        if(response.headers.has("content-type") && response.headers.get("content-type").indexOf("json") > 0) {
-                            return response.json();
-                        } else {
-                            return response.text();
-                        }
-                    }.bind(this)).then(function(body){
-                        if(body instanceof Object) {
-                            this._setLastJson(body);
-                        }
-                        if(typeof body === "string") {
-                            this._setLastText(body);
-                        }
-                    }.bind(this)).catch(function(err){
-                        console.error("error!", err);
-                        this._setLastError(err);
-                    }.bind(this));
-                },
+            if (response.headers.has("content-type") && response.headers.get("content-type").indexOf("json") > 0) {
+              return response.json();
+            } else {
+              return response.text();
+            }
+          }.bind(this)).then(function (body) {
+            if (body instanceof Object) {
+              this._setLastJson(body);
+            }
+            if (typeof body === "string") {
+              this._setLastText(body);
+            }
+          }.bind(this)).catch(function (err) {
+            console.error("error!", err);
+            this._setLastError(err);
+          }.bind(this));
+        },
 
-                _requestParamsChanged: function(url, params, auto) {
-                    console.log("changed", url, params, auto);
-                    this.debounce("auth-fetch", function(){
-                        if (!this.url && this.url !== '') {
-                            return;
-                        }
+        _requestParamsChanged: function (url, params, auto) {
+          console.log("changed", url, params, auto);
+          this.debounce("auth-fetch", function () {
+            if (!this.url && this.url !== '') {
+              return;
+            }
 
-                        if (this.auto) {
-                            this.generateRequest();
-                        }
-                    }, this.debounceDuration)
-                },
+            if (this.auto) {
+              this.generateRequest();
+            }
+          }, this.debounceDuration)
+        },
 
-                attached: function() {
-                    this._requestParamsChanged(this.url, this.params, this.auto);
-                }
-            });
-        })();
-    </script>
+        attached: function () {
+          this._requestParamsChanged(this.url, this.params, this.auto);
+        }
+      });
+    })();
+  </script>
 </dom-module>

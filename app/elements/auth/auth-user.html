@@ -1,53 +1,55 @@
 <dom-module id="auth-user">
-    <script>
-        (function(){
-            "use strict";
+  <script>
+    (function () {
+      "use strict";
 
-            var user = null, roles = [], elements = [];
+      var user = null, roles = [], elements = [];
 
-            Polymer({
-                is: "auth-user",
+      Polymer({
+        is: "auth-user",
 
-                properties: {
-                    value: {
-                        type: Object,
-                        value: null,
-                        notify: true,
-                        readOnly: true
-                    },
+        properties: {
+          value: {
+            type: Object,
+            value: null,
+            notify: true,
+            readOnly: true
+          },
 
-                    roles: {
-                        type: Array,
-                        value: [],
-                        notify: true,
-                        readOnly: true
-                    }
-                },
+          roles: {
+            type: Array,
+            value: [],
+            notify: true,
+            readOnly: true
+          }
+        },
 
-                attached: function(){
-                    elements.push(this);
-                },
+        attached: function () {
+          elements.push(this);
+        },
 
-                detached: function(){
-                    var t = this;
-                    elements = R.reject(function(v){return v === t}, elements);
-                },
+        detached: function () {
+          var t = this;
+          elements = R.reject(function (v) {
+            return v === t
+          }, elements);
+        },
 
-                setUser: function(v) {
-                    user = v;
-                    R.map(function(u){
-                        u._setValue(v);
-                    }, elements);
-                },
+        setUser: function (v) {
+          user = v;
+          R.map(function (u) {
+            u._setValue(v);
+          }, elements);
+        },
 
-                setRoles: function(v) {
-                    roles = v;
-                    R.map(function(u){
-                        u._setRoles(v);
-                    }, elements);
-                }
+        setRoles: function (v) {
+          roles = v;
+          R.map(function (u) {
+            u._setRoles(v);
+          }, elements);
+        }
 
-            })
-        })();
-    </script>
+      })
+    })();
+  </script>
 </dom-module>
