@@ -11,24 +11,30 @@
     }
   </style>
   <template>
-    <auth-fetch auto url="{{nodeHref}}" last-json="{{lastJson}}"></auth-fetch>
+    <meta-route load href="{{nodeHref}}" expand="user,text" meta-response="{{node}}">
 
-    <paper-material elevation="1">
-      <div class="container">
+      <meta-resource model="{{node}}">
+        <paper-material elevation="1">
+          <div class="container">
 
-        <h1>{{lastJson.title}}</h1>
+            <h1>{{node.title}}</h1>
 
-        <div>
-          <render-remarkable input="{{lastJson.text.content}}"></render-remarkable>
-        </div>
+            <meta-resource model="{{node.text}}">
+            <div>
+              <render-remarkable input="{{node.text.content}}"></render-remarkable>
+            </div>
+            </meta-resource>
 
-        <div>
-          <if-auth>
-            <a href$="{{nodeEditHref}}">Редактировать</a>
-          </if-auth>
-        </div>
-      </div>
-    </paper-material>
+            <div>
+              <is-auth user="{{node.user}}">
+                <a href$="{{nodeEditHref}}">Редактировать</a>
+              </is-auth>
+            </div>
+          </div>
+        </paper-material>
+      </meta-resource>
+
+    </meta-route>
   </template>
   <script>
     Polymer({
@@ -39,7 +45,7 @@
           type: Object,
           notify: true
         },
-        lastJson: {
+        node: {
           type: Object,
           notify: true
         },
@@ -60,7 +66,7 @@
       },
 
       computeNodeHref: function (params) {
-        return "/api/nodes/" + params.name + "?expand=user,text";
+        return "/api/nodes/" + params.name;
       },
 
       computeNodeEditHref: function (params) {

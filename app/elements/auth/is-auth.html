@@ -1,7 +1,6 @@
 <dom-module id="is-auth">
   <template>
     <auth-token non-empty="{{isAuth}}"></auth-token>
-    <span>{{!isAuth}}</span>
     <template is="dom-if" if="{{isAuth}}" respawn>
       <div hidden$="{{!isAuth}}">
         <content></content>

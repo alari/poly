@@ -1,0 +1,43 @@
+<dom-module id="meta-button">
+  <template>
+    <content></content>
+  </template>
+  <script>
+    Polymer({
+      is: "meta-button",
+      properties: {
+        for: {
+          type: Object
+        },
+        action: {
+          type: String
+        },
+        method: {
+          type: String,
+          value: "POST"
+        },
+        body: {
+          type: Object
+        },
+        updateModel: {
+          type: Boolean,
+          value: false
+        }
+      },
+      listeners: {
+        tap: "_onTap"
+      },
+      _onTap: function() {
+        console.log("i am tapped!", this.method);
+        var href = (this.for && this.for.meta) ? this.for.meta.href : null;
+        this.fire("metaAction", {
+          href: href,
+          action: this.action,
+          method: this.method,
+          body: this.body,
+          updateModel: this.updateModel
+        });
+      }
+    })
+  </script>
+</dom-module>

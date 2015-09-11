@@ -1,0 +1,46 @@
+<link rel="import" href="../auth/auth-fetch.html">
+
+<dom-module id="meta-route">
+  <template>
+    <auth-fetch auto="{{load}}" url="{{href}}" last-json="{{metaResponse}}" params="{{params}}"></auth-fetch>
+    <content></content>
+  </template>
+  <script>
+    Polymer({
+      is: "meta-route",
+      properties: {
+        href: {
+          type: String
+        },
+        metaResponse: {
+          type: Object,
+          notify: true
+        },
+        expand: {
+          type: String,
+          notify: true,
+          value: ""
+        },
+        load: {
+          type: Boolean,
+          notify: true,
+          value: true
+        },
+        params: {
+          computed: "_computeParams(expand)"
+        }
+      },
+      _computeParams: function(expand) {
+        if(!!expand) {
+          return {
+            headers: {
+              Accept: "application/json;expand=" + expand
+            }
+          };
+        } else {
+          return {};
+        }
+      }
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,52 @@
+<dom-module id="meta-resource">
+  <template>
+    <auth-fetch id="fetch" last-json="{{lastJson}}"></auth-fetch>
+    <content></content>
+  </template>
+  <script>
+    Polymer({
+      is: "meta-resource",
+      properties: {
+        model: {
+          type: Object,
+          notify: true
+        },
+        lastJson: {
+          type: Object,
+          observer: "_loaded"
+        }
+      },
+      listeners: {
+        'metaAction': '_action'
+      },
+      _action: function(e) {
+        if(!e.detail.href || (e.detail.href == this.model.meta.href)) {
+          e.stopPropagation();
+          console.log(e.detail);
+          this.$.fetch.params = {
+            method: e.detail.method,
+            headers: {
+              Accept: this.model.meta.mediaType,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(e.detail.body || this.model)
+          };
+          this.$.fetch.url = this.model.meta.href + (Boolean(e.detail.action) ? "/actions/"+ e.detail.action : "");
+          this.button = e.target;
+          this.updateModel = e.detail.updateModel;
+          this.$.fetch.generateRequest();
+        }
+      },
+      _loaded: function(json) {
+        console.log("action performed", json);
+        if(!!this.button) {
+          this.button.fire("complete", json);
+        }
+        if(this.updateModel) {
+          this.model = json;
+          this.updateModel = false;
+        }
+      }
+    })
+  </script>
+</dom-module>
