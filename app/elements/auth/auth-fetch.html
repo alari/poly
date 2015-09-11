@@ -150,13 +150,16 @@
           }.bind(this)).then(function (body) {
             if (body instanceof Object) {
               this._setLastJson(body);
+              this.fire("json", body);
             }
             if (typeof body === "string") {
               this._setLastText(body);
+              this.fire("text", body);
             }
           }.bind(this)).catch(function (err) {
             console.error("error!", err);
             this._setLastError(err);
+            this.fire("error", body);
           }.bind(this));
         },
 

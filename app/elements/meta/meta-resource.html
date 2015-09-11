@@ -1,6 +1,6 @@
 <dom-module id="meta-resource">
   <template>
-    <auth-fetch id="fetch" last-json="{{lastJson}}"></auth-fetch>
+    <auth-fetch id="fetch" on-json="_respJson" on-text="_respText" on-error="_respError"></auth-fetch>
     <content></content>
   </template>
   <script>
@@ -10,10 +10,6 @@
         model: {
           type: Object,
           notify: true
-        },
-        lastJson: {
-          type: Object,
-          observer: "_loaded"
         }
       },
       listeners: {
@@ -34,18 +30,30 @@
           this.$.fetch.url = this.model.meta.href + (Boolean(e.detail.action) ? "/actions/"+ e.detail.action : "");
           this.button = e.target;
           this.updateModel = e.detail.updateModel;
+          this.updateErrorModel = e.detail.updateErrorModel;
           this.$.fetch.generateRequest();
         }
       },
-      _loaded: function(json) {
-        console.log("action performed", json);
+      _handleResp: function(event, v, updateModel) {
         if(!!this.button) {
-          this.button.fire("complete", json);
+          this.button.fire("complete", v);
+          this.button = null;
         }
-        if(this.updateModel) {
-          this.model = json;
-          this.updateModel = false;
+        if(updateModel) {
+          this.model = v;
         }
+        this.updateErrorModel = false;
+        this.updateModel = false;
+      },
+      _respJson: function(e) {
+        console.log("yes, resp json", e);
+        this._handleResp("complete", e.detail, this.updateModel);
+      },
+      _respText: function(e) {
+        this._handleResp("complete", e.detail, this.updateModel);
+      },
+      _respErrorText: function(e) {
+        this._handleResp("error", e.detail, this.updateErrorModel);
       }
     })
   </script>

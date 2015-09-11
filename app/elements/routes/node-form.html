@@ -69,8 +69,10 @@
       ],
       _setTitle: function (node) {
         document.title = (this.node && this.node.title) || "Add Post";
-        this.notifyPath("node.title", this.node.title);
-        this.notifyPath("node.text.content", this.node.text.content);
+        if(this.node) {
+          this.notifyPath("node.title", this.node.title);
+          this.notifyPath("node.text.content", this.node.text.content);
+        }
       },
       _params: function (params) {
         if (params && params.name) {
