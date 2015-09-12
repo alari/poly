@@ -26,6 +26,8 @@
 
         attached: function () {
           elements.push(this);
+          this._setValue(user);
+          this._setRoles(roles);
         },
 
         detached: function () {

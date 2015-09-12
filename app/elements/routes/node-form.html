@@ -19,12 +19,13 @@
     }
   </style>
   <template>
-    <meta-route id="route" href="/api/nodes" meta-response="{{node}}" load="false">
+    <meta-route id="route" href="/api/nodes" expand="text" meta-response="{{node}}" load="false">
       <meta-resource model="{{node}}">
+        <page-info title="{{node.title}}"></page-info>
 
         <paper-material elevation="1">
 
-          <paper-input title="Title" placeholder="Название" value="{{node.title}}" on-input="_setTitle"></paper-input>
+          <paper-input title="Title" placeholder="Название" value="{{node.title}}"></paper-input>
 
           <meta-resource model="{{node.text}}">
             <iron-autogrow-textarea placeholder="Текст" bind-value="{{node.text.content}}"></iron-autogrow-textarea>
@@ -64,19 +65,11 @@
         }
       },
       observers: [
-        "_setTitle(node)",
         "_params(params)"
       ],
-      _setTitle: function (node) {
-        document.title = (this.node && this.node.title) || "Add Post";
-        if(this.node) {
-          this.notifyPath("node.title", this.node.title);
-          this.notifyPath("node.text.content", this.node.text.content);
-        }
-      },
       _params: function (params) {
         if (params && params.name) {
-          this.$.route.href = "/api/nodes/" + params.name + "?expand=text";
+          this.$.route.href = "/api/nodes/" + params.name;
           this.$.route.load = true;
         }
       },

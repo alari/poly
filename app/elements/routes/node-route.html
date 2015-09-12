@@ -14,6 +14,8 @@
     <meta-route load href="{{nodeHref}}" expand="user,text" meta-response="{{node}}">
 
       <meta-resource model="{{node}}">
+        <page-info title="{{node.title}}"></page-info>
+
         <paper-material elevation="1">
           <div class="container">
 
@@ -57,26 +59,12 @@
         }
       },
 
-      observers: [
-        "_nodeLoad(lastJson)"
-      ],
-
-      attached: function () {
-        console.log("node route attached, params = ", this.params);
-      },
-
       computeNodeHref: function (params) {
         return "/api/nodes/" + params.name;
       },
 
       computeNodeEditHref: function (params) {
         return "/nodes/" + params.name + "/edit";
-      },
-
-      _nodeLoad: function (lastJson) {
-        if (!!lastJson && lastJson.title) {
-          document.title = lastJson.title;
-        }
       }
     })
   </script>

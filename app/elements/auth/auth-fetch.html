@@ -115,7 +115,7 @@
 
         generateRequest: function () {
           window.fetch(this.url, this.options).then(function (response) {
-            console.log("response", response);
+            //console.log("response", response);
 
             this.fire("resp", response);
 
@@ -164,7 +164,7 @@
         },
 
         _requestParamsChanged: function (url, params, auto) {
-          console.log("changed", url, params, auto);
+          //console.log("changed", url, params, auto);
           this.debounce("auth-fetch", function () {
             if (!this.url && this.url !== '') {
               return;

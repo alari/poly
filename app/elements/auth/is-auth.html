@@ -1,11 +1,9 @@
 <dom-module id="is-auth">
   <template>
-    <auth-token non-empty="{{isAuth}}"></auth-token>
-    <template is="dom-if" if="{{isAuth}}" respawn>
-      <div hidden$="{{!isAuth}}">
-        <content></content>
-      </div>
-    </template>
+    <auth-user value="{{authUser}}"></auth-user>
+    <div hidden$="{{!value}}">
+      <content></content>
+    </div>
   </template>
   <script>
     (function () {
@@ -14,10 +12,21 @@
       Polymer({
         is: "is-auth",
         properties: {
-          isAuth: {
+          value: {
             type: Boolean,
+            computed: "computeValue(user, authUser)"
+          },
+          user: {
+            type: Object,
+            value: null
+          },
+          authUser: {
+            type: Object,
             notify: true
           }
+        },
+        computeValue: function (u, au) {
+          return !!au && (!u || (u.meta.href == au.meta.href));
         }
       })
     })();

@@ -20,7 +20,7 @@ Extended Header + List Left + Card Over Toolbar
 
     <auth-fetch auto url="/api/nodes?expand=items.{text,user}" last-json="{{lastJson}}"></auth-fetch>
 
-    <paper-drawer-panel id="paperDrawerPanel">
+    <paper-drawer-panel id="drawerPanel">
       <!-- Drawer Scroll Header Panel -->
       <paper-scroll-header-panel drawer fixed>
 
@@ -48,6 +48,8 @@ Extended Header + List Left + Card Over Toolbar
           <!-- Toolbar icons -->
           <auth-buttons></auth-buttons>
 
+          <page-info bind="false" title="{{title}}"></page-info>
+
           <!-- Application name -->
           <div class="middle middle-container center horizontal layout">
             <div class="app-name"></div>
@@ -58,12 +60,13 @@ Extended Header + List Left + Card Over Toolbar
             <div class="bottom-title paper-font-subhead"></div>
           </div>
 
+          <div class="bottom title">{{title}}</div>
+
         </paper-toolbar>
 
         <!-- Main Content -->
         <div class="content">
           <content></content>
-
         </div>
       </paper-scroll-header-panel>
     </paper-drawer-panel>

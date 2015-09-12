@@ -1,0 +1,46 @@
+<dom-module id="page-info">
+  <script>
+
+    var elements = [],
+        defaults = {
+          title: document.title
+        };
+
+    Polymer({
+      is: "page-info",
+      properties: {
+        title: {
+          type: String,
+          notify: true
+        },
+        bind: {
+          type: Boolean,
+          value: true
+        }
+      },
+      observers: [
+          "_notice(bind, title)"
+      ],
+      attached: function() {
+        elements.push(this);
+        this._notice(this.bind, this.title);
+      },
+      detached: function() {
+        this._notice(this.bind);
+        var t = this;
+        elements = R.reject(function (v) {
+          return v === t
+        }, elements);
+      },
+      _notice: function(bind, title) {
+        if(bind) {
+          document.title = title || defaults.title;
+
+          R.map(function (e) {
+            e.title = title;
+          }, elements)
+        }
+      }
+    })
+  </script>
+</dom-module>
