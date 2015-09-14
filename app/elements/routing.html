@@ -14,7 +14,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   function route(name) {
     return function (data) {
       app.routeChanging = true;
-      app.routeParams = data.params;
+      app.params = data.params;
       app.route = name;
       app.routeChanging = false;
     }

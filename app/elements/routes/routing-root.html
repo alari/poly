@@ -5,18 +5,17 @@
       properties: {
         route: {
           type: String,
-          notify: true,
-          default: "nodes-route"
+          notify: true
         },
         params: {
           type: Object,
           notify: true,
-          default: null
+          value: null
         },
         routeChanging: {
           type: Boolean,
           notify: true,
-          default: false
+          value: false
         }
       },
       observers: [
@@ -28,9 +27,9 @@
           R.forEach(function (n) {
             root.removeChild(n);
           }, root.childNodes);
-        } else {
+        } else if(!!this.route) {
           var r = document.createElement(this.route);
-          r.params = this.params;
+          r.routeParams = this.params;
           root.appendChild(r);
         }
       }

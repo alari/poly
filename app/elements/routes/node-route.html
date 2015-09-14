@@ -59,12 +59,12 @@
         }
       },
 
-      computeNodeHref: function (params) {
-        return "/api/nodes/" + params.name;
+      computeNodeHref: function (routeParams) {
+        return "/api/nodes/" + routeParams.name;
       },
 
-      computeNodeEditHref: function (params) {
-        return "/nodes/" + params.name + "/edit";
+      computeNodeEditHref: function (routeParams) {
+        return "/nodes/" + routeParams.name + "/edit";
       }
     })
   </script>
