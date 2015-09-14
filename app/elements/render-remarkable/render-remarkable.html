@@ -1,6 +1,8 @@
+<link rel="import" href="../../bower_components/google-youtube/google-youtube.html">
+
 <dom-module id="render-remarkable">
 
-  <script src="../../../bower_components/remarkable/dist/remarkable.js"></script>
+  <script src="../../bower_components/remarkable/dist/remarkable.js"></script>
 
   <template>
     <div id="output"></div>
@@ -42,6 +44,71 @@
           return ''; // use external default escaping
         }
       });
+      var parseYoutube = function (state) {
+        var ch, v = "",
+            pos = state.pos;
+
+        ch = state.src.charCodeAt(pos);
+
+        console.log(ch);
+
+        if (ch !== 0x21/* ! */) {
+          return false;
+        }
+
+        ch = state.src.charCodeAt(++pos);
+        if (ch !== 0x79/* y */) {
+          return false;
+        }
+        ch = state.src.charCodeAt(++pos);
+        if (ch !== 0x6F/* o */) {
+          return false;
+        }
+        ch = state.src.charCodeAt(++pos);
+        if (ch !== 0x75/* u */) {
+          return false;
+        }
+        ch = state.src.charCodeAt(++pos);
+        if (ch !== 0x74/* t */) {
+          return false;
+        }
+        ch = state.src.charCodeAt(++pos);
+        if (ch !== 0x75/* u */) {
+          return false;
+        }
+        ch = state.src.charCodeAt(++pos);
+        if (ch !== 0x62/* b */) {
+          return false;
+        }
+        ch = state.src.charCodeAt(++pos);
+        if (ch !== 0x65/* e */) {
+          return false;
+        }
+        ch = state.src.charCodeAt(++pos);
+        if (ch !== 0x20/*   */) {
+          return false;
+        }
+
+        while (ch && ch !== 0xA /* \n */) {
+          ch = state.src.charCodeAt(++pos);
+          v += state.src.charAt(pos);
+        }
+
+        state.pos = pos + 1;
+
+        state.tokens.push({
+          type: 'youtube',
+          v: v,
+          level: state.level
+        });
+
+        return true;
+      };
+      var renderYoutube = function (tokens, idx, options) {
+        return '<google-youtube video-id="' + tokens[idx].v + '"></google-youtube>';
+      };
+      md.inline.ruler.push('youtube', parseYoutube);
+      md.renderer.rules.youtube = renderYoutube;
 
       new Polymer({
         is: "render-remarkable",
