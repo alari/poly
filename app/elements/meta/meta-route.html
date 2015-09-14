@@ -2,7 +2,7 @@
 
 <dom-module id="meta-route">
   <template>
-    <auth-fetch auto="{{load}}" url="{{href}}" last-json="{{metaResponse}}" params="{{params}}"></auth-fetch>
+    <auth-fetch auto="{{!noLoad}}" url="{{href}}" last-json="{{metaResponse}}" params="{{params}}"></auth-fetch>
     <content></content>
   </template>
   <script>
@@ -21,10 +21,10 @@
           notify: true,
           value: ""
         },
-        load: {
+        noLoad: {
           type: Boolean,
           notify: true,
-          value: true
+          value: false
         },
         params: {
           computed: "_computeParams(expand)"

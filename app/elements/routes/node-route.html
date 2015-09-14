@@ -43,7 +43,7 @@
       is: "node-route",
 
       properties: {
-        params: {
+        routeParams: {
           type: Object,
           notify: true
         },
@@ -52,10 +52,10 @@
           notify: true
         },
         nodeHref: {
-          computed: "computeNodeHref(params)"
+          computed: "computeNodeHref(routeParams)"
         },
         nodeEditHref: {
-          computed: "computeNodeEditHref(params)"
+          computed: "computeNodeEditHref(routeParams)"
         }
       },
 

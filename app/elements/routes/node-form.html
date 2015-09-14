@@ -19,7 +19,7 @@
     }
   </style>
   <template>
-    <meta-route id="route" href="/api/nodes" expand="text" meta-response="{{node}}" load="false">
+    <meta-route id="route" href="/api/nodes" expand="text" meta-response="{{node}}" no-load>
       <meta-resource model="{{node}}">
         <page-info title="{{node.title}}"></page-info>
 
@@ -47,6 +47,10 @@
           type: Object,
           notify: true,
           value: {
+            meta: {
+              href: "/api/nodes",
+              mediaType: "application/node+json;expand=text"
+            },
             kind: "Post",
             title: "",
             text: {
@@ -55,7 +59,7 @@
             }
           }
         },
-        params: {
+        routeParams: {
           type: Object,
           notify: true
         },
@@ -65,12 +69,12 @@
         }
       },
       observers: [
-        "_params(params)"
+        "_params(routeParams)"
       ],
       _params: function (params) {
         if (params && params.name) {
           this.$.route.href = "/api/nodes/" + params.name;
-          this.$.route.load = true;
+          this.$.route.noLoad = false;
         }
       },
       _saved: function (e) {
