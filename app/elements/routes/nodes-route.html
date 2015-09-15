@@ -30,9 +30,6 @@
       itemHref: function (item) {
         return "/nodes/" + item.id;
       },
-      attached: function() {
-        document.title = "Мирари"
-      },
       show: function(item) {
         return new Date(item.dateCreated).toDateString();
       }

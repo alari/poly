@@ -1,0 +1,51 @@
+<dom-module id="user-route">
+  <style>
+    paper-material {
+      background-color: white;
+      min-height: 120px;
+      max-width: 720px;
+      margin: 0px auto;
+      padding: 2em;
+    }
+  </style>
+  <template>
+    <meta-route no-load id="route" expand="items.{text,user}" meta-response="{{lastJson}}">
+      <template is="dom-repeat" items="{{lastJson.items}}">
+        <meta-resource model="{{item}}">
+          <paper-material elevation="1">
+
+            <h2>{{item.title}}</h2>
+
+            <a href$="[[itemHref(item)]]">{{show(item)}}</a>
+
+          </paper-material>
+        </meta-resource>
+      </template>
+    </meta-route>
+
+  </template>
+  <script>
+    Polymer({
+      is: "user-route",
+      properties: {
+        routeParams: {
+          type: Object,
+          observer: "_settedRouteParams"
+        }
+      },
+      _settedRouteParams: function(routeParams) {
+        console.log("SETTED ROUTE PARAMS");
+        if(!!routeParams && routeParams.id) {
+          this.$.route.href = "/api/nodes?userId="+routeParams.id;
+          this.$.route.noLoad = false;
+        }
+      },
+      itemHref: function (item) {
+        return "/nodes/" + item.id;
+      },
+      show: function (item) {
+        return new Date(item.dateCreated).toDateString();
+      }
+    })
+  </script>
+</dom-module>

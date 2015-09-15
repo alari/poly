@@ -6,6 +6,7 @@
       max-width: 720px;
       margin: 0px auto;
     }
+
     :host .container {
       padding: 2em;
     }
@@ -22,9 +23,12 @@
             <h1>{{node.title}}</h1>
 
             <meta-resource model="{{node.text}}">
-            <div>
-              <render-remarkable input="{{node.text.content}}"></render-remarkable>
-            </div>
+              <div>
+                <render-remarkable input="{{node.text.content}}"></render-remarkable>
+              </div>
+              <div>
+                <a href$="{{userHref}}">{{node.user.name}}</a>
+              </div>
             </meta-resource>
 
             <div>
@@ -54,6 +58,9 @@
         nodeHref: {
           computed: "computeNodeHref(routeParams)"
         },
+        userHref: {
+          computed: "computeUserHref(node)"
+        },
         nodeEditHref: {
           computed: "computeNodeEditHref(routeParams)"
         }
@@ -61,6 +68,10 @@
 
       computeNodeHref: function (routeParams) {
         return "/api/nodes/" + routeParams.name;
+      },
+
+      computeUserHref: function (node) {
+        return "/user/" + node.user.id;
       },
 
       computeNodeEditHref: function (routeParams) {
