@@ -69,7 +69,11 @@
       },
 
       computeUserHref: function (node) {
-        return "/user/" + node.user.id;
+        if(node && node.user) {
+          return "/user/" + node.user.id;
+        } else {
+          return "/user/";
+        }
       },
 
       computeNodeEditHref: function (routeParams) {
