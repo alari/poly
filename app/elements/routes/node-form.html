@@ -1,3 +1,5 @@
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+
 <dom-module id="node-form">
   <style>
     paper-material {
@@ -34,6 +36,9 @@
           <meta-button on-complete="_saved">
             <paper-button raised>Сохранить</paper-button>
           </meta-button>
+
+          <paper-checkbox checked="{{node.draft}}">Черновик</paper-checkbox>
+
         </paper-material>
       </meta-resource>
     </meta-route>
@@ -53,6 +58,7 @@
             },
             kind: "Post",
             title: "",
+            draft: true,
             text: {
               content: "",
               version: 1

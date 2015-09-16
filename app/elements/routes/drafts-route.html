@@ -1,0 +1,32 @@
+<dom-module id="drafts-route">
+  <template>
+    <auth-user value="{{user}}"></auth-user>
+    <meta-route no-load id="route" expand="items.{text,user}" meta-response="{{lastJson}}">
+      <template is="dom-repeat" items="{{lastJson.items}}">
+        <node-snippet item="{{item}}"></node-snippet>
+      </template>
+    </meta-route>
+
+  </template>
+  <script>
+    Polymer({
+      is: "drafts-route",
+      properties: {
+        user: {
+          type: Object,
+          notify: true,
+          observer: "userBound"
+        }
+      },
+      attached: function() {
+        if(!!this.user) this.userBound(this.user);
+      },
+      userBound: function(user) {
+        if(!!user && user.id) {
+          this.$.route.href = "/api/nodes?draft=true&userId="+user.id;
+          this.$.route.noLoad = false;
+        }
+      }
+    });
+  </script>
+</dom-module>
