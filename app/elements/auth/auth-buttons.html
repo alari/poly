@@ -1,7 +1,8 @@
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
 <dom-module id="auth-buttons">
-  <link rel="import" href="../../bower_components/paper-input/paper-input.html">
-  <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
-  <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 
   <template>
     <auth-fetch url="/api/auth?expand=user" auto last-json="{{authResponse}}" params="{{params}}"></auth-fetch>
