@@ -46,7 +46,6 @@
         this.updateModel = false;
       },
       _respJson: function(e) {
-        console.log("yes, resp json", e);
         this._handleResp("complete", e.detail, this.updateModel);
       },
       _respText: function(e) {
@@ -55,6 +54,6 @@
       _respErrorText: function(e) {
         this._handleResp("error", e.detail, this.updateErrorModel);
       }
-    })
+    });
   </script>
 </dom-module>

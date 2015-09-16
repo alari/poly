@@ -49,7 +49,7 @@
   <script>
     (function () {
       "use strict";
-      Polymer({
+      var AuthButtons = new Polymer({
         is: "auth-buttons",
         properties: {
           authResponse: {
@@ -116,7 +116,7 @@
               email: this.email,
               password: this.password
             })
-          })
+          });
         },
         postSignup: function () {
 
@@ -130,16 +130,16 @@
               email: this.email,
               password: this.password
             })
-          })
+          });
         },
         checkEmailVerify: function () {
           if (this.email != this.emailVerify) {
             this.$.emailVerify.invalid = true;
-            console.log("not verified")
+            console.log("not verified");
           }
         },
         checkEmailAvailable: function () {
-          if (this.email) true;
+          if (this.email) return true;
         },
         signOut: function () {
           this.$.token.setValue(null);
@@ -147,7 +147,7 @@
         addPost: function () {
           page("/add-post");
         }
-      })
+      });
     })();
   </script>
 </dom-module>

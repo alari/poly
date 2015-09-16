@@ -11,7 +11,7 @@
     (function () {
       "use strict";
 
-      var AuthFetch = Polymer({
+      var AuthFetch = new Polymer({
         is: "auth-fetch",
 
         properties: {
@@ -174,7 +174,7 @@
             if (this.auto) {
               this.generateRequest();
             }
-          }, this.debounceDuration)
+          }, this.debounceDuration);
         },
 
         attached: function () {

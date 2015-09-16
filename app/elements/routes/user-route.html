@@ -17,12 +17,11 @@
         }
       },
       _settedRouteParams: function(routeParams) {
-        console.log("SETTED ROUTE PARAMS");
         if(!!routeParams && routeParams.id) {
           this.$.route.href = "/api/nodes?userId="+routeParams.id;
           this.$.route.noLoad = false;
         }
       }
-    })
+    });
   </script>
 </dom-module>

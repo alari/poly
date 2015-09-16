@@ -5,7 +5,7 @@
 
       var user = null, roles = [], elements = [];
 
-      Polymer({
+      var AuthUser = new Polymer({
         is: "auth-user",
 
         properties: {
@@ -33,7 +33,7 @@
         detached: function () {
           var t = this;
           elements = R.reject(function (v) {
-            return v === t
+            return v === t;
           }, elements);
         },
 
@@ -51,7 +51,7 @@
           }, elements);
         }
 
-      })
+      });
     })();
   </script>
 </dom-module>

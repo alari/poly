@@ -29,7 +29,7 @@
         this._notice(this.bind);
         var t = this;
         elements = R.reject(function (v) {
-          return v === t
+          return v === t;
         }, elements);
       },
       _notice: function(bind, title) {
@@ -38,9 +38,9 @@
 
           R.map(function (e) {
             e.title = title;
-          }, elements)
+          }, elements);
         }
       }
-    })
+    });
   </script>
 </dom-module>
