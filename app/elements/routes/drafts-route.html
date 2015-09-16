@@ -1,5 +1,6 @@
 <dom-module id="drafts-route">
   <template>
+    <page-info title="Черновики"></page-info>
     <auth-user value="{{user}}"></auth-user>
     <meta-route no-load id="route" expand="items.{text,user}" meta-response="{{lastJson}}">
       <template is="dom-repeat" items="{{lastJson.items}}">
