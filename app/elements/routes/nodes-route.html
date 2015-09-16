@@ -1,38 +1,19 @@
 <dom-module id="nodes-route">
-  <style>
-    paper-material {
-      background-color: white;
-      min-height: 120px;
-      max-width: 720px;
-      margin: 0px auto;
-      padding: 2em;
-    }
-  </style>
   <template>
-    <auth-fetch auto url="/api/nodes?expand=items.{text,user}" last-json="{{lastJson}}"></auth-fetch>
+    <meta-route href="/api/nodes" expand="items.{text,user}" meta-response="{{lastJson}}">
 
+      <template is="dom-repeat" items="{{lastJson.items}}">
 
-    <template is="dom-repeat" items="{{lastJson.items}}">
-      <paper-material elevation="1">
+        <node-snippet item="{{item}}"></node-snippet>
 
-        <h2>{{item.title}}</h2>
+      </template>
 
-        <a href$="[[itemHref(item)]]">{{show(item)}}</a>
-
-      </paper-material>
-
-    </template>
+    </meta-route>
 
   </template>
   <script>
     Polymer({
-      is: "nodes-route",
-      itemHref: function (item) {
-        return "/nodes/" + item.id;
-      },
-      show: function(item) {
-        return new Date(item.dateCreated).toDateString();
-      }
+      is: "nodes-route"
     })
   </script>
 </dom-module>

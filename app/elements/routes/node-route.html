@@ -14,31 +14,29 @@
   <template>
     <meta-route load href="{{nodeHref}}" expand="user,text" meta-response="{{node}}">
 
-      <meta-resource model="{{node}}">
-        <page-info title="{{node.title}}"></page-info>
+      <page-info title="{{node.title}}"></page-info>
 
-        <paper-material elevation="1">
-          <div class="container">
+      <paper-material elevation="1">
+        <div class="container">
 
-            <h1>{{node.title}}</h1>
+          <h1>{{node.title}}</h1>
 
-            <meta-resource model="{{node.text}}">
-              <div>
-                <render-remarkable input="{{node.text.content}}"></render-remarkable>
-              </div>
-              <div>
-                <a href$="{{userHref}}">{{node.user.name}}</a>
-              </div>
-            </meta-resource>
-
+          <meta-resource model="{{node.text}}">
             <div>
-              <is-auth user="{{node.user}}">
-                <a href$="{{nodeEditHref}}">Редактировать</a>
-              </is-auth>
+              <render-remarkable input="{{node.text.content}}"></render-remarkable>
             </div>
+            <div>
+              <a href$="{{userHref}}">{{node.user.name}}</a>
+            </div>
+          </meta-resource>
+
+          <div>
+            <is-auth user="{{node.user}}">
+              <a href$="{{nodeEditHref}}">Редактировать</a>
+            </is-auth>
           </div>
-        </paper-material>
-      </meta-resource>
+        </div>
+      </paper-material>
 
     </meta-route>
   </template>

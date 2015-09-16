@@ -1,0 +1,40 @@
+<dom-module id="node-snippet">
+  <style>
+    paper-material {
+      background-color: white;
+      min-height: 120px;
+      max-width: 720px;
+      margin: 0px auto;
+      padding: 2em;
+      margin-bottom: 1em;
+    }
+  </style>
+  <template>
+    <meta-resource model="{{item}}">
+      <paper-material elevation="1">
+
+        <h2>{{item.title}}</h2>
+
+        <a href$="[[itemHref(item)]]">{{show(item)}}</a>
+
+      </paper-material>
+    </meta-resource>
+  </template>
+  <script>
+    Polymer({
+      is: "node-snippet",
+      properties: {
+        item: {
+          type: Object,
+          notify: true
+        }
+      },
+      itemHref: function (item) {
+        return "/nodes/" + item.id;
+      },
+      show: function (item) {
+        return new Date(item.dateCreated).toDateString();
+      }
+    })
+  </script>
+</dom-module>

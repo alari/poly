@@ -18,8 +18,6 @@ Extended Header + List Left + Card Over Toolbar
 
   <template>
 
-    <auth-fetch auto url="/api/nodes?expand=items.{text,user}" last-json="{{lastJson}}"></auth-fetch>
-
     <paper-drawer-panel id="drawerPanel">
       <!-- Drawer Scroll Header Panel -->
       <paper-scroll-header-panel drawer fixed>
@@ -30,11 +28,13 @@ Extended Header + List Left + Card Over Toolbar
         </paper-toolbar>
 
         <!-- Drawer Content -->
-        <paper-menu class="list" on-iron-activate="_listTap">
-          <template is="dom-repeat" items="{{lastJson.items}}">
-            <paper-item><a href$="[[itemHref(item)]]" data-route="node">{{item.title}}</a></paper-item>
-          </template>
-        </paper-menu>
+        <meta-route href="/api/nodes" meta-response="{{lastJson}}">
+          <paper-menu class="list" on-iron-activate="_listTap">
+            <template is="dom-repeat" items="{{lastJson.items}}">
+              <paper-item><a href$="[[itemHref(item)]]" data-route="node">{{item.title}}</a></paper-item>
+            </template>
+          </paper-menu>
+        </meta-route>
       </paper-scroll-header-panel>
 
       <!-- Main Area -->

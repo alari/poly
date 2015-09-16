@@ -3,7 +3,9 @@
 <dom-module id="meta-route">
   <template>
     <auth-fetch auto="{{!noLoad}}" url="{{href}}" last-json="{{metaResponse}}" params="{{params}}"></auth-fetch>
-    <content></content>
+    <meta-resource model="{{lastJson}}">
+      <content></content>
+    </meta-resource>
   </template>
   <script>
     Polymer({
@@ -31,8 +33,8 @@
           computed: "_computeParams(expand)"
         }
       },
-      _computeParams: function(expand) {
-        if(!!expand) {
+      _computeParams: function (expand) {
+        if (!!expand) {
           return {
             headers: {
               Accept: "application/json;expand=" + expand
