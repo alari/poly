@@ -24,25 +24,7 @@
 
         // Double + single quotes replacement pairs, when typographer enabled,
         // and smartquotes on. Set doubles to '«»' for Russian, '„“' for German.
-        quotes: '«»‘’',
-
-        // Highlighter function. Should return escaped HTML,
-        // or '' if input not changed
-        highlight: function (str, lang) {
-          if (lang && hljs.getLanguage(lang)) {
-            try {
-              return hljs.highlight(lang, str).value;
-            } catch (__) {
-            }
-          }
-
-          try {
-            return hljs.highlightAuto(str).value;
-          } catch (__) {
-          }
-
-          return ''; // use external default escaping
-        }
+        quotes: '«»‘’'
       });
 
       // https://youtu.be/Zz7CwhjYF8o
@@ -201,7 +183,7 @@
 
         return true;
       };
-      var renderYoutube = function (tokens, idx, options) {
+      var renderYoutube = function (tokens, idx) {
         return '<google-youtube video-id="' + tokens[idx].v + '"></google-youtube>';
       };
       md.inline.ruler.push('youtube', parseYoutube);
@@ -221,7 +203,7 @@
         render: function () {
           this.$.output.innerHTML = md.render(this.input);
         },
-        inputChanged: function (v) {
+        inputChanged: function () {
           this.render();
         },
         attached: function () {

@@ -9,7 +9,7 @@
     (function () {
       "use strict";
 
-      var IsAuth = new Polymer({
+      Polymer({
         is: "is-auth",
         properties: {
           value: {
@@ -26,7 +26,7 @@
           }
         },
         computeValue: function (u, au) {
-          return !!au && (!u || (u.meta.href == au.meta.href));
+          return !!au && (!u || (u.meta.href === au.meta.href));
         }
       });
     })();

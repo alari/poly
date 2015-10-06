@@ -11,7 +11,7 @@
     (function () {
       "use strict";
 
-      var AuthFetch = new Polymer({
+      Polymer({
         is: "auth-fetch",
 
         properties: {
@@ -120,12 +120,12 @@
 
             this.fire("resp", response);
 
-            if (response.status == 401) {
+            if (response.status === 401) {
               this.authToken = null;
               this.fire("unauthenticated", response);
             } else if (response.headers.has(this.authHeaderName)) {
               var respAuthToken = response.headers.get(this.authHeaderName);
-              if (respAuthToken != this.authToken) {
+              if (respAuthToken !== this.authToken) {
                 this.authToken = respAuthToken;
               }
             }
@@ -160,11 +160,11 @@
           }.bind(this)).catch(function (err) {
             console.error("error!", err);
             this._setLastError(err);
-            this.fire("error", body);
+            this.fire("error", err);
           }.bind(this));
         },
 
-        _requestParamsChanged: function (url, params, auto) {
+        _requestParamsChanged: function () {
           //console.log("changed", url, params, auto);
           this.debounce("auth-fetch", function () {
             if (!this.url && this.url !== '') {

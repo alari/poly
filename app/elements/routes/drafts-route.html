@@ -20,7 +20,9 @@
         }
       },
       attached: function() {
-        if(!!this.user) this.userBound(this.user);
+        if(!!this.user) {
+          this.userBound(this.user);
+        }
       },
       userBound: function(user) {
         if(!!user && user.id) {

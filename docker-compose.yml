@@ -1,0 +1,35 @@
+poly:
+  image: alari/poly
+  links:
+    - api
+    - varnish:prerender
+  ports:
+    - "3001:80"
+
+api:
+  image: alari/mirari
+  links:
+    - mongodb
+  restart: always
+
+mongodb:
+  image: mongo:3.1
+  volumes:
+    - ./mongo:/data/db
+
+varnish:
+  image: million12/varnish
+  volumes:
+    - ./docker:/etc/prerender:ro
+  environment:
+    VCL_CONFIG: "/etc/prerender/varnish.vcl"
+  links:
+    - prerender
+  restart: always
+
+prerender:
+  image: cerisier/prerender
+  hostname: prerender
+  environment:
+    BASIC_AUTH_USERNAME: "prerender"
+    BASIC_AUTH_PASSWORD: "iopsgr"

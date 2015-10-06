@@ -50,7 +50,7 @@
   <script>
     (function () {
       "use strict";
-      var AuthButtons = new Polymer({
+      Polymer({
         is: "auth-buttons",
         properties: {
           authResponse: {
@@ -134,13 +134,15 @@
           });
         },
         checkEmailVerify: function () {
-          if (this.email != this.emailVerify) {
+          if (this.email !== this.emailVerify) {
             this.$.emailVerify.invalid = true;
             console.log("not verified");
           }
         },
         checkEmailAvailable: function () {
-          if (this.email) return true;
+          if (this.email) {
+            return true;
+          }
         },
         signOut: function () {
           this.$.token.setValue(null);
