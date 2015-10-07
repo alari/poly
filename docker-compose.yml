@@ -5,6 +5,7 @@ poly:
     - varnish:prerender
   ports:
     - "3001:80"
+  restart: always
 
 api:
   image: alari/mirari
@@ -16,6 +17,7 @@ mongodb:
   image: mongo:3.1
   volumes:
     - ./mongo:/data/db
+  restart: always
 
 varnish:
   image: million12/varnish
@@ -33,3 +35,4 @@ prerender:
   environment:
     BASIC_AUTH_USERNAME: "prerender"
     BASIC_AUTH_PASSWORD: "iopsgr"
+  restart: always
