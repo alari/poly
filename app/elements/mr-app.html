@@ -32,6 +32,11 @@ Extended Header + List Left + Card Over Toolbar
         <!-- Drawer Content -->
         <meta-route href="/api/nodes" meta-response="{{lastJson}}">
           <paper-menu class="list" on-iron-activate="_listTap">
+            <paper-item><a href="/"><iron-icon icon="home"></iron-icon> Главная</a></paper-item>
+            <is-auth>
+              <paper-item><a href="/drafts"><iron-icon icon="visibility-off"></iron-icon> Черновики</a></paper-item>
+              <paper-item><a href="/add-post"><iron-icon icon="add"></iron-icon> Добавить</a></paper-item>
+            </is-auth>
             <template is="dom-repeat" items="{{lastJson.items}}">
               <paper-item><a href$="[[itemHref(item)]]" data-route="node">{{item.title}}</a></paper-item>
             </template>

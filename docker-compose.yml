@@ -11,6 +11,8 @@ api:
   image: alari/mirari
   links:
     - mongodb
+  volumes:
+    - ./api-logs:/var/logs
   restart: always
 
 mongodb:

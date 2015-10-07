@@ -12,7 +12,7 @@
     }
   </style>
   <template>
-    <meta-route load href="{{nodeHref}}" expand="user,text" meta-response="{{node}}">
+    <meta-route load href="{{computeNodeHref(routeParams)}}" expand="user,text" meta-response="{{node}}">
 
       <page-info title="{{node.title}}"></page-info>
 
@@ -22,17 +22,18 @@
           <h1>{{node.title}}</h1>
 
           <meta-resource model="{{node.text}}">
-            <div>
-              <render-remarkable input="{{node.text.content}}"></render-remarkable>
-            </div>
-            <div>
-              <a href$="{{userHref}}">{{node.user.name}}</a>
-            </div>
+            <render-remarkable input="{{node.text.content}}"></render-remarkable>
           </meta-resource>
 
-          <div>
+          <div id="settings">
+            <user-link user="{{node.user}}"></user-link>
             <is-auth user="{{node.user}}">
-              <a href$="{{nodeEditHref}}">Редактировать</a>
+
+              <paper-icon-button icon="editor:mode-edit" on-tap="gotoEdit"></paper-icon-button>
+              <meta-button body$="{{computeDraftMetaBody(node.draft)}}" on-complete="_toggleDraft" no-content>
+                <paper-icon-button icon$="{{computeDraftIcon(node.draft)}}"></paper-icon-button>
+              </meta-button>
+
             </is-auth>
           </div>
         </div>
@@ -52,15 +53,6 @@
         node: {
           type: Object,
           notify: true
-        },
-        nodeHref: {
-          computed: "computeNodeHref(routeParams)"
-        },
-        userHref: {
-          computed: "computeUserHref(node)"
-        },
-        nodeEditHref: {
-          computed: "computeNodeEditHref(routeParams)"
         }
       },
 
@@ -68,16 +60,26 @@
         return "/api/nodes/" + routeParams.name;
       },
 
-      computeUserHref: function (node) {
-        if(node && node.user) {
-          return "/user/" + node.user.id;
+      computeDraftIcon: function (node) {
+        console.log("compute draft icon");
+        if (!node || node.draft) {
+          return "visibility-off";
         } else {
-          return "/user/";
+          return "visibility";
         }
       },
 
-      computeNodeEditHref: function (routeParams) {
-        return "/nodes/" + routeParams.name + "/edit";
+      computeDraftMetaBody: function () {
+        return {draft: this.node ? !this.node.draft : true};
+      },
+
+      gotoEdit: function () {
+        page("/nodes/" + this.node.id + "/edit");
+      },
+
+      _toggleDraft: function () {
+        this.node.draft = !this.node.draft;
+        this.notifyPath("node.draft", this.node.draft);
       }
     });
   </script>

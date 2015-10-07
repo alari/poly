@@ -22,20 +22,24 @@
         updateModel: {
           type: Boolean,
           value: false
+        },
+        noContent: {
+          type: Boolean,
+          value: false
         }
       },
       listeners: {
         tap: "_onTap"
       },
       _onTap: function() {
-        console.log("i am tapped!", this.method);
-        var href = (this.for && this.for.meta) ? this.for.meta.href : null;
+        var href = (!!this.for && this.for.meta) ? this.for.meta.href : null;
         this.fire("metaAction", {
           href: href,
           action: this.action,
           method: this.method,
           body: this.body,
-          updateModel: this.updateModel
+          updateModel: this.updateModel,
+          noContent: this.noContent
         });
       }
     });

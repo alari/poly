@@ -3,7 +3,7 @@
 <dom-module id="meta-route">
   <template>
     <auth-fetch auto="{{!noLoad}}" url="{{href}}" last-json="{{metaResponse}}" params="{{params}}"></auth-fetch>
-    <meta-resource model="{{lastJson}}">
+    <meta-resource model="{{metaResponse}}">
       <content></content>
     </meta-resource>
   </template>

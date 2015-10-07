@@ -1,0 +1,22 @@
+<dom-module id="user-link">
+  <template>
+    <a href$="{{ userHref(user.id) }}"><iron-icon icon="social:person"></iron-icon> <span>{{ user.name }}</span></a>
+  </template>
+  <script>
+    Polymer({
+      is: "user-link",
+      properties: {
+        user: {
+          type: Object
+        }
+      },
+      userHref: function(user) {
+        if(user.id) {
+          return "/user/"+user.id;
+        } else {
+          return "/user";
+        }
+      }
+    });
+  </script>
+</dom-module>

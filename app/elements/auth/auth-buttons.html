@@ -10,7 +10,6 @@
     <auth-user id="user" value="{{user}}"></auth-user>
 
     <is-auth>
-      <paper-icon-button icon="info" on-tap="addPost"></paper-icon-button>
       <a href="/drafts" style="color:white">{{user.name}}</a>
       <paper-icon-button icon="icons:settings-power" on-tap="signOut"></paper-icon-button>
     </is-auth>
@@ -146,9 +145,6 @@
         },
         signOut: function () {
           this.$.token.setValue(null);
-        },
-        addPost: function () {
-          page("/add-post");
         }
       });
     })();

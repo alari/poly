@@ -28,6 +28,9 @@
             body: JSON.stringify(e.detail.body || this.model)
           };
           this.$.fetch.url = this.model.meta.href + (Boolean(e.detail.action) ? "/actions/"+ e.detail.action : "");
+          if(e.detail.noContent) {
+            this.$.fetch.url += this.$.fetch.url.indexOf("?") > -1 ? "&_noContent" : "?_noContent";
+          }
           this.button = e.target;
           this.updateModel = e.detail.updateModel;
           this.updateErrorModel = e.detail.updateErrorModel;
