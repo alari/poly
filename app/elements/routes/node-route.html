@@ -38,7 +38,8 @@
       properties: {
         routeParams: {
           type: Object,
-          notify: true
+          notify: true,
+          observer: "routeParamsSet"
         },
         node: {
           type: Object,
@@ -46,9 +47,15 @@
         }
       },
 
+      routeParamsSet: function(routeParams) {
+        if(!this.node && routeParams.name && window.nodesCache && window.nodesCache[routeParams.name]) {
+          this.node = window.nodesCache[routeParams.name];
+        }
+      },
+
       computeNodeHref: function (routeParams) {
         return "/api/nodes/" + routeParams.name;
-      },
+      }
 
 
     });

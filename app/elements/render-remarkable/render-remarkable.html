@@ -189,7 +189,7 @@
       md.inline.ruler.push('youtube', parseYoutube);
       md.renderer.rules.youtube = renderYoutube;
 
-      new Polymer({
+      Polymer({
         is: "render-remarkable",
         properties: {
           input: {
@@ -201,7 +201,7 @@
           'input-changed': 'inputChanged'
         },
         render: function () {
-          this.$.output.innerHTML = md.render(this.input.replace(/https?:\/\/(www.)?(youtu.be|youtube.com)\/[^\s]+/gi, function(x){return "[" + x + "]";}));
+          this.$.output.innerHTML = !!this.input ? md.render(this.input.replace(/https?:\/\/(www.)?(youtu.be|youtube.com)\/[^\s]+/gi, function(x){return "[" + x + "]";})) : "";
         },
         inputChanged: function () {
           this.render();

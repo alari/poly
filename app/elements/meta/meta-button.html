@@ -10,7 +10,8 @@
           type: Object
         },
         action: {
-          type: String
+          type: String,
+          value: null
         },
         method: {
           type: String,
@@ -29,9 +30,9 @@
         }
       },
       listeners: {
-        tap: "_onTap"
+        tap: "act"
       },
-      _onTap: function() {
+      act: function() {
         var href = (!!this.for && this.for.meta) ? this.for.meta.href : null;
         this.fire("metaAction", {
           href: href,

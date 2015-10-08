@@ -1,9 +1,11 @@
 <dom-module id="is-auth">
   <template>
     <auth-user value="{{authUser}}"></auth-user>
-    <span hidden$="{{!value}}">
-      <content></content>
-    </span>
+    <template is="dom-if" if="{{value}}" respawn>
+      <span hidden$="{{!value}}">
+        <content></content>
+      </span>
+    </template>
   </template>
   <script>
     (function () {

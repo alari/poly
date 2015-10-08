@@ -1,0 +1,67 @@
+<dom-module id="auth-signin">
+
+  <style>
+    #dialog {
+      border-color: var(--paper-green-500);
+      background-color: var(--paper-green-50);
+      color: var(--paper-green-500);
+    }
+  </style>
+
+  <template>
+
+      <paper-dialog id="dialog">
+        <h2>Вход</h2>
+
+        <paper-input label="Email" value="{{email}}" required id="email"></paper-input>
+        <paper-input label="Пароль" value="{{password}}" type="password" required></paper-input>
+
+        <div class="buttons">
+          <meta-button id="submit" update-model body="{{ signinBody(email, password) }}">
+            <paper-button>Войти</paper-button>
+          </meta-button>
+        </div>
+      </paper-dialog>
+
+  </template>
+  <script>
+    (function () {
+      "use strict";
+      Polymer({
+        is: "auth-signin",
+        properties: {
+          email: {
+            type: String,
+            value: null,
+            notify: true
+          },
+          password: {
+            type: String,
+            value: null,
+            notify: true
+          }
+        },
+
+        signinBody: function() {
+          return {
+            provider: "email",
+            email: this.email,
+            password: this.password
+          };
+        },
+
+        toggle: function() {
+          this.$.dialog.toggle();
+        },
+
+        close: function() {
+          this.$.dialog.close();
+        },
+
+        open: function() {
+          this.$.dialog.open();
+        }
+      });
+    })();
+  </script>
+</dom-module>

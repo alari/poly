@@ -1,0 +1,86 @@
+<dom-module id="auth-signup">
+
+  <style>
+    #dialog {
+      border-color: var(--paper-orange-500);
+      background-color: var(--paper-orange-50);
+      color: var(--paper-orange-500);
+    }
+  </style>
+
+  <template>
+
+      <paper-dialog id="dialog">
+        <h2>Регистрация</h2>
+
+        <paper-input label="Email" value="{{email}}" required id="email" on-blur="checkEmailAvailable"
+                     error-message="Адрес занят, возможно, вы забыли пароль?"></paper-input>
+        <paper-input label="Повторите Email" value="{{emailVerify}}" required id="emailVerify" on-blur="checkEmailVerify"
+                     error-message="Адреса не совпадают"></paper-input>
+        <paper-input label="Пароль" value="{{password}}" type="password" required></paper-input>
+
+        <div class="buttons">
+          <meta-button id="submit" update-model method="PUT" body="{{ signupBody(email, emailVerify, password) }}">
+            <paper-button>Создать аккаунт</paper-button>
+          </meta-button>
+        </div>
+      </paper-dialog>
+
+  </template>
+  <script>
+    (function () {
+      "use strict";
+      Polymer({
+        is: "auth-signup",
+        properties: {
+          email: {
+            type: String,
+            value: null,
+            notify: true
+          },
+          emailVerify: {
+            type: String,
+            value: null,
+            notify: true
+          },
+          password: {
+            type: String,
+            value: null,
+            notify: true
+          }
+        },
+
+        signupBody: function() {
+          return {
+            provider: "email",
+            email: this.email,
+            password: this.password
+          };
+        },
+
+        toggle: function() {
+          this.$.dialog.toggle();
+        },
+
+        close: function() {
+          this.$.dialog.close();
+        },
+
+        open: function() {
+          this.$.dialog.open();
+        },
+
+        checkEmailVerify: function () {
+          if (this.email !== this.emailVerify) {
+            this.$.emailVerify.invalid = true;
+          }
+        },
+        checkEmailAvailable: function () {
+          if (this.email) {
+            return true;
+          }
+        }
+      });
+    })();
+  </script>
+</dom-module>

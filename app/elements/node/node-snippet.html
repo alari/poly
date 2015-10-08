@@ -4,9 +4,8 @@
       background-color: white;
       min-height: 120px;
       max-width: 720px;
-      margin: 0px auto;
+      margin: 0 auto;
       padding: 2em;
-      margin-bottom: 1em;
     }
     #titleLink {
       color: #333;
@@ -30,14 +29,18 @@
       properties: {
         item: {
           type: Object,
-          notify: true
+          notify: true,
+          observer: "itemSet"
+        }
+      },
+      itemSet: function(item) {
+        if(!!item) {
+          var nodesCache = window.nodesCache || {};
+          nodesCache[item.id] = item;
         }
       },
       itemHref: function (item) {
         return "/nodes/" + item.id;
-      },
-      show: function (item) {
-        return new Date(item.dateCreated).toDateString();
       }
     });
   </script>

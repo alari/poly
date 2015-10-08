@@ -16,6 +16,8 @@
         'metaAction': '_action'
       },
       _action: function(e) {
+        console.log("meta?", this.model, e.detail);
+
         if(this.model.meta && (!e.detail.href || (e.detail.href === this.model.meta.href))) {
           e.stopPropagation();
           console.log(e.detail);
