@@ -201,7 +201,7 @@
           'input-changed': 'inputChanged'
         },
         render: function () {
-          this.$.output.innerHTML = md.render(this.input);
+          this.$.output.innerHTML = md.render(this.input.replace(/https?:\/\/(www.)?(youtu.be|youtube.com)\/[^\s]+/gi, function(x){return "[" + x + "]";}));
         },
         inputChanged: function () {
           this.render();
