@@ -1,0 +1,60 @@
+<dom-module id="node-settings">
+  <style>
+    #settings {
+      margin-top: 1em;
+    }
+  </style>
+  <template>
+    <div id="settings">
+      <user-link user="{{node.user}}"></user-link>
+      <node-date node="{{node}}"></node-date>
+      <is-auth user="{{node.user}}">
+
+        <paper-icon-button icon="editor:mode-edit" on-tap="gotoEdit"></paper-icon-button>
+        <meta-button body$="{{computeDraftMetaBody(node.draft)}}" on-complete="_toggleDraft" no-content for="{{node}}">
+          <paper-icon-button icon$="{{computeDraftIcon(node.draft)}}" title$="{{computeDraftTitle(node.draft)}}"></paper-icon-button>
+        </meta-button>
+
+      </is-auth>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: "node-settings",
+      properties: {
+        node: {
+          type: Object,
+          notify: true
+        }
+      },
+      computeDraftIcon: function (node) {
+        if (!node || node.draft) {
+          return "visibility";
+        } else {
+          return "visibility-off";
+        }
+      },
+
+      computeDraftTitle: function() {
+        if(!!this.node) {
+          return this.node.draft ? "Черновик" : "Чистовик";
+        } else {
+          return "";
+        }
+      },
+
+      computeDraftMetaBody: function () {
+        return {draft: this.node ? !this.node.draft : true};
+      },
+
+      gotoEdit: function () {
+        page("/nodes/" + this.node.id + "/edit");
+      },
+
+      _toggleDraft: function () {
+        this.node.draft = !this.node.draft;
+        this.notifyPath("node.draft", this.node.draft);
+      }
+    });
+  </script>
+</dom-module>

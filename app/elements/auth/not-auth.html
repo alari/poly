@@ -2,9 +2,9 @@
   <template>
     <auth-token is-empty="{{notAuth}}"></auth-token>
     <template is="dom-if" if="{{notAuth}}" respawn>
-      <div hidden$="{{!notAuth}}">
+      <span hidden$="{{!notAuth}}">
         <content></content>
-      </div>
+      </span>
     </template>
   </template>
   <script>

@@ -8,16 +8,18 @@
       padding: 2em;
       margin-bottom: 1em;
     }
+    #titleLink {
+      color: #333;
+      text-decoration: none;
+    }
   </style>
   <template>
     <meta-resource model="{{item}}">
       <paper-material elevation="1">
 
-        <h2>{{item.title}}</h2>
+        <h2><a href$="[[itemHref(item)]]" id="titleLink">{{item.title}}</a></h2>
 
-        <a href$="[[itemHref(item)]]">{{show(item)}}</a>
-
-        <user-link user="{{node.user}}"></user-link>
+        <node-settings node="{{item}}"></node-settings>
 
       </paper-material>
     </meta-resource>

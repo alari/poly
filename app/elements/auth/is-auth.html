@@ -1,9 +1,9 @@
 <dom-module id="is-auth">
   <template>
     <auth-user value="{{authUser}}"></auth-user>
-    <div hidden$="{{!value}}">
+    <span hidden$="{{!value}}">
       <content></content>
-    </div>
+    </span>
   </template>
   <script>
     (function () {

@@ -25,17 +25,7 @@
             <render-remarkable input="{{node.text.content}}"></render-remarkable>
           </meta-resource>
 
-          <div id="settings">
-            <user-link user="{{node.user}}"></user-link>
-            <is-auth user="{{node.user}}">
-
-              <paper-icon-button icon="editor:mode-edit" on-tap="gotoEdit"></paper-icon-button>
-              <meta-button body$="{{computeDraftMetaBody(node.draft)}}" on-complete="_toggleDraft" no-content>
-                <paper-icon-button icon$="{{computeDraftIcon(node.draft)}}"></paper-icon-button>
-              </meta-button>
-
-            </is-auth>
-          </div>
+          <node-settings node="{{node}}"></node-settings>
         </div>
       </paper-material>
 
@@ -60,27 +50,7 @@
         return "/api/nodes/" + routeParams.name;
       },
 
-      computeDraftIcon: function (node) {
-        console.log("compute draft icon");
-        if (!node || node.draft) {
-          return "visibility-off";
-        } else {
-          return "visibility";
-        }
-      },
 
-      computeDraftMetaBody: function () {
-        return {draft: this.node ? !this.node.draft : true};
-      },
-
-      gotoEdit: function () {
-        page("/nodes/" + this.node.id + "/edit");
-      },
-
-      _toggleDraft: function () {
-        this.node.draft = !this.node.draft;
-        this.notifyPath("node.draft", this.node.draft);
-      }
     });
   </script>
 </dom-module>

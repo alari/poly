@@ -1,0 +1,23 @@
+<dom-module id="node-date">
+  <style>
+    #wrap {
+      font-family: Roboto-Light;
+    }
+  </style>
+  <template>
+    <span id="wrap"><iron-icon icon="schedule"></iron-icon> <span>{{nodeDate(node)}}</span></span>
+  </template>
+  <script>
+    Polymer({
+      is: "node-date",
+      properties: {
+        node: {
+          type: Object
+        }
+      },
+      nodeDate: function (item) {
+        return new Date(item.dateCreated).toDateString();
+      }
+    });
+  </script>
+</dom-module>

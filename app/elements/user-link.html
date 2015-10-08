@@ -1,18 +1,29 @@
 <dom-module id="user-link">
+  <style is="custom-style">
+    :root {
+      display: inline;
+    }
+    a#ul {
+      color: var(--link-color);
+      text-decoration: none;
+      font-family: 'Roboto-Light';
+    }
+  </style>
   <template>
-    <a href$="{{ userHref(user.id) }}"><iron-icon icon="social:person"></iron-icon> <span>{{ user.name }}</span></a>
+    <a id="ul" href$="{{ userHref(user.id) }}"><iron-icon icon="social:person"></iron-icon> <span>{{ user.name }}</span></a>
   </template>
   <script>
     Polymer({
       is: "user-link",
       properties: {
         user: {
-          type: Object
+          type: Object,
+          notify: true
         }
       },
-      userHref: function(user) {
-        if(user.id) {
-          return "/user/"+user.id;
+      userHref: function(id) {
+        if(id) {
+          return "/user/"+id;
         } else {
           return "/user";
         }
