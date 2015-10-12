@@ -11,6 +11,8 @@
 <link rel="import" href="../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../bower_components/paper-toolbar/paper-toolbar.html">
 
+<link rel="import" href="mr-menu.html">
+
 <!--
 Extended Header + List Left + Card Over Toolbar
  -->
@@ -24,24 +26,8 @@ Extended Header + List Left + Card Over Toolbar
       <!-- Drawer Scroll Header Panel -->
       <paper-scroll-header-panel drawer fixed>
 
-        <!-- Drawer Toolbar -->
-        <paper-toolbar id="drawerToolbar">
-          <span class="paper-font-title">Меню</span>
-        </paper-toolbar>
+        <mr-menu on-iron-activate="_listTap"></mr-menu>
 
-        <!-- Drawer Content -->
-        <meta-route href="/api/nodes" meta-response="{{lastJson}}">
-          <paper-menu class="list" on-iron-activate="_listTap">
-            <paper-item><a href="/"><iron-icon icon="home"></iron-icon> Главная</a></paper-item>
-            <is-auth>
-              <paper-item><a href="/drafts"><iron-icon icon="visibility-off"></iron-icon> Черновики</a></paper-item>
-              <paper-item><a href="/add-post"><iron-icon icon="add"></iron-icon> Добавить</a></paper-item>
-            </is-auth>
-            <template is="dom-repeat" items="{{lastJson.items}}">
-              <paper-item><a href$="[[itemHref(item)]]" data-route="node">{{item.title}}</a></paper-item>
-            </template>
-          </paper-menu>
-        </meta-route>
       </paper-scroll-header-panel>
 
       <!-- Main Area -->
@@ -97,9 +83,6 @@ Extended Header + List Left + Card Over Toolbar
         this.drawerWidth = isMobile ? '100%' : '320px';
         this.toolbarClass = isMobile ? '' : 'tall';
         this.updateStyles();
-      },
-      itemHref: function (item) {
-        return "/nodes/" + item.id;
       }
     });
   </script>

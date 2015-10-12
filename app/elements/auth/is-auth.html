@@ -1,7 +1,7 @@
 <dom-module id="is-auth">
   <template>
     <auth-user value="{{authUser}}"></auth-user>
-    <template is="dom-if" if="{{value}}" respawn>
+    <template is="dom-if" if$="{{value}}" respawn>
       <span hidden$="{{!value}}">
         <content></content>
       </span>
@@ -27,8 +27,8 @@
             notify: true
           }
         },
-        computeValue: function (u, au) {
-          return !!au && (!u || (u.meta.href === au.meta.href));
+        computeValue: function () {
+          return !!this.authUser && (!this.user || (this.user.meta.href === this.authUser.meta.href));
         }
       });
     })();

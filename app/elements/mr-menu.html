@@ -1,0 +1,59 @@
+<dom-module id="mr-menu">
+  <style>
+    paper-item {
+      cursor: pointer;
+    }
+  </style>
+  <template>
+    <!-- Drawer Toolbar -->
+    <paper-toolbar id="drawerToolbar">
+      <span class="paper-font-title">Меню</span>
+    </paper-toolbar>
+
+    <!-- Drawer Content -->
+    <meta-route href="/api/nodes" meta-response="{{lastJson}}">
+      <auth-user value="{{authUser}}"></auth-user>
+
+      <paper-menu class="list" selected="{{selected}}" attr-for-selected="page">
+        <paper-item page="/">
+          <iron-icon icon="home" item-icon></iron-icon>
+          Главная
+        </paper-item>
+
+        <template is="dom-if" if$="{{authUser}}" respawn>
+          <paper-item page="/drafts">
+            <iron-icon icon="visibility-off" item-icon></iron-icon>
+            Черновики
+          </paper-item>
+          <paper-item page="/add-post">
+            <iron-icon icon="add" item-icon></iron-icon>
+            Добавить
+          </paper-item>
+        </template>
+
+        <template is="dom-repeat" items="{{lastJson.items}}">
+          <paper-item page$="[[itemHref(item)]]">{{item.title}}</paper-item>
+        </template>
+      </paper-menu>
+    </meta-route>
+  </template>
+  <script>
+    Polymer({
+      is: "mr-menu",
+      properties: {
+        selected: {
+          type: String,
+          observer: "_onSelected"
+        }
+      },
+      _onSelected: function () {
+        if (this.selected !== page.current) {
+          page(this.selected);
+        }
+      },
+      itemHref: function (item) {
+        return "/nodes/" + item.id;
+      }
+    });
+  </script>
+</dom-module>
