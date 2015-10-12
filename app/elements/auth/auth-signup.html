@@ -64,6 +64,9 @@
 
         close: function() {
           this.$.dialog.close();
+          this.email = null;
+          this.emailVerify = null;
+          this.password = null;
         },
 
         open: function() {

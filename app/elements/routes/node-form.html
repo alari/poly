@@ -22,74 +22,83 @@
   </style>
   <template>
     <meta-route id="route" href="/api/nodes" expand="text" meta-response="{{node}}" no-load>
-      <meta-resource model="{{node}}">
-        <page-info title="{{node.title}}"></page-info>
+      <page-info title="{{node.title}}"></page-info>
 
-        <paper-material elevation="1">
+      <paper-material elevation="1">
 
-          <paper-input title="Title" placeholder="Название" value="{{node.title}}"></paper-input>
+        <paper-input title="Title" placeholder="Название" value="{{node.title}}"></paper-input>
 
-          <meta-resource model="{{node.text}}">
-            <iron-autogrow-textarea placeholder="Текст" bind-value="{{node.text.content}}"></iron-autogrow-textarea>
-          </meta-resource>
+        <meta-resource model="{{node.text}}">
+          <iron-autogrow-textarea placeholder="Текст" bind-value="{{node.text.content}}"></iron-autogrow-textarea>
+        </meta-resource>
 
-          <meta-button on-complete="_saved">
-            <paper-button raised>
-              <iron-icon icon="editor:publish"></iron-icon>
-              Сохранить</paper-button>
-          </meta-button>
+        <meta-button on-complete="_saved">
+          <paper-button raised>
+            <iron-icon icon="editor:publish"></iron-icon>
+            Сохранить
+          </paper-button>
+        </meta-button>
 
-          <paper-checkbox checked="{{node.draft}}">Черновик</paper-checkbox>
+        <paper-checkbox checked="{{node.draft}}">Черновик</paper-checkbox>
 
-        </paper-material>
-      </meta-resource>
+        <div hidden$="{{node.dateCreated}}">
+          <paper-input title="Date" placeholder="YYYY-MM-DD" value="{{node.date}}"></paper-input>
+        </div>
+
+      </paper-material>
     </meta-route>
 
   </template>
   <script>
-    Polymer({
-      is: "node-form",
-      properties: {
-        node: {
-          type: Object,
-          notify: true,
-          value: {
-            meta: {
-              href: "/api/nodes",
-              mediaType: "application/node+json;expand=text"
-            },
-            kind: "Post",
-            title: "",
-            draft: true,
-            text: {
-              content: "",
-              version: 1
-            }
+    (function () {
+      var defaultNode = function() {
+        return {
+          meta: {
+            href: "/api/nodes",
+            mediaType: "application/node+json;expand=text"
+          },
+          kind: "Post",
+          title: "",
+          draft: true,
+          text: {
+            content: "",
+            version: 1
+          }
+        };
+      };
+
+      Polymer({
+        is: "node-form",
+        properties: {
+          node: {
+            type: Object,
+            notify: true,
+            value: defaultNode
+          },
+          routeParams: {
+            type: Object,
+            notify: true
+          },
+          saving: {
+            type: Boolean,
+            value: false
           }
         },
-        routeParams: {
-          type: Object,
-          notify: true
+        observers: [
+          "_params(routeParams)"
+        ],
+        _params: function (params) {
+          if (params && params.name) {
+            this.$.route.href = "/api/nodes/" + params.name;
+            this.$.route.noLoad = false;
+          }
         },
-        saving: {
-          type: Boolean,
-          default: false
+        _saved: function (e) {
+          if (e.detail && e.detail.id) {
+            page("/nodes/" + e.detail.id);
+          }
         }
-      },
-      observers: [
-        "_params(routeParams)"
-      ],
-      _params: function (params) {
-        if (params && params.name) {
-          this.$.route.href = "/api/nodes/" + params.name;
-          this.$.route.noLoad = false;
-        }
-      },
-      _saved: function (e) {
-        if (e.detail && e.detail.id) {
-          page("/nodes/" + e.detail.id);
-        }
-      }
-    });
+      });
+    })();
   </script>
 </dom-module>
