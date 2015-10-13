@@ -27,10 +27,14 @@
         noContent: {
           type: Boolean,
           value: false
+        },
+        suffix: {
+          type: String,
+          value: ""
         }
       },
       listeners: {
-        tap: "act"
+        click: "act"
       },
       act: function() {
         var href = (!!this.for && this.for.meta) ? this.for.meta.href : null;
@@ -40,7 +44,8 @@
           method: this.method,
           body: this.body,
           updateModel: this.updateModel,
-          noContent: this.noContent
+          noContent: this.noContent,
+          suffix: this.suffix
         });
       }
     });

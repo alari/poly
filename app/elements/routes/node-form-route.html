@@ -1,0 +1,33 @@
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../node/node-form.html">
+
+<dom-module id="node-form-route">
+  <template>
+    <meta-route id="route" href="/api/nodes" expand="text" meta-response="{{node}}" no-load>
+      <node-form node="{{node}}"></node-form>
+    </meta-route>
+
+  </template>
+  <script>
+    (function () {
+      Polymer({
+        is: "node-form-route",
+        properties: {
+          node: {
+            type: Object,
+            notify: true
+          },
+          routeParams: {
+            observer: "_params"
+          }
+        },
+        _params: function (params) {
+          if (params && params.name) {
+            this.$.route.href = "/api/nodes/" + params.name;
+            this.$.route.noLoad = false;
+          }
+        }
+      });
+    })();
+  </script>
+</dom-module>

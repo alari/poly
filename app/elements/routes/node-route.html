@@ -1,34 +1,9 @@
+<link rel="import" href="../node/node-page.html">
+
 <dom-module id="node-route">
-  <style>
-    paper-material {
-      background-color: white;
-      min-height: 120px;
-      max-width: 720px;
-      margin: 0px auto;
-    }
-
-    :host .container {
-      padding: 2em;
-    }
-  </style>
   <template>
-    <meta-route load href="{{computeNodeHref(routeParams)}}" expand="user,text" meta-response="{{node}}">
-
-      <page-info title="{{node.title}}"></page-info>
-
-      <paper-material elevation="1">
-        <div class="container">
-
-          <h1>{{node.title}}</h1>
-
-          <meta-resource model="{{node.text}}">
-            <render-remarkable input="{{node.text.content}}"></render-remarkable>
-          </meta-resource>
-
-          <node-settings node="{{node}}"></node-settings>
-        </div>
-      </paper-material>
-
+    <meta-route href="{{computeNodeHref(routeParams)}}" expand="user,text" meta-response="{{node}}">
+      <node-page node="{{node}}"></node-page>
     </meta-route>
   </template>
   <script>
@@ -37,9 +12,7 @@
 
       properties: {
         routeParams: {
-          type: Object,
-          notify: true,
-          observer: "routeParamsSet"
+          type: Object
         },
         node: {
           type: Object,
@@ -47,16 +20,9 @@
         }
       },
 
-      routeParamsSet: function(routeParams) {
-        if(!this.node && routeParams.name && window.nodesCache && window.nodesCache[routeParams.name]) {
-          this.node = window.nodesCache[routeParams.name];
-        }
-      },
-
       computeNodeHref: function (routeParams) {
         return "/api/nodes/" + routeParams.name;
       }
-
 
     });
   </script>

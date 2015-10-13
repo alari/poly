@@ -1,11 +1,14 @@
+<link rel="import" href="../node/nodes-list.html">
+
 <dom-module id="drafts-route">
   <template>
     <page-info title="Черновики"></page-info>
     <auth-user value="{{user}}"></auth-user>
-    <meta-route no-load id="route" expand="items.{text,user}" meta-response="{{lastJson}}">
-      <template is="dom-repeat" items="{{lastJson.items}}">
-        <node-snippet item="{{item}}"></node-snippet>
-      </template>
+
+    <meta-route no-load id="route" expand="items.{text,user},agg.count" meta-response="{{lastJson}}">
+
+      <nodes-list model="{{lastJson}}"></nodes-list>
+
     </meta-route>
 
   </template>

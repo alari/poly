@@ -1,0 +1,43 @@
+<dom-module id="node-page">
+  <style>
+    paper-material {
+      background-color: white;
+      min-height: 120px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    :host .container {
+      padding: 2em;
+    }
+  </style>
+  <template>
+      <page-info title="{{node.title}}"></page-info>
+
+      <paper-material elevation="1">
+        <div class="container">
+
+          <h1>{{node.title}}</h1>
+
+          <meta-resource model="{{node.text}}">
+            <render-remarkable input="{{node.text.content}}"></render-remarkable>
+          </meta-resource>
+
+          <node-settings node="{{node}}"></node-settings>
+        </div>
+      </paper-material>
+  </template>
+  <script>
+    Polymer({
+      is: "node-page",
+
+      properties: {
+        node: {
+          type: Object,
+          notify: true
+        }
+      }
+
+    });
+  </script>
+</dom-module>

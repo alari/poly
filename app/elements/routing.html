@@ -27,13 +27,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     // More info: https://visionmedia.github.io/page.js/
     page('/', route("nodes-route"));
 
-    page('/add-post', route("node-form"));
+    page('/add-post', route("node-form-route"));
 
     page('/nodes', route("nodes-route"));
 
     page('/nodes/:name', route("node-route"));
 
-    page('/nodes/:name/edit', route("node-form"));
+    page('/nodes/:name/edit', route("node-form-route"));
 
     page('/user/:id', route("user-route"));
 

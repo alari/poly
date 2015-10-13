@@ -1,0 +1,29 @@
+<link rel="import" href="node-snippet.html">
+<link rel="import" href="../layout/mr-pager.html">
+
+<dom-module id="nodes-list">
+
+  <template>
+
+    <template is="dom-repeat" items="{{model.items}}">
+
+      <node-snippet item="{{item}}"></node-snippet>
+
+    </template>
+
+    <mr-pager model="{{model}}"></mr-pager>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: "nodes-list",
+      properties: {
+        model: {
+          type: Object,
+          notify: true
+        }
+      }
+    });
+  </script>
+</dom-module>

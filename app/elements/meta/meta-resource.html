@@ -15,22 +15,25 @@
       listeners: {
         'metaAction': '_action'
       },
-      _action: function(e) {
-        console.log("meta?", this.model, e.detail);
-
-        if(this.model.meta && (!e.detail.href || (e.detail.href === this.model.meta.href))) {
+      _action: function (e) {
+        if (this.model.meta && (!e.detail.href || (e.detail.href === this.model.meta.href))) {
           e.stopPropagation();
-          console.log(e.detail);
           this.$.fetch.params = {
             method: e.detail.method,
             headers: {
               Accept: this.model.meta.mediaType,
               'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(e.detail.body || this.model)
+            }
           };
-          this.$.fetch.url = this.model.meta.href + (Boolean(e.detail.action) ? "/actions/"+ e.detail.action : "");
-          if(e.detail.noContent) {
+          if(e.detail.method !== "GET") {
+            this.$.fetch.params.body = JSON.stringify(e.detail.body || this.model);
+          }
+          this.$.fetch.url = this.model.meta.href + (Boolean(e.detail.action) ? "/actions/" + e.detail.action : "");
+          if (e.detail.suffix) {
+            console.log("with suffix: ", e.detail.suffix);
+            this.$.fetch.url += ((this.$.fetch.url.indexOf("?") > -1 ? "&" : "?") + e.detail.suffix);
+          }
+          if (e.detail.noContent) {
             this.$.fetch.url += this.$.fetch.url.indexOf("?") > -1 ? "&_noContent" : "?_noContent";
           }
           this.button = e.target;
@@ -39,24 +42,24 @@
           this.$.fetch.generateRequest();
         }
       },
-      _handleResp: function(event, v, updateModel) {
-        if(!!this.button) {
+      _handleResp: function (event, v, updateModel) {
+        if (!!this.button) {
           this.button.fire("complete", v);
           this.button = null;
         }
-        if(updateModel) {
+        if (updateModel) {
           this.model = v;
         }
         this.updateErrorModel = false;
         this.updateModel = false;
       },
-      _respJson: function(e) {
+      _respJson: function (e) {
         this._handleResp("complete", e.detail, this.updateModel);
       },
-      _respText: function(e) {
+      _respText: function (e) {
         this._handleResp("complete", e.detail, this.updateModel);
       },
-      _respErrorText: function(e) {
+      _respErrorText: function (e) {
         this._handleResp("error", e.detail, this.updateErrorModel);
       }
     });

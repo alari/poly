@@ -29,14 +29,7 @@
       properties: {
         item: {
           type: Object,
-          notify: true,
-          observer: "itemSet"
-        }
-      },
-      itemSet: function(item) {
-        if(!!item) {
-          var nodesCache = window.nodesCache || {};
-          nodesCache[item.id] = item;
+          notify: true
         }
       },
       itemHref: function (item) {

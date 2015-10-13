@@ -1,16 +1,16 @@
+<link rel="import" href="../node/nodes-list.html">
+
 <dom-module id="nodes-route">
+
   <template>
-    <meta-route href="/api/nodes" expand="items.{text,user}" meta-response="{{lastJson}}">
+    <meta-route href="/api/nodes" expand="items.{text,user},agg.count" meta-response="{{lastJson}}">
 
-      <template is="dom-repeat" items="{{lastJson.items}}">
-
-        <node-snippet item="{{item}}"></node-snippet>
-
-      </template>
+      <nodes-list model="{{lastJson}}"></nodes-list>
 
     </meta-route>
 
   </template>
+
   <script>
     Polymer({
       is: "nodes-route"
