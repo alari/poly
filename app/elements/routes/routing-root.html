@@ -27,10 +27,11 @@
           R.forEach(function (n) {
             root.removeChild(n);
           }, root.childNodes);
-        } else if(!!this.route) {
+        } else if (!!this.route) {
           var r = document.createElement(this.route);
           r.routeParams = this.params;
           root.appendChild(r);
+          this.fire("iron-signal", {name: "route-changed", data: {route: this.route, params: this.params}});
         }
       }
     });

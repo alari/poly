@@ -1,3 +1,5 @@
+<link rel="import" href="../../bower_components/iron-signals/iron-signals.html">
+
 <dom-module id="mr-menu">
   <style>
     paper-item {
@@ -13,6 +15,7 @@
     <!-- Drawer Content -->
     <meta-route href="/api/nodes" meta-response="{{lastJson}}">
       <auth-user value="{{authUser}}"></auth-user>
+      <iron-signals on-iron-signal-route-changed="_routeChanged"></iron-signals>
 
       <paper-menu class="list" selected="{{selected}}" attr-for-selected="page">
         <paper-item page="/">
@@ -50,6 +53,9 @@
         if (this.selected !== page.current) {
           page(this.selected);
         }
+      },
+      _routeChanged: function () {
+        this.selected = page.current;
       },
       itemHref: function (item) {
         return "/nodes/" + item.id;
