@@ -11,7 +11,7 @@
       <is-auth user="{{node.user}}">
 
         <paper-icon-button icon="editor:mode-edit" on-tap="gotoEdit"></paper-icon-button>
-        <meta-button body$="{{computeDraftMetaBody(node.draft)}}" on-complete="_toggleDraft" no-content for="{{node}}">
+        <meta-button body$="{{computeDraftMetaBody(node.draft)}}" no-content for="{{node}}">
           <paper-icon-button icon$="{{computeDraftIcon(node.draft)}}" title$="{{computeDraftTitle(node.draft)}}"></paper-icon-button>
         </meta-button>
 
@@ -49,11 +49,6 @@
 
       gotoEdit: function () {
         page("/nodes/" + this.node.id + "/edit");
-      },
-
-      _toggleDraft: function () {
-        this.node.draft = !this.node.draft;
-        this.notifyPath("node.draft", this.node.draft);
       }
     });
   </script>

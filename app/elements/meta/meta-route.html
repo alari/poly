@@ -17,7 +17,8 @@
         },
         metaResponse: {
           type: Object,
-          notify: true
+          notify: true,
+          observer: "_metaResponseChanged"
         },
         expand: {
           type: String,
@@ -42,6 +43,26 @@
           };
         } else {
           return {};
+        }
+      },
+      _metaResponseChanged: function () {
+        if(!!window.EventSource) {
+          if (!!this.stream) {
+            this.stream.close();
+          }
+          if (this.metaResponse && this.metaResponse.meta && this.metaResponse.meta.stream) {
+            this.stream = new window.EventSource(this.metaResponse.meta.stream);
+            var self = this;
+            this.stream.onmessage = function (e) {
+              var data = JSON.parse(e.data);
+              self.fire("iron-signal", {name: data.meta.href, data: data});
+            };
+          }
+        }
+      },
+      detached: function() {
+        if(!!this.stream) {
+          this.stream.close();
         }
       }
     });

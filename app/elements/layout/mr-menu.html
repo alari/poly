@@ -35,7 +35,9 @@
         </template>
 
         <template is="dom-repeat" items="{{lastJson.items}}">
-          <paper-item page$="[[itemHref(item)]]">{{item.title}}</paper-item>
+          <paper-item page$="[[itemHref(item)]]">
+            <meta-resource model="{{item}}">{{item.title}}</meta-resource>
+          </paper-item>
         </template>
       </paper-menu>
     </meta-route>
