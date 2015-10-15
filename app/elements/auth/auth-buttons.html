@@ -10,7 +10,7 @@
     <auth-token id="token"></auth-token>
     <auth-user id="user" value="{{user}}"></auth-user>
 
-    <meta-route href="/api/auth" expand="user" meta-response="{{authResponse}}">
+    <meta-route href="/api/auth" expand="user" model="{{authResponse}}">
 
       <is-auth>
         <span>{{user.name}}</span>

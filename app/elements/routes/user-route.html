@@ -2,7 +2,7 @@
 
 <dom-module id="user-route">
   <template>
-    <meta-route no-load id="route" expand="items.{text,user},agg.count" meta-response="{{lastJson}}">
+    <meta-route no-load id="route" expand="items.{text,user},agg.count" model="{{lastJson}}">
 
       <nodes-list model="{{lastJson}}"></nodes-list>
 

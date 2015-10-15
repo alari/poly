@@ -3,7 +3,7 @@
 <dom-module id="nodes-route">
 
   <template>
-    <meta-route href="/api/nodes" expand="items.{text,user},agg.count" meta-response="{{lastJson}}">
+    <meta-route href="/api/nodes" expand="items.{text,user},agg.count" model="{{lastJson}}">
 
       <nodes-list model="{{lastJson}}"></nodes-list>
 

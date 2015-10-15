@@ -2,7 +2,7 @@
 
 <dom-module id="node-route">
   <template>
-    <meta-route href="{{computeNodeHref(routeParams)}}" expand="user,text" meta-response="{{node}}">
+    <meta-route href="{{computeNodeHref(routeParams)}}" expand="user,text" model="{{node}}">
       <node-page node="{{node}}"></node-page>
     </meta-route>
   </template>

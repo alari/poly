@@ -13,7 +13,7 @@
     </paper-toolbar>
 
     <!-- Drawer Content -->
-    <meta-route href="/api/nodes" meta-response="{{lastJson}}">
+    <meta-route href="/api/nodes" model="{{lastJson}}">
       <auth-user value="{{authUser}}"></auth-user>
       <iron-signals on-iron-signal-route-changed="_routeChanged"></iron-signals>
 
