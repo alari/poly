@@ -54,7 +54,7 @@
         }
       },
       _ironSignalListener: function (e) {
-        var k, data = e.detail, arr;
+        var data = e.detail;
         var compare = function (arr) {
           return function (v) {
             return R.any(function (a) {
@@ -65,45 +65,36 @@
         if (data.meta.href !== this.model.meta.href) {
           return;
         }
-        if (!!data.$set) {
-          for (k in data.$set) {
-            if (data.$set.hasOwnProperty(k)) {
-              this.set("model." + k, data.$set[k]);
-            }
-          }
-        }
-        if (!!data.$unset) {
-          for (k in data.$unset) {
-            if (data.$unset.hasOwnProperty(k)) {
-              this.set("model." + k, false);
-            }
-          }
-        }
-        if (!!data.$pull) {
-          for (k in data.$pull) {
-            if (data.$pull.hasOwnProperty(k)) {
-              arr = data.$pull[k];
-              this.model[k] = R.filter(compare(arr), this.model[k]);
+        R.forEach(function (k) {
+          this.set("model." + k, data.$set[k]);
+        }.bind(this), R.keys(data.$set));
+
+        R.forEach(function (k) {
+          this.set("model." + k, false);
+        }.bind(this), R.keys(data.$unset));
+
+        R.forEach(function (k) {
+          this.model[k] = R.filter(compare(data.$pull[k]), this.model[k]);
+        }.bind(this), R.keys(data.$pull));
+
+        R.forEach(function (k) {
+          this.model[k] = R.concat(data.$prepend[k], this.model[k]);
+        }.bind(this), R.keys(data.$prepend));
+
+        R.forEach(function (k) {
+          this.model[k] = R.concat(data.$append[k], this.model[k]);
+        }.bind(this), R.keys(data.$append));
+
+        R.forEach(function (k) {
               this.notifyPath("model." + k, this.model[k]);
-            }
-          }
-        }
-        if (!!data.$prepend) {
-          for (k in data.$prepend) {
-            if (data.$prepend.hasOwnProperty(k)) {
-              this.model[k] = R.concat(data.$prepend[k], this.model[k]);
-              this.notifyPath("model." + k, this.model[k]);
-            }
-          }
-        }
-        if (!!data.$append) {
-          for (k in data.$append) {
-            if (data.$append.hasOwnProperty(k)) {
-              this.model[k] = R.concat(this.model[k], data.$append[k]);
-              this.notifyPath("model." + k);
-            }
-          }
-        }
+            }.bind(this), R.uniq(
+                R.concat(
+                    R.concat(R.keys(data.$append), R.keys(data.$prepend)),
+                    R.keys(data.$pull)
+                )
+            )
+        );
+
       },
       _action: function (e) {
         if (this.model.meta && (!e.detail.href || (e.detail.href === this.model.meta.href))) {
