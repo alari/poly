@@ -12,7 +12,11 @@
       properties: {
         model: {
           type: Object,
-          notify: true
+          notify: true,
+          observer: "_modelChanged"
+        },
+        expand: {
+          type: String
         }
       },
       listeners: {
@@ -21,34 +25,91 @@
       observers: [
         "_subscribeToIron(model.meta.href)"
       ],
-      attached: function() {
+      attached: function () {
         this._subscribeToIron();
-      },
-      _subscribeToIron: function() {
-        if(this.model && this.model.meta && this.model.meta.href) {
-          this.$.signals.addEventListener("iron-signal-"+ this.model.meta.href, this._ironSignalListener.bind(this));
+        if (!!this.model && R.equals(R.keys(this.model), ["meta"])) {
+          this._action({
+            detail: {
+              updateModel: true,
+              method: "GET",
+              suffix: this.expand && ("expand=" + this.expand)
+            }
+          });
         }
       },
-      _ironSignalListener: function(e) {
-        var k, data = e.detail;
-        if(!!data.$set) {
-          for(k in data.$set) {
-            if(data.$set.hasOwnProperty(k)) {
-              this.set("model."+k, data.$set[k]);
+      _modelChanged: function (n, o) {
+        if (n && (!o || n.meta !== o.meta) && R.equals(R.keys(this.model), ["meta"])) {
+          this._action({
+            detail: {
+              updateModel: true,
+              method: "GET",
+              suffix: this.expand && ("expand=" + this.expand)
+            }
+          });
+        }
+      },
+      _subscribeToIron: function () {
+        if (this.model && this.model.meta && this.model.meta.href) {
+          this.$.signals.addEventListener("iron-signal-" + this.model.meta.href, this._ironSignalListener.bind(this));
+        }
+      },
+      _ironSignalListener: function (e) {
+        var k, data = e.detail, arr;
+        var compare = function (arr) {
+          return function (v) {
+            return R.any(function (a) {
+              return !(a === v || (a.meta && v.meta && a.meta.href === v.meta.href));
+            }, arr);
+          };
+        };
+        if (data.meta.href !== this.model.meta.href) {
+          return;
+        }
+        if (!!data.$set) {
+          for (k in data.$set) {
+            if (data.$set.hasOwnProperty(k)) {
+              this.set("model." + k, data.$set[k]);
             }
           }
         }
-        if(!!data.$unset) {
-          for(k in data.$unset) {
-            if(data.$unset.hasOwnProperty(k)) {
-              this.set("model."+k, false);
+        if (!!data.$unset) {
+          for (k in data.$unset) {
+            if (data.$unset.hasOwnProperty(k)) {
+              this.set("model." + k, false);
+            }
+          }
+        }
+        if (!!data.$pull) {
+          for (k in data.$pull) {
+            if (data.$pull.hasOwnProperty(k)) {
+              arr = data.$pull[k];
+              this.model[k] = R.filter(compare(arr), this.model[k]);
+              this.notifyPath("model." + k, this.model[k]);
+            }
+          }
+        }
+        if (!!data.$prepend) {
+          for (k in data.$prepend) {
+            if (data.$prepend.hasOwnProperty(k)) {
+              this.model[k] = R.concat(data.$prepend[k], this.model[k]);
+              this.notifyPath("model." + k, this.model[k]);
+            }
+          }
+        }
+        if (!!data.$append) {
+          for (k in data.$append) {
+            if (data.$append.hasOwnProperty(k)) {
+              this.model[k] = R.concat(this.model[k], data.$append[k]);
+              this.notifyPath("model." + k);
             }
           }
         }
       },
       _action: function (e) {
         if (this.model.meta && (!e.detail.href || (e.detail.href === this.model.meta.href))) {
-          e.stopPropagation();
+          if (!!e.stopPropagation) {
+            e.stopPropagation();
+          }
           this.$.fetch.params = {
             method: e.detail.method,
             headers: {
@@ -56,12 +117,11 @@
               'Content-Type': 'application/json'
             }
           };
-          if(e.detail.method !== "GET") {
+          if (e.detail.method !== "GET") {
             this.$.fetch.params.body = JSON.stringify(e.detail.body || this.model);
           }
           this.$.fetch.url = this.model.meta.href + (Boolean(e.detail.action) ? "/actions/" + e.detail.action : "");
           if (e.detail.suffix) {
-            console.log("with suffix: ", e.detail.suffix);
             this.$.fetch.url += ((this.$.fetch.url.indexOf("?") > -1 ? "&" : "?") + e.detail.suffix);
           }
           if (e.detail.noContent) {

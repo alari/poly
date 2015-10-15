@@ -45,14 +45,7 @@
           }
         },
         authResp: function () {
-          console.log("got auth resp", this.authResponse);
-
           if (!!this.authResponse) {
-            this.authResponse.meta = {
-              href: "/api/auth",
-              mediaType: "application/auth-status+json;expand=user"
-            };
-
             if(!this.authResponse.failure) {
               this.$.user.setUser(this.authResponse.user);
               this.$.user.setRoles(this.authResponse.roles);
