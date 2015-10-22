@@ -57,7 +57,7 @@
             document.title = this.title || defaults.title;
 
             head.querySelector('meta[property="og:title"]').setAttribute("content", document.title);
-            head.querySelector('meta[property="og:url"]').setAttribute("content", this.url || defaults.url);
+            head.querySelector('meta[property="og:url"]').setAttribute("content", this.url ? (defaults.url + this.url) : defaults.url);
             head.querySelector('meta[property="og:type"]').setAttribute("content", this.type || defaults.type);
             head.querySelector('meta[property="og:image"]').setAttribute("content", this.image || defaults.image);
 
