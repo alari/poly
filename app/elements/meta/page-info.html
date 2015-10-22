@@ -1,46 +1,77 @@
 <dom-module id="page-info">
   <script>
 
-    var elements = [],
-        defaults = {
-          title: document.title
-        };
+    (function () {
 
-    Polymer({
-      is: "page-info",
-      properties: {
-        title: {
-          type: String,
-          notify: true
+      var elements = [],
+          head = Polymer.dom(document.head),
+          defaults = {
+            title: document.title,
+            url: head.querySelector('meta[property="og:url"]').getAttribute("content"),
+            type: head.querySelector('meta[property="og:type"]').getAttribute("content"),
+            image: head.querySelector('meta[property="og:image"]').getAttribute("content")
+          };
+
+      Polymer({
+        is: "page-info",
+        properties: {
+          title: {
+            type: String,
+            notify: true
+          },
+          url: {
+            type: String,
+            notify: true
+          },
+          type: {
+            type: String,
+            notify: true
+          },
+          image: {
+            type: String,
+            notify: true,
+            observer: "_notice"
+          },
+          bind: {
+            type: Boolean,
+            notify: true,
+            value: true
+          }
         },
-        bind: {
-          type: Boolean,
-          value: true
-        }
-      },
-      observers: [
-          "_notice(bind, title)"
-      ],
-      attached: function() {
-        elements.push(this);
-        this._notice(this.bind, this.title);
-      },
-      detached: function() {
-        this._notice(this.bind);
-        var t = this;
-        elements = R.reject(function (v) {
-          return v === t;
-        }, elements);
-      },
-      _notice: function(bind, title) {
-        if(bind) {
-          document.title = title || defaults.title;
-
-          R.map(function (e) {
-            e.title = title;
+        observers: [
+          "_notice(bind, title, url, type)"
+        ],
+        attached: function () {
+          elements.push(this);
+          this._notice();
+        },
+        detached: function () {
+          this._notice();
+          var t = this;
+          elements = R.reject(function (v) {
+            return v === t;
           }, elements);
+        },
+        _notice: function () {
+          if (this.bind) {
+            document.title = this.title || defaults.title;
+
+            head.querySelector('meta[property="og:title"]').setAttribute("content", document.title);
+            head.querySelector('meta[property="og:url"]').setAttribute("content", this.url || defaults.url);
+            head.querySelector('meta[property="og:type"]').setAttribute("content", this.type || defaults.type);
+            head.querySelector('meta[property="og:image"]').setAttribute("content", this.image || defaults.image);
+
+
+            R.map(function (e) {
+              e.title = this.title;
+              e.url = this.url;
+              e.type = this.type;
+              e.image = this.image;
+            }.bind(this), elements);
+          }
         }
-      }
-    });
+      });
+
+    })();
   </script>
 </dom-module>

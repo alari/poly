@@ -13,6 +13,8 @@ api:
     - mongodb
   volumes:
     - ./api-logs:/var/logs
+  environment:
+    pidfile.path: /var/logs/play.pid
   restart: always
 
 mongodb:

@@ -21,6 +21,9 @@
       observers: [
         '_progressRoute(routeChanging)'
       ],
+      attached: function() {
+        console.log("ready to route");
+      },
       _progressRoute: function (routeChanging) {
         var root = Polymer.dom(this.root);
         if (routeChanging) {

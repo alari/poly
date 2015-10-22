@@ -12,20 +12,20 @@
     }
   </style>
   <template>
-      <page-info title="{{node.title}}"></page-info>
+    <page-info title="{{node.title}}" type="article" url="{{nodeUrl(node)}}"></page-info>
 
-      <paper-material elevation="1">
-        <div class="container">
+    <paper-material elevation="1">
+      <div class="container">
 
-          <h1>{{node.title}}</h1>
+        <h1>{{node.title}}</h1>
 
-          <meta-resource model="{{node.text}}">
-            <render-remarkable input="{{node.text.content}}"></render-remarkable>
-          </meta-resource>
+        <meta-resource model="{{node.text}}">
+          <render-remarkable input="{{node.text.content}}"></render-remarkable>
+        </meta-resource>
 
-          <node-settings node="{{node}}"></node-settings>
-        </div>
-      </paper-material>
+        <node-settings node="{{node}}"></node-settings>
+      </div>
+    </paper-material>
   </template>
   <script>
     Polymer({
@@ -35,6 +35,14 @@
         node: {
           type: Object,
           notify: true
+        }
+      },
+
+      nodeUrl: function () {
+        if (!!this.node) {
+          return "/nodes/" + this.node.id;
+        } else {
+          return "/";
         }
       }
 

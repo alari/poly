@@ -1,8 +1,9 @@
 <link rel="import" href="../../bower_components/iron-signals/iron-signals.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
 
 <dom-module id="mr-menu">
   <style>
-    paper-item {
+    paper-item, paper-icon-item {
       cursor: pointer;
     }
   </style>
@@ -18,20 +19,20 @@
       <iron-signals on-iron-signal-route-changed="_routeChanged"></iron-signals>
 
       <paper-menu class="list" selected="{{selected}}" attr-for-selected="page">
-        <paper-item page="/">
+        <paper-icon-item page="/">
           <iron-icon icon="home" item-icon></iron-icon>
           Главная
-        </paper-item>
+        </paper-icon-item>
 
         <template is="dom-if" if$="{{authUser}}" respawn>
-          <paper-item page="/drafts">
+          <paper-icon-item page="/drafts">
             <iron-icon icon="visibility-off" item-icon></iron-icon>
             Черновики
-          </paper-item>
-          <paper-item page="/add-post">
+          </paper-icon-item>
+          <paper-icon-item page="/add-post">
             <iron-icon icon="add" item-icon></iron-icon>
             Добавить
-          </paper-item>
+          </paper-icon-item>
         </template>
 
         <template is="dom-repeat" items="{{lastJson.items}}">
