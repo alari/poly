@@ -1,3 +1,5 @@
+<script src="../../../bower_components/page/page.js"></script>
+
 <dom-module is="routing-root">
   <script>
     Polymer({
@@ -11,31 +13,56 @@
           type: Object,
           notify: true,
           value: null
-        },
-        routeChanging: {
-          type: Boolean,
-          notify: true,
-          value: false
         }
       },
       observers: [
         '_progressRoute(routeChanging)'
       ],
-      attached: function() {
-        console.log("ready to route");
+      attached: function () {
+        var route = this._route.bind(this);
+
+        page('/', route("nodes-route"));
+
+        page('/add-post', route("node-form-route"));
+
+        page('/nodes', route("nodes-route"));
+
+        page('/nodes/:name', route("node-route"));
+
+        page('/nodes/:name/edit', route("node-form-route"));
+
+        page('/user/:id', route("user-route"));
+
+        page('/drafts', route("drafts-route"));
+
+        // add #! before urls
+        page({
+          hashbang: false
+        });
       },
-      _progressRoute: function (routeChanging) {
+
+      _route: function(name) {
+        return function(data) {
+          this._clean();
+          this.route = name;
+          this.params = data.params;
+          this._display();
+        }.bind(this);
+      },
+
+      _clean: function () {
         var root = Polymer.dom(this.root);
-        if (routeChanging) {
-          R.forEach(function (n) {
-            root.removeChild(n);
-          }, root.childNodes);
-        } else if (!!this.route) {
-          var r = document.createElement(this.route);
-          r.routeParams = this.params;
-          root.appendChild(r);
-          this.fire("iron-signal", {name: "route-changed", data: {route: this.route, params: this.params}});
-        }
+        R.forEach(function (n) {
+          root.removeChild(n);
+        }, root.childNodes);
+      },
+
+      _display: function () {
+        var root = Polymer.dom(this.root);
+        var r = document.createElement(this.route);
+        r.routeParams = this.params;
+        root.appendChild(r);
+        this.fire("iron-signal", {name: "route-changed", data: {route: this.route, params: this.params}});
       }
     });
   </script>
