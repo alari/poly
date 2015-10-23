@@ -11,30 +11,26 @@
             type: head.querySelector('meta[property="og:type"]').getAttribute("content"),
             image: head.querySelector('meta[property="og:image"]').getAttribute("content")
           };
+      head.removeChild(head.querySelector('meta[name="fragment"]'));
 
       Polymer({
         is: "page-info",
         properties: {
           title: {
-            type: String,
-            notify: true
+            type: String
           },
           url: {
-            type: String,
-            notify: true
+            type: String
           },
           type: {
-            type: String,
-            notify: true
+            type: String
           },
           image: {
             type: String,
-            notify: true,
             observer: "_notice"
           },
           bind: {
             type: Boolean,
-            notify: true,
             value: true
           }
         },
