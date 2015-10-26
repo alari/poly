@@ -12,7 +12,7 @@
     }
   </style>
   <template>
-    <page-info title="{{node.title}}" type="article" url="{{nodeUrl(node)}}"></page-info>
+    <page-info title="{{node.title}}" type="article" url="{{nodeUrl(node)}}" description="{{nodeDescription(node)}}"></page-info>
 
     <paper-material elevation="1">
       <div class="container">
@@ -43,6 +43,14 @@
           return "/nodes/" + this.node.id;
         } else {
           return "/";
+        }
+      },
+
+      nodeDescription: function() {
+        if (!! this.node && this.node.text && this.node.text.content) {
+          return this.node.text.content.substr(0, 255);
+        } else {
+          return null;
         }
       }
 

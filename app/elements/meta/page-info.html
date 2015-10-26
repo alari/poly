@@ -9,7 +9,8 @@
             title: document.title,
             url: head.querySelector('meta[property="og:url"]').getAttribute("content"),
             type: head.querySelector('meta[property="og:type"]').getAttribute("content"),
-            image: head.querySelector('meta[property="og:image"]').getAttribute("content")
+            image: head.querySelector('meta[property="og:image"]').getAttribute("content"),
+            description: head.querySelector('meta[property="og:description"]').getAttribute("content")
           };
       head.removeChild(head.querySelector('meta[name="fragment"]'));
 
@@ -18,25 +19,41 @@
         properties: {
           title: {
             type: String,
-            notify: true
+            notify: true,
+            value: null,
+            reflectToAttribute: true
           },
           url: {
-            type: String
+            type: String,
+            notify: true,
+            value: null,
+            reflectToAttribute: true
           },
           type: {
-            type: String
+            type: String,
+            notify: true,
+            value: null,
+            reflectToAttribute: true
           },
           image: {
             type: String,
-            observer: "_notice"
+            notify: true,
+            value: null,
+            reflectToAttribute: true
           },
-          bind: {
+          description: {
+            type: String,
+            notify: true,
+            value: null,
+            reflectToAttribute: true
+          },
+          noBind: {
             type: Boolean,
-            value: true
+            value: false
           }
         },
         observers: [
-          "_notice(bind, title, url, type)"
+          "_notice(noBind, title, url, type, description, image)"
         ],
         attached: function () {
           elements.push(this);
@@ -50,13 +67,15 @@
           }, elements);
         },
         _notice: function () {
-          if (this.bind) {
+          if (!this.noBind) {
+            console.log("set type to ", this.type, this);
             document.title = this.title || defaults.title;
 
             head.querySelector('meta[property="og:title"]').setAttribute("content", document.title);
             head.querySelector('meta[property="og:url"]').setAttribute("content", this.url ? (defaults.url + this.url) : defaults.url);
             head.querySelector('meta[property="og:type"]').setAttribute("content", this.type || defaults.type);
             head.querySelector('meta[property="og:image"]').setAttribute("content", this.image || defaults.image);
+            head.querySelector('meta[property="og:description"]').setAttribute("content", this.description || defaults.description);
 
 
             R.map(function (e) {
@@ -64,6 +83,8 @@
               e.url = this.url;
               e.type = this.type;
               e.image = this.image;
+              e.description = this.description;
+              console.log(e, e.type);
             }.bind(this), elements);
           }
         }
