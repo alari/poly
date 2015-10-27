@@ -20,7 +20,7 @@
         <paper-input label="Пароль" value="{{password}}" type="password" required></paper-input>
 
         <div class="buttons">
-          <meta-button id="submit" update-model method="PUT" body="{{ signupBody(email, emailVerify, password) }}">
+          <meta-button update-model method="PUT" body="{{ signupBody(email, emailVerify, password) }}">
             <paper-button>Создать аккаунт</paper-button>
           </meta-button>
         </div>

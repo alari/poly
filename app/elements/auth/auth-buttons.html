@@ -24,8 +24,8 @@
 
       <auth-signin id="signin"></auth-signin>
       <auth-signup id="signup"></auth-signup>
-    </meta-route>
 
+    </meta-route>
 
   </template>
   <script>
@@ -46,12 +46,17 @@
         },
         authResp: function () {
           if (!!this.authResponse) {
-            if(!this.authResponse.failure) {
+            if (!this.authResponse.failure) {
               this.$.user.setUser(this.authResponse.user);
               this.$.user.setRoles(this.authResponse.roles);
 
               this.$.signin.close();
               this.$.signup.close();
+            } else {
+              this.authResponse.meta = {
+                href: "/api/auth",
+                mediaType: "application/auth-status+json;expand=user"
+              };
             }
 
           } else {
@@ -72,7 +77,12 @@
           this.$.token.setValue(null);
           this.$.user.setUser(null);
           this.$.user.setRoles([]);
-          this.authResponse = {};
+          this.authResponse = {
+            meta: {
+              href: "/api/auth",
+              mediaType: "application/auth-status+json;expand=user"
+            }
+          };
         }
       });
     })();
