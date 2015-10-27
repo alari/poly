@@ -60,6 +60,11 @@
           this._notice();
         },
         detached: function () {
+          this.title = null;
+          this.url = null;
+          this.type = null;
+          this.image = null;
+          this.description = null;
           this._notice();
           var t = this;
           elements = R.reject(function (v) {
@@ -68,7 +73,6 @@
         },
         _notice: function () {
           if (!this.noBind) {
-            console.log("set type to ", this.type, this);
             document.title = this.title || defaults.title;
 
             head.querySelector('meta[property="og:title"]').setAttribute("content", document.title);
@@ -84,7 +88,6 @@
               e.type = this.type;
               e.image = this.image;
               e.description = this.description;
-              console.log(e, e.type);
             }.bind(this), elements);
           }
         }
