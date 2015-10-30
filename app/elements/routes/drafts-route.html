@@ -1,11 +1,19 @@
 <link rel="import" href="../node/nodes-list.html">
+<link rel="import" href="../node/kinds-tabs.html">
 
 <dom-module id="drafts-route">
   <template>
     <page-info title="Черновики"></page-info>
     <auth-user value="{{user}}"></auth-user>
 
-    <meta-route no-load id="route" expand="items.{text,user},agg.count" model="{{lastJson}}">
+    <kinds-tabs values="{{kinds}}"></kinds-tabs>
+
+    <div style="position: absolute;">
+      <paper-spinner active$="{{!lastJson}}"></paper-spinner>
+    </div>
+
+    <meta-route no-load href="{{draftsHref(kinds.splices,user)}}" id="route" expand="items.{text,user},agg.count"
+                model="{{lastJson}}">
 
       <nodes-list model="{{lastJson}}"></nodes-list>
 
@@ -19,18 +27,30 @@
         user: {
           type: Object,
           notify: true,
-          observer: "userBound"
+          observer: "userChanged"
+        },
+        kinds: {
+          type: Array,
+          value: ["Post", "Article", "Prose", "Poetry"]
         }
       },
-      attached: function() {
-        if(!!this.user) {
-          this.userBound(this.user);
-        }
+      userChanged: function () {
+        this.$.route.href = this.draftsHref();
       },
-      userBound: function(user) {
-        if(!!user && user.id) {
-          this.$.route.href = "/api/nodes?_withStream&draft=true&userId="+user.id;
-          this.$.route.noLoad = false;
+      attached: function () {
+        this.userChanged();
+      },
+      draftsHref: function () {
+        if (!!this.user && this.user.id) {
+          if (this.$.route.noLoad) {
+            var r = this.$.route;
+            this.async(function () {
+              r.noLoad = false;
+            });
+          }
+          return "/api/nodes?_withStream&draft=true&userId=" + this.user.id + "&kinds=" + R.join(',', R.sortBy(R.toLower, this.kinds));
+        } else {
+          this.$.route.noLoad = true;
         }
       }
     });

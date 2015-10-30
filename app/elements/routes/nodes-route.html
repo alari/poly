@@ -1,11 +1,18 @@
 <link rel="import" href="../node/nodes-list.html">
+<link rel="import" href="../node/kinds-tabs.html">
 
 <dom-module id="nodes-route">
 
   <template>
     <page-info title="Знание и Творчество"></page-info>
 
-    <meta-route href="/api/nodes?_withStream&kindsNot=label" expand="items.{text,user},agg.count" model="{{lastJson}}">
+    <div style="position: absolute;">
+      <paper-spinner active$="{{!lastJson}}"></paper-spinner>
+    </div>
+
+    <kinds-tabs values="{{kinds}}"></kinds-tabs>
+
+    <meta-route href$="{{nodesHref(kinds.splices)}}" expand="items.{text,user},agg.count" model="{{lastJson}}">
 
       <nodes-list model="{{lastJson}}"></nodes-list>
 
@@ -15,7 +22,17 @@
 
   <script>
     Polymer({
-      is: "nodes-route"
+      is: "nodes-route",
+      properties: {
+        kinds: {
+          type: Array,
+          value: ["Post", "Article", "Prose", "Poetry"]
+        }
+      },
+
+      nodesHref: function() {
+        return "/api/nodes?_withStream&kinds=" + R.join(',', R.sortBy(R.toLower, this.kinds));
+      }
     });
   </script>
 </dom-module>

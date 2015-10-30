@@ -1,0 +1,37 @@
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+
+<dom-module id="kinds-tabs">
+
+  <style>
+    paper-tabs {
+      background-color: #eee;
+      color: #111;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    }
+    paper-tab.iron-selected {
+      background-color: var(--paper-green-100);
+    }
+  </style>
+
+  <template>
+    <paper-tabs multi="true" selected-values="{{values}}" attr-for-selected="kind" no-bar>
+      <paper-tab kind="Post">Посты</paper-tab>
+      <paper-tab kind="Article">Статьи</paper-tab>
+      <paper-tab kind="Prose">Проза</paper-tab>
+      <paper-tab kind="Poetry">Поэзия</paper-tab>
+    </paper-tabs>
+  </template>
+
+  <script>
+    Polymer({
+      is: "kinds-tabs",
+      properties: {
+        values: {
+          type: Array,
+          value: ["Post", "Article", "Prose", "Poetry"],
+          notify: true
+        }
+      }
+    });
+  </script>
+</dom-module>

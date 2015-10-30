@@ -5,7 +5,7 @@
     }
   </style>
   <template>
-    <div class="pager">
+    <div class="pager" hidden$="{{!model}}">
       <meta-button method="GET" suffix$="{{prevSuffix(page,model)}}" update-model>
         <paper-icon-button icon="icons:arrow-back" hidden$="{{hidePrev(page)}}"></paper-icon-button>
       </meta-button>

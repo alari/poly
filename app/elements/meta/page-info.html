@@ -56,6 +56,10 @@
           "_notice(noBind, title, url, type, description, image)"
         ],
         attached: function () {
+          if(elements.length > 0) {
+            var e = elements[0];
+            this.title = e.title;
+          }
           elements.push(this);
           this._notice();
         },
