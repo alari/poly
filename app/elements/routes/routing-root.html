@@ -23,6 +23,12 @@
 
         page('/', route("nodes-route"));
 
+        page('/auth/verify-email/:token', route("verifyEmail-route"));
+
+        page('/auth/change-email/:token', route("changeEmail-route"));
+
+        page('/auth/recover/:token', route("recoverPassword-route"));
+
         page('/add-post', route("node-form-route"));
 
         page('/nodes', route("nodes-route"));

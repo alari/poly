@@ -1,0 +1,36 @@
+<dom-module id="verifyEmail-route">
+  <template>
+    <page-info title="Подтверждение электропочты"></page-info>
+    <auth-user value="{{user}}"></auth-user>
+
+    <meta-route no-load id="route" expand="items.{text,user},agg.count" model="{{lastJson}}">
+
+      <nodes-list model="{{lastJson}}"></nodes-list>
+
+    </meta-route>
+
+  </template>
+  <script>
+    Polymer({
+      is: "verifyEmail-route",
+      properties: {
+        user: {
+          type: Object,
+          notify: true,
+          observer: "userBound"
+        }
+      },
+      attached: function() {
+        if(!!this.user) {
+          this.userBound(this.user);
+        }
+      },
+      userBound: function(user) {
+        if(!!user && user.id) {
+          this.$.route.href = "/api/nodes?draft=true&userId="+user.id;
+          this.$.route.noLoad = false;
+        }
+      }
+    });
+  </script>
+</dom-module>
