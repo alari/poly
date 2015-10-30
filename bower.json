@@ -29,7 +29,9 @@
     "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#~1.0.5",
     "paper-checkbox": "PolymerElements/paper-checkbox#~1.0.13",
     "paper-tabs": "PolymerElements/paper-tabs#~1.0.5",
-    "paper-spinner": "PolymerElements/paper-spinner#~1.0.3"
+    "paper-spinner": "PolymerElements/paper-spinner#~1.0.3",
+    "paper-header-panel": "PolymerElements/paper-header-panel#~1.0.5",
+    "iron-media-query": "PolymerElements/iron-media-query#~1.0.5"
   },
   "devDependencies": {
     "web-component-tester": "*",

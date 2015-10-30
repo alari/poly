@@ -60,7 +60,6 @@
         return R.trim( R.toUpper(kind.substr(0,1)) + R.toLower(kind.substr(1)) );
       }, isContentKind = function (kind) {
         var k = normalizeKind(kind);
-        console.log(kind, k);
         return R.contains(k, ["Post", "Prose", "Article", "Poetry"]);
       }, defaultNode = function (kind) {
         var node = {
