@@ -4,7 +4,7 @@
 <dom-module id="node-form-route">
   <template>
     <meta-route id="route" href="/api/nodes" expand="text" model="{{node}}" no-load>
-      <node-form node="{{node}}"></node-form>
+      <node-form node="{{node}}" new-kind="{{newKind}}"></node-form>
     </meta-route>
 
   </template>
@@ -19,12 +19,18 @@
           },
           routeParams: {
             observer: "_params"
+          },
+          newKind: {
+            type: String,
+            value: null
           }
         },
         _params: function (params) {
           if (params && params.name) {
             this.$.route.href = "/api/nodes/" + params.name;
             this.$.route.noLoad = false;
+          } else if(params && params.kind) {
+            this.newKind = params.kind;
           }
         }
       });

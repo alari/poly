@@ -3,7 +3,9 @@
 <dom-module id="nodes-route">
 
   <template>
-    <meta-route href="/api/nodes" expand="items.{text,user},agg.count" model="{{lastJson}}">
+    <page-info title="Знание и Творчество"></page-info>
+
+    <meta-route href="/api/nodes?_withStream&kindsNot=label" expand="items.{text,user},agg.count" model="{{lastJson}}">
 
       <nodes-list model="{{lastJson}}"></nodes-list>
 

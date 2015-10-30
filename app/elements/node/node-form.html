@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 
 <dom-module id="node-form">
   <style>
@@ -22,9 +23,11 @@
 
       <paper-input title="Title" placeholder="Название" value="{{node.title}}"></paper-input>
 
-      <meta-resource model="{{node.text}}">
-        <iron-autogrow-textarea placeholder="Текст" bind-value="{{node.text.content}}"></iron-autogrow-textarea>
-      </meta-resource>
+      <template is="dom-if" if$="{{node.text}}">
+        <meta-resource model="{{node.text}}">
+          <iron-autogrow-textarea placeholder="Текст" bind-value="{{node.text.content}}"></iron-autogrow-textarea>
+        </meta-resource>
+      </template>
 
       <meta-button on-complete="_saved">
         <paper-button raised>
@@ -35,8 +38,17 @@
 
       <paper-checkbox checked="{{node.draft}}">Черновик</paper-checkbox>
 
-      <div hidden$="{{node.dateCreated}}">
-        <paper-input title="Date" placeholder="YYYY-MM-DD" value="{{node.date}}"></paper-input>
+      <div>
+        <paper-dropdown-menu label="Этот материал - ">
+          <paper-menu class="dropdown-content" selected="{{node.kind}}" attr-for-selected="kind">
+            <template is="dom-repeat" items="{{availableKinds(node.kind)}}">
+
+              <paper-item kind="[[item.kind]]">[[item.title]]</paper-item>
+
+            </template>
+
+          </paper-menu>
+        </paper-dropdown-menu>
       </div>
 
     </paper-material>
@@ -44,20 +56,29 @@
   </template>
   <script>
     (function () {
-      var defaultNode = function () {
-        return {
+      var normalizeKind = function(kind){
+        return R.trim( R.toUpper(kind.substr(0,1)) + R.toLower(kind.substr(1)) );
+      }, isContentKind = function (kind) {
+        var k = normalizeKind(kind);
+        console.log(kind, k);
+        return R.contains(k, ["Post", "Prose", "Article", "Poetry"]);
+      }, defaultNode = function (kind) {
+        var node = {
           meta: {
             href: "/api/nodes",
             mediaType: "application/node+json;expand=text"
           },
-          kind: "Post",
+          kind: normalizeKind(kind),
           title: "",
-          draft: true,
-          text: {
+          draft: true
+        };
+        if (isContentKind(kind)) {
+          node.text = {
             content: "",
             version: 1
-          }
-        };
+          };
+        }
+        return node;
       };
 
       Polymer({
@@ -66,9 +87,36 @@
           node: {
             type: Object,
             notify: true,
-            value: defaultNode
+            value: null
+          },
+          newKind: {
+            type: String,
+            observer: "_newKind"
           }
         },
+
+        availableKinds: function () {
+          if (this.node && isContentKind(this.node.kind)) {
+            return [
+              {kind: "Prose", title: "Проза"},
+              {kind: "Poetry", title: "Поэзия"},
+              {kind: "Post", title: "Пост"},
+              {kind: "Article", title: "Статья"}
+            ];
+          } else {
+            return [
+              {kind: "Label", title: "Раздел"}
+            ];
+          }
+        },
+
+        _newKind: function () {
+          if (!!this.newKind) {
+            this.node = defaultNode(this.newKind);
+          }
+        },
+
+
         _saved: function (e) {
           if (e.detail && e.detail.id) {
             page("/nodes/" + e.detail.id);

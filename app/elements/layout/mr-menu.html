@@ -1,6 +1,10 @@
 <link rel="import" href="../../bower_components/iron-signals/iron-signals.html">
 <link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
 
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-submenu.html">
+
+
 <dom-module id="mr-menu">
   <style>
     paper-item, paper-icon-item {
@@ -14,34 +18,51 @@
     </paper-toolbar>
 
     <!-- Drawer Content -->
-    <meta-route href="/api/nodes" model="{{lastJson}}">
-      <auth-user value="{{authUser}}"></auth-user>
-      <iron-signals on-iron-signal-route-changed="_routeChanged"></iron-signals>
+    <auth-user value="{{authUser}}"></auth-user>
+    <iron-signals on-iron-signal-route-changed="_routeChanged"></iron-signals>
 
-      <paper-menu class="list" selected="{{selected}}" attr-for-selected="page">
-        <paper-icon-item page="/">
-          <iron-icon icon="home" item-icon></iron-icon>
-          Главная
+    <paper-menu class="list" selected="{{selected}}" attr-for-selected="page">
+      <paper-icon-item page="/">
+        <iron-icon icon="home" item-icon></iron-icon>
+        Главная
+      </paper-icon-item>
+
+      <template is="dom-if" if$="{{authUser}}" respawn>
+        <paper-icon-item page="/drafts">
+          <iron-icon icon="visibility-off" item-icon></iron-icon>
+          Черновики
         </paper-icon-item>
-
-        <template is="dom-if" if$="{{authUser}}" respawn>
-          <paper-icon-item page="/drafts">
-            <iron-icon icon="visibility-off" item-icon></iron-icon>
-            Черновики
-          </paper-icon-item>
-          <paper-icon-item page="/add-post">
+        <paper-submenu>
+          <paper-icon-item class="menu-trigger">
             <iron-icon icon="add" item-icon></iron-icon>
             Добавить
           </paper-icon-item>
-        </template>
+          <paper-menu class="menu-content" selected="{{selected}}" attr-for-selected="page">
+            <paper-icon-item page="/new/post">
+              <iron-icon icon="add" item-icon></iron-icon>
+              Пост
+            </paper-icon-item>
+            <paper-icon-item page="/new/article">
+              <iron-icon icon="add" item-icon></iron-icon>
+              Статья
+            </paper-icon-item>
+            <paper-icon-item page="/new/prose">
+              <iron-icon icon="add" item-icon></iron-icon>
+              Проза
+            </paper-icon-item>
+            <paper-icon-item page="/new/poetry">
+              <iron-icon icon="add" item-icon></iron-icon>
+              Поэзия
+            </paper-icon-item>
+            <paper-icon-item page="/new/label">
+              <iron-icon icon="label" item-icon></iron-icon>
+              Раздел
+            </paper-icon-item>
+          </paper-menu>
+        </paper-submenu>
+      </template>
 
-        <template is="dom-repeat" items="{{lastJson.items}}">
-          <paper-item page$="[[itemHref(item)]]">
-            <meta-resource model="{{item}}">{{item.title}}</meta-resource>
-          </paper-item>
-        </template>
-      </paper-menu>
-    </meta-route>
+    </paper-menu>
   </template>
   <script>
     Polymer({
@@ -59,9 +80,6 @@
       },
       _routeChanged: function () {
         this.selected = page.current;
-      },
-      itemHref: function (item) {
-        return "/nodes/" + item.id;
       }
     });
   </script>

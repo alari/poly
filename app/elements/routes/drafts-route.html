@@ -29,7 +29,7 @@
       },
       userBound: function(user) {
         if(!!user && user.id) {
-          this.$.route.href = "/api/nodes?draft=true&userId="+user.id;
+          this.$.route.href = "/api/nodes?_withStream&draft=true&userId="+user.id;
           this.$.route.noLoad = false;
         }
       }
