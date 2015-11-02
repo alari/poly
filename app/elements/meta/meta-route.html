@@ -24,23 +24,28 @@
           notify: true,
           value: ""
         },
+        withStream: {
+          type: Boolean,
+          value: false
+        },
         noLoad: {
           type: Boolean,
           notify: true,
           value: false
         },
         params: {
-          computed: "_computeParams(expand)"
+          computed: "_computeParams(expand, withStream)"
         }
       },
       observers: [
         "_openStream(model.meta.stream)"
       ],
-      _computeParams: function (expand) {
-        if (!!expand) {
+      _computeParams: function (expand, withStream) {
+        console.log("this", expand, withStream);
+        if (!!expand || withStream) {
           return {
             headers: {
-              Accept: "application/json;expand=" + expand
+              Accept: "application/json;" + (expand ? ("expand="+expand) : "") + (withStream ? "&_withStream" : "")
             }
           };
         } else {

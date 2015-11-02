@@ -2,7 +2,7 @@
 
 <dom-module id="node-route">
   <template>
-    <meta-route href="{{computeNodeHref(routeParams)}}" expand="user,text" model="{{node}}">
+    <meta-route with-stream href="{{computeNodeHref(routeParams)}}" expand="user,text" model="{{node}}">
       <node-page node="{{node}}"></node-page>
     </meta-route>
   </template>
@@ -21,7 +21,7 @@
       },
 
       computeNodeHref: function (routeParams) {
-        return "/api/nodes/" + routeParams.name + "?_withStream";
+        return "/api/nodes/" + routeParams.name;
       }
 
     });
