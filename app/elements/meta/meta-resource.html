@@ -20,7 +20,7 @@
         }
       },
       listeners: {
-        'metaAction': '_action'
+        'action': '_action'
       },
       observers: [
         "_subscribeToIron(model.meta.href)"
@@ -127,6 +127,7 @@
       _handleResp: function (event, v, updateModel) {
         if (!!this.button) {
           this.button.fire("complete", v);
+          this.button.fire(!!v.failure ? "failure" : "success", v);
           this.button = null;
         }
         if (updateModel) {

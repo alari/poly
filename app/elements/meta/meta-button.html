@@ -1,6 +1,7 @@
 <dom-module id="meta-button">
   <template>
     <content></content>
+    <meta-overlay id="overlay" message="{{failure}}" opened="{{failure}}"></meta-overlay>
   </template>
   <script>
     Polymer({
@@ -31,14 +32,32 @@
         suffix: {
           type: String,
           value: ""
+        },
+        failure: {
+          type: String,
+          value: null,
+          notify: true
         }
       },
+
       listeners: {
-        click: "act"
+        click: "act",
+        failure: "_failure"
       },
+
+      attached: function(){
+        this.$.overlay.fitInto = Polymer.dom(this).parentNode;
+        this.$.overlay.fit();
+      },
+
+      _failure: function(v) {
+        this.failure = v.detail.failure.summary;
+      },
+
       act: function() {
         var href = (!!this.for && this.for.meta) ? this.for.meta.href : null;
-        this.fire("metaAction", {
+        this.failure = null;
+        this.fire("action", {
           href: href,
           action: this.action,
           method: this.method,

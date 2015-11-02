@@ -8,10 +8,6 @@
       background-color: var(--paper-green-50);
       color: var(--paper-green-500);
     }
-    .error {
-      color: var(--paper-red-500);;
-      text-align: center;
-    }
   </style>
 
   <template>
@@ -22,12 +18,8 @@
         <gold-email-input label="Email" value="{{email}}" required autofocus id="email" auto-validate></gold-email-input>
         <paper-input label="Пароль" value="{{password}}" type="password" required></paper-input>
 
-        <div hidden$="{{!error}}" class="error">
-          <span>{{error}}</span>
-        </div>
-
-        <div class="buttons">
-          <meta-button update-model body="{{ signinBody(email, password) }}" on-complete="complete">
+        <div class="buttons" id="buttons">
+          <meta-button update-model body="{{ _signinBody(email, password) }}">
             <paper-button>Войти</paper-button>
           </meta-button>
         </div>
@@ -49,21 +41,10 @@
             type: String,
             value: null,
             notify: true
-          },
-          error: {
-            type: String,
-            value: null,
-            notify: true
           }
         },
 
-        complete: function(m) {
-          if(!!m.detail.failure) {
-            this.error = m.detail.failure.summary;
-          }
-        },
-
-        signinBody: function() {
+        _signinBody: function() {
           return {
             provider: "email",
             email: this.email,
