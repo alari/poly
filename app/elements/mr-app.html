@@ -22,7 +22,7 @@ Extended Header + List Left + Card Over Toolbar
 
   <template>
 
-    <paper-drawer-panel id="drawerPanel">
+    <paper-drawer-panel id="drawerPanel" responsive-width="1024px" drawer-width="{{drawerWidth}}">
       <!-- Drawer Scroll Header Panel -->
       <paper-scroll-header-panel drawer fixed>
 
@@ -31,10 +31,10 @@ Extended Header + List Left + Card Over Toolbar
       </paper-scroll-header-panel>
 
       <!-- Main Area -->
-      <paper-scroll-header-panel main condenses keep-condensed-header>
+      <paper-scroll-header-panel main condenses keep-condensed-header mode="{{mainMode}}">
 
         <!-- Main Toolbar -->
-        <paper-toolbar id="mainToolbar" class="tall">
+        <paper-toolbar id="mainToolbar" class$="{{toolbarClass}}">
           <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
           <span class="flex"></span>
 
@@ -63,6 +63,9 @@ Extended Header + List Left + Card Over Toolbar
         </div>
       </paper-scroll-header-panel>
     </paper-drawer-panel>
+
+    <iron-media-query query="(max-width: 780px)" query-matches="{{_isMobile}}"></iron-media-query>
+
   </template>
 
   <script>
