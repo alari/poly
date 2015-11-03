@@ -27,7 +27,7 @@
         },
         _params: function (params) {
           if (params && params.name) {
-            this.$.route.href = "/api/nodes/" + params.name;
+            this.$.route.ref = "/api/nodes/" + params.name;
             this.$.route.noLoad = false;
           } else if(params && params.kind) {
             this.newKind = params.kind;

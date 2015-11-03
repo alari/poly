@@ -57,7 +57,7 @@
   <script>
     (function () {
       var normalizeKind = function(kind){
-        return R.trim( R.toUpper(kind.substr(0,1)) + R.toLower(kind.substr(1)) );
+        return kind && R.trim( R.toUpper(kind.substr(0,1)) + R.toLower(kind.substr(1)) );
       }, isContentKind = function (kind) {
         var k = normalizeKind(kind);
         return R.contains(k, ["Post", "Prose", "Article", "Poetry"]);
