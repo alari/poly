@@ -16,15 +16,18 @@
         properties: {
           value: {
             type: Boolean,
+            notify: true,
             computed: "computeValue(user, authUser)"
           },
           user: {
             type: Object,
+            notify: true,
             value: null
           },
           authUser: {
             type: Object,
-            notify: true
+            notify: true,
+            value: null
           }
         },
         computeValue: function () {
