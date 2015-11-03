@@ -12,7 +12,7 @@
       <paper-spinner active$="{{!lastJson}}"></paper-spinner>
     </div>
 
-    <meta-route no-load with-stream href="{{draftsHref(kinds.splices,user)}}" id="route" expand="items.{text,user},agg.{count,kind.distinct.count}"
+    <meta-route no-load with-stream ref="{{draftsHref(kinds.splices,user)}}" id="route" expand="items.{text,user},agg.{count,kind.distinct.count}"
                 model="{{lastJson}}">
 
       <nodes-list model="{{lastJson}}"></nodes-list>

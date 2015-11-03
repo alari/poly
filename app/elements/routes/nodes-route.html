@@ -12,7 +12,7 @@
 
     <kinds-tabs values="{{kinds}}" kinds-agg="{{lastJson.agg.kind}}"></kinds-tabs>
 
-    <meta-route with-stream href$="{{nodesHref(kinds.splices)}}"
+    <meta-route with-stream ref$="{{nodesHref(kinds.splices)}}"
                 expand="items.{text,user},agg.{count,kind.distinct.count}" model="{{lastJson}}">
 
       <nodes-list model="{{lastJson}}"></nodes-list>

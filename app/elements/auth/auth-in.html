@@ -1,0 +1,130 @@
+<link rel="import" href="../../bower_components/gold-email-input/gold-email-input.html">
+
+<dom-module id="auth-in">
+
+  <style>
+    #dialog.PUT {
+      border-color: var(--paper-orange-500);
+      background-color: var(--paper-orange-50);
+      color: var(--paper-orange-500);
+    }
+
+    #dialog.POST {
+      border-color: var(--paper-green-500);
+      background-color: var(--paper-green-50);
+      color: var(--paper-green-500);
+    }
+
+    paper-tabs {
+      background-color: #eee;
+      color: #111;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    paper-tab.iron-selected {
+      background-color: var(--paper-green-100);
+    }
+
+    paper-tab span {
+      padding: 0 1em;
+    }
+
+    .error {
+      background-color: white;
+      padding: 3px;
+      border: 1px solid var(--paper-red-100);
+      text-align: center;
+      color: var(--paper-red-500);
+    }
+  </style>
+
+  <template>
+
+    <paper-dialog id="dialog" class$="{{method}}" with-backdrop>
+      <paper-tabs selected="{{method}}" attr-for-selected="method">
+        <paper-tab method="PUT">
+          <span>Регистрация</span>
+        </paper-tab>
+        <paper-tab method="POST">
+          <span>Вход</span>
+        </paper-tab>
+      </paper-tabs>
+
+      <form on-submit="_submit">
+
+        <gold-email-input label="Email" value="{{email}}" required autofocus id="email"
+                          auto-validate></gold-email-input>
+        <paper-input label="Пароль" value="{{password}}" type="password" required></paper-input>
+
+        <div class="error" hidden$="{{!failure}}">{{failure}}</div>
+
+        <div class="buttons">
+          <meta-button update-model id="button" method="{{method}}" body="{{ _signupBody(email, password) }}"
+                       for='{"meta":{"href":"/api/auth"}}' on-success="close" failure="{{failure}}">
+            <paper-button>{{_buttonTitle(method)}}</paper-button>
+          </meta-button>
+        </div>
+
+      </form>
+    </paper-dialog>
+
+  </template>
+  <script>
+    (function () {
+      "use strict";
+      Polymer({
+        is: "auth-in",
+        properties: {
+          email: {
+            type: String,
+            value: null,
+            notify: true
+          },
+          password: {
+            type: String,
+            value: null,
+            notify: true
+          },
+          method: {
+            type: String,
+            value: "PUT",
+            notify: true
+          }
+        },
+
+        _signupBody: function () {
+          return {
+            provider: "email",
+            email: this.email,
+            password: this.password
+          };
+        },
+
+        _buttonTitle: function () {
+          return {
+            PUT: "Зарегистрироваться",
+            POST: "Войти"
+          }[this.method];
+        },
+
+        _submit: function() {
+          this.$.button.act();
+        },
+
+        toggle: function () {
+          this.$.dialog.toggle();
+        },
+
+        close: function () {
+          this.$.dialog.close();
+          this.email = null;
+          this.password = null;
+        },
+
+        open: function () {
+          this.$.dialog.open();
+        }
+      });
+    })();
+  </script>
+</dom-module>

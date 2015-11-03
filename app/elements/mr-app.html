@@ -12,6 +12,7 @@
 <link rel="import" href="../bower_components/paper-toolbar/paper-toolbar.html">
 
 <link rel="import" href="layout/mr-menu.html">
+<link rel="import" href="auth/auth-context.html">
 
 <!--
 Extended Header + List Left + Card Over Toolbar
@@ -22,47 +23,51 @@ Extended Header + List Left + Card Over Toolbar
 
   <template>
 
-    <paper-drawer-panel id="drawerPanel" responsive-width="1024px" drawer-width="{{drawerWidth}}">
-      <!-- Drawer Scroll Header Panel -->
-      <paper-scroll-header-panel drawer fixed>
+    <auth-context>
 
-        <mr-menu on-iron-activate="_listTap"></mr-menu>
+      <paper-drawer-panel id="drawerPanel" responsive-width="1024px" drawer-width="{{drawerWidth}}">
+        <!-- Drawer Scroll Header Panel -->
+        <paper-scroll-header-panel drawer fixed>
 
-      </paper-scroll-header-panel>
+          <mr-menu on-iron-activate="_listTap"></mr-menu>
 
-      <!-- Main Area -->
-      <paper-scroll-header-panel main condenses keep-condensed-header mode="{{mainMode}}">
+        </paper-scroll-header-panel>
 
-        <!-- Main Toolbar -->
-        <paper-toolbar id="mainToolbar" class$="{{toolbarClass}}">
-          <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
-          <span class="flex"></span>
+        <!-- Main Area -->
+        <paper-scroll-header-panel main condenses keep-condensed-header mode="{{mainMode}}">
 
-          <!-- Toolbar icons -->
-          <auth-buttons></auth-buttons>
+          <!-- Main Toolbar -->
+          <paper-toolbar id="mainToolbar" class$="{{toolbarClass}}">
+            <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
+            <span class="flex"></span>
 
-          <page-info no-bind title="{{title}}"></page-info>
+            <!-- Toolbar icons -->
+            <auth-buttons></auth-buttons>
 
-          <!-- Application name -->
-          <div class="middle middle-container center horizontal layout">
-            <div class="app-name"></div>
+            <page-info no-bind title="{{title}}"></page-info>
+
+            <!-- Application name -->
+            <div class="middle middle-container center horizontal layout">
+              <div class="app-name"></div>
+            </div>
+
+            <!-- Application sub title -->
+            <div class="bottom bottom-container center horizontal layout">
+              <div class="bottom-title paper-font-subhead"></div>
+            </div>
+
+            <div class="bottom title">{{title}}</div>
+
+          </paper-toolbar>
+
+          <!-- Main Content -->
+          <div class="content">
+            <content></content>
           </div>
+        </paper-scroll-header-panel>
+      </paper-drawer-panel>
 
-          <!-- Application sub title -->
-          <div class="bottom bottom-container center horizontal layout">
-            <div class="bottom-title paper-font-subhead"></div>
-          </div>
-
-          <div class="bottom title">{{title}}</div>
-
-        </paper-toolbar>
-
-        <!-- Main Content -->
-        <div class="content">
-          <content></content>
-        </div>
-      </paper-scroll-header-panel>
-    </paper-drawer-panel>
+    </auth-context>
 
     <iron-media-query query="(max-width: 780px)" query-matches="{{_isMobile}}"></iron-media-query>
 

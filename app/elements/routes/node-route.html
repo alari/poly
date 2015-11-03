@@ -2,7 +2,7 @@
 
 <dom-module id="node-route">
   <template>
-    <meta-route with-stream href="{{computeNodeHref(routeParams)}}" expand="user,text" model="{{node}}">
+    <meta-route with-stream ref="{{computeNodeHref(routeParams)}}" expand="user,text" model="{{node}}">
       <node-page node="{{node}}"></node-page>
     </meta-route>
   </template>

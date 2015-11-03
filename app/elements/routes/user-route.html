@@ -25,7 +25,7 @@
       },
       _setRouteParams: function(routeParams) {
         if(!!routeParams && routeParams.id) {
-          this.$.route.href = "/api/nodes?userId="+routeParams.id;
+          this.$.route.ref = "/api/nodes?userId="+routeParams.id;
           this.$.route.noLoad = false;
         }
       }

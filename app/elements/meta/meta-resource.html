@@ -97,7 +97,8 @@
 
       },
       _action: function (e) {
-        if (this.model.meta && (!e.detail.href || (e.detail.href === this.model.meta.href))) {
+        console.log(e.detail, this.model);
+        if (this.model && this.model.meta && (!e.detail.href || (e.detail.href === this.model.meta.href))) {
           if (!!e.stopPropagation) {
             e.stopPropagation();
           }

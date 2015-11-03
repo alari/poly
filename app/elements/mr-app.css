@@ -35,8 +35,3 @@ paper-toolbar {
      left: 64px;
  };
 }
-
-paper-material {
-    height: 1400px;
-    background-color: #fff;
-}

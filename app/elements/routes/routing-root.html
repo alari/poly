@@ -13,6 +13,11 @@
           type: Object,
           notify: true,
           value: null
+        },
+        queryString: {
+          type: String,
+          notify: true,
+          value: null
         }
       },
       observers: [
@@ -23,11 +28,11 @@
 
         page('/', route("nodes-route"));
 
-        page('/auth/verify-email/:token', route("verifyEmail-route"));
+        page('/auth/verify-email', route("verifyEmail-route"));
 
-        page('/auth/change-email/:token', route("changeEmail-route"));
+        page('/auth/change-email', route("changeEmail-route"));
 
-        page('/auth/recover/:token', route("recoverPassword-route"));
+        page('/auth/recover', route("recoverPassword-route"));
 
         page('/new/:kind', route("node-form-route"));
 
@@ -52,6 +57,7 @@
           this._clean();
           this.route = name;
           this.params = data.params;
+          this.queryString = data.querystring;
           this._display();
         }.bind(this);
       },
@@ -67,6 +73,7 @@
         var root = Polymer.dom(this.root);
         var r = document.createElement(this.route);
         r.routeParams = this.params;
+        r.queryString = this.queryString;
         root.appendChild(r);
         this.fire("iron-signal", {name: "route-changed", data: {route: this.route, params: this.params}});
 

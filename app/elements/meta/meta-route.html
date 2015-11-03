@@ -2,7 +2,7 @@
 
 <dom-module id="meta-route">
   <template>
-    <auth-fetch id="fetch" auto="{{!noLoad}}" url="{{href}}" last-json="{{model}}" params="{{params}}"></auth-fetch>
+    <auth-fetch id="fetch" auto="{{!noLoad}}" url="{{ref}}" last-json="{{model}}" params="{{params}}"></auth-fetch>
     <meta-resource model="{{model}}">
       <content></content>
     </meta-resource>
@@ -11,8 +11,9 @@
     Polymer({
       is: "meta-route",
       properties: {
-        href: {
+        ref: {
           type: String,
+          value: null,
           reflectToAttribute: true
         },
         model: {
@@ -40,6 +41,17 @@
       observers: [
         "_openStream(model.meta.stream)"
       ],
+      attached: function() {
+        if(!this.model && this.ref) {
+          this.model = {
+            meta: {
+              href: this.ref,
+              mediaType: "application/json;expand="+this.expand
+            },
+            _noPreload: true
+          };
+        }
+      },
       _computeParams: function (expand, withStream) {
         if (!!expand || withStream) {
           return {

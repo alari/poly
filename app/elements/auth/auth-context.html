@@ -1,0 +1,82 @@
+<dom-module id="auth-context">
+
+  <template>
+    <auth-token id="token"></auth-token>
+    <auth-user id="user" value="{{_user}}" roles="{{_roles}}"></auth-user>
+
+    <meta-route ref="/api/auth" expand="user" model="{{_resp}}">
+
+      <content></content>
+
+    </meta-route>
+
+  </template>
+  <script>
+    (function () {
+      "use strict";
+      var defaultMeta = function () {
+        return {
+          href: "/api/auth",
+          mediaType: "application/auth-status+json;expand=user"
+        };
+      };
+      Polymer({
+        is: "auth-context",
+        properties: {
+          _resp: {
+            type: Object,
+            observer: "_authResp",
+            value: null,
+            notify: true
+          },
+          _user: {
+            type: Object,
+            notify: true,
+            observer: "_userSet"
+          },
+          user: {
+            type: Object,
+            notify: true,
+            readOnly: true
+          },
+          _roles: {
+            type: Array,
+            notify: true
+          },
+          roles: {
+            type: Array,
+            notify: true,
+            readOnly: true
+          }
+        },
+
+        observers: [
+          "_rolesSet(_roles.splices)"
+        ],
+
+        _userSet: function () {
+          this._setUser(this._user);
+        },
+
+        _rolesSet: function () {
+          this._setRoles(this._roles);
+        },
+
+        _authResp: function () {
+          if (!!this._resp) {
+            if (!this._resp.failure) {
+              this.$.user.setUser(this._resp.user);
+              this.$.user.setRoles(this._resp.roles);
+            } else {
+              this._resp.meta = defaultMeta();
+            }
+
+          } else {
+            this.$.user.setUser(null);
+            this.$.user.setRoles([]);
+          }
+        }
+      });
+    })();
+  </script>
+</dom-module>

@@ -1,35 +1,61 @@
 <dom-module id="verifyEmail-route">
+  <style>
+    paper-material {
+      text-align: center;
+      max-width: 740px;
+      background: #fff;
+      margin: auto;
+      padding: 2em;
+    }
+
+    #spinner {
+      width: 100px;
+      height: 100px;
+    }
+  </style>
   <template>
     <page-info title="Подтверждение электропочты"></page-info>
-    <auth-user value="{{user}}"></auth-user>
 
-    <meta-route no-load id="route" expand="items.{text,user},agg.count" model="{{lastJson}}">
+    <paper-material>
+      <h2>Подтверждаем электропочту</h2>
 
-      <nodes-list model="{{lastJson}}"></nodes-list>
+      <meta-button id="button" action="verifyEmail" for='{"meta":{"href":"/api/auth"}}' body="{{_tokenBody(queryString)}}"
+                   on-success="_success">
+      </meta-button>
 
-    </meta-route>
+      <paper-spinner id="spinner" active></paper-spinner>
+    </paper-material>
+
 
   </template>
   <script>
     Polymer({
       is: "verifyEmail-route",
       properties: {
-        user: {
-          type: Object,
+        queryString: {
+          type: String,
           notify: true,
-          observer: "userBound"
+          observer: "paramsBound"
         }
       },
-      attached: function() {
-        if(!!this.user) {
-          this.userBound(this.user);
+
+      paramsBound: function () {
+        var b = this.$.button;
+        if (!!this.queryString && !this.launched) {
+          this.launched = true;
+
+          this.async(function () {
+            b.act();
+          });
         }
       },
-      userBound: function(user) {
-        if(!!user && user.id) {
-          this.$.route.href = "/api/nodes?draft=true&userId="+user.id;
-          this.$.route.noLoad = false;
-        }
+      _tokenBody: function () {
+        return {
+          token: this.queryString
+        };
+      },
+      _success: function () {
+        page("/");
       }
     });
   </script>
