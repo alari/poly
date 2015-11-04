@@ -1,8 +1,29 @@
 <link rel="import" href="../auth/auth-fetch.html">
 
 <dom-module id="meta-route">
+  <style>
+    #spinner {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      height: 100%;
+      min-height: 100px;
+    }
+
+    paper-spinner {
+      margin: auto;
+      width: 100px;
+      height: 100px;
+      top: 25%;
+    }
+  </style>
   <template>
     <auth-fetch id="fetch" auto="{{!noLoad}}" url="{{ref}}" last-json="{{model}}" params="{{params}}"></auth-fetch>
+
+    <div hidden$="{{_spinnerHidden(noSpinner, noLoad, model)}}" id="spinner">
+      <paper-spinner active$="{{!model}}"></paper-spinner>
+    </div>
+
     <meta-resource model="{{model}}">
       <content></content>
     </meta-resource>
@@ -36,17 +57,24 @@
         },
         params: {
           computed: "_computeParams(expand, withStream)"
+        },
+        noSpinner: {
+          type: Boolean,
+          value: false
         }
       },
       observers: [
         "_openStream(model.meta.stream)"
       ],
-      attached: function() {
-        if(!this.model && this.ref) {
+      _spinnerHidden: function () {
+        return this.noSpinner || this.noLoad || (this.model && !this.model._noPreload);
+      },
+      attached: function () {
+        if (!this.model && this.ref) {
           this.model = {
             meta: {
               href: this.ref,
-              mediaType: "application/json;expand="+this.expand
+              mediaType: "application/json;expand=" + this.expand
             },
             _noPreload: true
           };
@@ -56,7 +84,7 @@
         if (!!expand || withStream) {
           return {
             headers: {
-              Accept: "application/json;" + (expand ? ("expand="+expand) : "") + (withStream ? "&_withStream" : "")
+              Accept: "application/json;" + (expand ? ("expand=" + expand) : "") + (withStream ? "&_withStream" : "")
             }
           };
         } else {
@@ -64,7 +92,7 @@
         }
       },
       _openStream: function () {
-        if(!!window.EventSource) {
+        if (!!window.EventSource) {
           if (!!this.stream) {
             this.stream.close();
           }
@@ -78,8 +106,8 @@
           }
         }
       },
-      detached: function() {
-        if(!!this.stream) {
+      detached: function () {
+        if (!!this.stream) {
           this.stream.close();
         }
       }

@@ -76,7 +76,7 @@
               }, this.kindsAgg.distinct));
         },
         hideTabs: function () {
-          return R.length(this.availableKinds()) <= 1;
+          return this.kindsAgg && R.length(this.availableKinds()) <= 1;
         }
       });
     })();

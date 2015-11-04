@@ -3,10 +3,6 @@
 <dom-module id="user-route">
   <template>
 
-    <div style="position: absolute;">
-      <paper-spinner active$="{{!lastJson}}"></paper-spinner>
-    </div>
-
     <meta-route no-load id="route" expand="items.{text,user},agg.count" model="{{lastJson}}">
 
       <nodes-list model="{{lastJson}}"></nodes-list>

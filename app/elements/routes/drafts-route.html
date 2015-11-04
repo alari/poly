@@ -6,14 +6,10 @@
     <page-info title="Черновики"></page-info>
     <auth-user value="{{user}}"></auth-user>
 
-    <kinds-tabs values="{{kinds}}" kinds-agg="{{lastJson.agg.kind}}"></kinds-tabs>
-
-    <div style="position: absolute;">
-      <paper-spinner active$="{{!lastJson}}"></paper-spinner>
-    </div>
-
     <meta-route no-load with-stream ref="{{draftsHref(kinds.splices,user)}}" id="route" expand="items.{text,user},agg.{count,kind.distinct.count}"
                 model="{{lastJson}}">
+
+      <kinds-tabs values="{{kinds}}" kinds-agg="{{lastJson.agg.kind}}"></kinds-tabs>
 
       <nodes-list model="{{lastJson}}"></nodes-list>
 
@@ -27,21 +23,23 @@
         user: {
           type: Object,
           notify: true,
-          observer: "userChanged"
+          observer: "_userChanged"
         },
         kinds: {
           type: Array,
           value: ["Post", "Article", "Prose", "Poetry"]
         }
       },
-      userChanged: function () {
-        this.$.route.href = this.draftsHref();
+      _userChanged: function () {
+        this.$.route.ref = this.draftsHref();
       },
       attached: function () {
-        this.userChanged();
+        this._userChanged();
       },
       draftsHref: function () {
+        console.log("trying to load");
         if (!!this.user && this.user.id) {
+          console.log("trying to load", this.user.id, this.$.route.noLoad, "/api/nodes?draft=true&userId=" + this.user.id + "&kinds=" + R.join(',', R.sortBy(R.toLower, this.kinds)));
           if (this.$.route.noLoad) {
             var r = this.$.route;
             this.async(function () {
@@ -50,6 +48,7 @@
           }
           return "/api/nodes?draft=true&userId=" + this.user.id + "&kinds=" + R.join(',', R.sortBy(R.toLower, this.kinds));
         } else {
+          console.log("noload");
           this.$.route.noLoad = true;
         }
       }
