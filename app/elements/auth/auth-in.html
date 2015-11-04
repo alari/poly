@@ -3,15 +3,24 @@
 <dom-module id="auth-in">
 
   <style>
+    #dialog a {
+      text-decoration: none;
+    }
+
     #dialog.PUT {
       border-color: var(--paper-orange-500);
       background-color: var(--paper-orange-50);
+    }
+    #dialog.PUT, #dialog.PUT a {
       color: var(--paper-orange-500);
     }
 
     #dialog.POST {
       border-color: var(--paper-green-500);
       background-color: var(--paper-green-50);
+    }
+
+    #dialog.POST, #dialog.POST a {
       color: var(--paper-green-500);
     }
 
@@ -54,7 +63,7 @@
 
         <gold-email-input label="Email" value="{{email}}" required autofocus id="email"
                           auto-validate></gold-email-input>
-        <paper-input label="Пароль" value="{{password}}" type="password" required></paper-input>
+        <paper-input label="Пароль" value="{{password}}" type="password" minlength="6" auto-validate required></paper-input>
 
         <div class="error" hidden$="{{!failure}}">{{failure}}</div>
 
@@ -63,6 +72,10 @@
                        for='{"meta":{"href":"/api/auth"}}' on-success="close" failure="{{failure}}">
             <paper-button>{{_buttonTitle(method)}}</paper-button>
           </meta-button>
+        </div>
+
+        <div>
+          <a href="/auth/recover">Восстановить пароль</a>
         </div>
 
       </form>

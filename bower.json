@@ -33,7 +33,8 @@
     "paper-header-panel": "PolymerElements/paper-header-panel#~1.0.5",
     "iron-media-query": "PolymerElements/iron-media-query#~1.0.5",
     "iron-overlay-behavior": "PolymerElements/iron-overlay-behavior#~1.0.9",
-    "paper-badge": "PolymerElements/paper-badge#~1.0.4"
+    "paper-badge": "PolymerElements/paper-badge#~1.0.4",
+    "iron-pages": "PolymerElements/iron-pages#~1.0.3"
   },
   "devDependencies": {
     "web-component-tester": "*",

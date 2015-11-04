@@ -1,0 +1,145 @@
+<link rel="import" href="../../../bower_components/iron-pages/iron-pages.html">
+
+<dom-module id="recover-route">
+  <style>
+    paper-material {
+      text-align: center;
+      max-width: 740px;
+      background: #fff;
+      margin: auto;
+      padding: 2em;
+    }
+
+    #spinner {
+      width: 100px;
+      height: 100px;
+    }
+  </style>
+  <template>
+    <page-info title="Восстановление пароля"></page-info>
+
+    <paper-material>
+      <h2>Вспомним всё</h2>
+
+      <iron-pages selected="{{_page}}" attr-for-selected="page">
+        <div page="main">
+          <gold-email-input label="Email" value="{{email}}" required autofocus id="email"
+                            auto-validate></gold-email-input>
+
+          <div class="error" hidden$="{{!failure}}">{{failure}}</div>
+
+          <div class="buttons">
+            <meta-button action="startPasswordRecovery" body="{{ _recoveryBody(email) }}"
+                         for='{"meta":{"href":"/api/auth"}}' on-success="_sent" failure="{{failure}}">
+              <paper-button>Отправить письмо</paper-button>
+            </meta-button>
+          </div>
+        </div>
+
+        <div page="sent">
+
+          <h3>Письмо отправлено!</h3>
+
+          <p>Пожалуйста, следуйте инструкции в письме, отправленном по адресу <span>{{email}}</span></p>
+
+        </div>
+
+        <div page="check">
+
+          <meta-button id="button" action="checkPasswordRecovery" body="{{ _checkBody(queryString) }}"
+                       for='{"meta":{"href":"/api/auth"}}' on-success="_correct" failure="{{failure}}">
+          </meta-button>
+
+          <h3>Проверяем</h3>
+
+          <div class="error" hidden$="{{!failure}}">{{failure}}</div>
+
+        </div>
+
+        <div page="change">
+          <h3>Будет новый</h3>
+
+          <paper-input label="Придумайте Пароль" value="{{password}}" type="password" minlength="6" auto-validate required></paper-input>
+
+          <div class="error" hidden$="{{!failure}}">{{failure}}</div>
+
+          <div class="buttons">
+            <meta-button update-model action="recoverPassword" body="{{ _changeBody(password,queryString) }}"
+                         for='{"meta":{"href":"/api/auth"}}' on-success="_ok" failure="{{failure}}">
+              <paper-button>Поставить пароль</paper-button>
+            </meta-button>
+          </div>
+
+        </div>
+      </iron-pages>
+
+
+    </paper-material>
+
+
+  </template>
+  <script>
+    Polymer({
+      is: "recover-route",
+      properties: {
+        email: {
+          type: String,
+          notify: true
+        },
+        password: {
+          type: String,
+          value: null,
+          notify: true
+        },
+        _page: {
+          type: String,
+          value: null,
+          notify: true
+        },
+        queryString: {
+          type: String,
+          value: null,
+          notify: true
+        }
+      },
+
+      attached: function(){
+        this._page = this.queryString ? "check" : "main";
+        if(this.queryString) {
+          this.$.button.act();
+        }
+      },
+
+      _recoveryBody: function () {
+        return {
+          email: this.email
+        };
+      },
+
+      _checkBody: function () {
+        return {
+          token: this.queryString
+        };
+      },
+
+      _changeBody: function () {
+        return {
+          token: this.queryString,
+          newPass: this.password
+        };
+      },
+
+      _sent: function () {
+        this._page = "success";
+      },
+
+      _correct: function() {
+        this._page = "change";
+      },
+
+      _ok: function() {
+        page("/");
+      }
+    });
+  </script>
+</dom-module>
