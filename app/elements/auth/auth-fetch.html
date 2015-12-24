@@ -8,11 +8,11 @@
     <auth-token id="token"></auth-token>
   </template>
   <script>
-    (function () {
-      "use strict";
+    (function() {
+      'use strict';
 
       Polymer({
-        is: "auth-fetch",
+        is: 'auth-fetch',
 
         properties: {
           url: {
@@ -103,27 +103,27 @@
         set authToken(v) {
           this.$.token.setValue(v);
 
-          this.fire("auth-token", this.authToken);
+          this.fire('auth-token', this.authToken);
         },
 
         get authHeaderName() {
-          var ahn = this.$.meta.byKey("auth-header-name");
-          return ahn || "Authorization";
+          var ahn = this.$.meta.byKey('auth-header-name');
+          return ahn || 'Authorization';
         },
 
         observers: [
-          "_requestParamsChanged(url, params, auto)"
+          '_requestParamsChanged(url, params, auto)'
         ],
 
-        generateRequest: function () {
-          window.fetch(this.url, this.options).then(function (response) {
-            //console.log("response", response);
+        generateRequest: function() {
+          window.fetch(this.url, this.options).then(function(response) {
+            //console.log('response', response);
 
-            this.fire("resp", response);
+            this.fire('resp', response);
 
             if (response.status === 401) {
               this.authToken = null;
-              this.fire("unauthenticated", response);
+              this.fire('unauthenticated', response);
             } else if (response.headers.has(this.authHeaderName)) {
               var respAuthToken = response.headers.get(this.authHeaderName);
               if (respAuthToken !== this.authToken) {
@@ -144,30 +144,30 @@
             this._setLastJson(null);
             this._setLastText('');
 
-            if (response.headers.has("content-type") && response.headers.get("content-type").indexOf("json") > 0) {
+            if (response.headers.has('content-type') && response.headers.get('content-type').indexOf('json') > 0) {
               return response.json();
             } else {
               return response.text();
             }
-          }.bind(this)).then(function (body) {
+          }.bind(this)).then(function(body) {
             if (body instanceof Object) {
               this._setLastJson(body);
-              this.fire("json", body);
+              this.fire('json', body);
             }
-            if (typeof body === "string") {
+            if (typeof body === 'string') {
               this._setLastText(body);
-              this.fire("text", body);
+              this.fire('text', body);
             }
-          }.bind(this)).catch(function (err) {
-            console.error("error!", err);
+          }.bind(this)).catch(function(err) {
+            console.error('error!', err);
             this._setLastError(err);
-            this.fire("error", err);
+            this.fire('error', err);
           }.bind(this));
         },
 
-        _requestParamsChanged: function () {
-          //console.log("changed", url, params, auto);
-          this.debounce("auth-fetch", function () {
+        _requestParamsChanged: function() {
+          //console.log('changed', url, params, auto);
+          this.debounce('auth-fetch', function() {
             if (!this.url && this.url !== '') {
               return;
             }
@@ -178,7 +178,7 @@
           }, this.debounceDuration);
         },
 
-        attached: function () {
+        attached: function() {
           this._requestParamsChanged(this.url, this.params, this.auto);
         }
       });

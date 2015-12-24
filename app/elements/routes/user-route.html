@@ -3,7 +3,7 @@
 <dom-module id="user-route">
   <template>
 
-    <meta-route no-load id="route" expand="items.{text,user},agg.count" model="{{lastJson}}">
+    <meta-route no-load id="route" expand="items.user,agg.count" model="{{lastJson}}">
 
       <nodes-list model="{{lastJson}}"></nodes-list>
 
@@ -12,16 +12,16 @@
   </template>
   <script>
     Polymer({
-      is: "user-route",
+      is: 'user-route',
       properties: {
         routeParams: {
           type: Object,
-          observer: "_setRouteParams"
+          observer: '_setRouteParams'
         }
       },
       _setRouteParams: function(routeParams) {
-        if(!!routeParams && routeParams.id) {
-          this.$.route.ref = "/api/nodes?userId="+routeParams.id;
+        if (!!routeParams && routeParams.id) {
+          this.$.route.ref = '/api/nodes?userId=' + routeParams.id;
           this.$.route.noLoad = false;
         }
       }

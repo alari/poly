@@ -3,7 +3,7 @@
 <dom-module is="routing-root">
   <script>
     Polymer({
-      is: "routing-root",
+      is: 'routing-root',
       properties: {
         route: {
           type: String,
@@ -23,28 +23,28 @@
       observers: [
         '_progressRoute(routeChanging)'
       ],
-      attached: function () {
+      attached: function() {
         var route = this._route.bind(this);
 
-        page('/', route("nodes-route"));
+        page('/', route('nodes-route'));
 
-        page('/auth/verify-email', route("verifyEmail-route"));
+        page('/auth/verify-email', route('verifyEmail-route'));
 
-        page('/auth/change-email', route("changeEmail-route"));
+        page('/auth/change-email', route('changeEmail-route'));
 
-        page('/auth/recover', route("recover-route"));
+        page('/auth/recover', route('recover-route'));
 
-        page('/new/:kind', route("node-form-route"));
+        page('/new/:kind', route('node-form-route'));
 
-        page('/nodes', route("nodes-route"));
+        page('/nodes', route('nodes-route'));
 
-        page('/nodes/:name', route("node-route"));
+        page('/nodes/:name', route('node-route'));
 
-        page('/nodes/:name/edit', route("node-form-route"));
+        page('/nodes/:name/edit', route('node-form-route'));
 
-        page('/user/:id', route("user-route"));
+        page('/user/:id', route('user-route'));
 
-        page('/drafts', route("drafts-route"));
+        page('/drafts', route('drafts-route'));
 
         // add #! before urls
         page({
@@ -62,22 +62,22 @@
         }.bind(this);
       },
 
-      _clean: function () {
+      _clean: function() {
         var root = Polymer.dom(this.root);
-        R.forEach(function (n) {
+        R.forEach(function(n) {
           root.removeChild(n);
         }, root.childNodes);
       },
 
-      _display: function () {
+      _display: function() {
         var root = Polymer.dom(this.root);
         var r = document.createElement(this.route);
         r.routeParams = this.params;
         r.queryString = this.queryString;
         root.appendChild(r);
-        this.fire("iron-signal", {name: "route-changed", data: {route: this.route, params: this.params}});
+        this.fire('iron-signal', {name: 'route-changed', data: {route: this.route, params: this.params}});
 
-        if(!!window.ga && document.domain !== "localhost") {
+        if (!!window.ga && document.domain !== 'localhost') {
           window.ga('send', 'pageview');
         }
       }

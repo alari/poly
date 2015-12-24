@@ -9,27 +9,27 @@
 
   </template>
   <script>
-    (function () {
+    (function() {
       Polymer({
-        is: "node-form-route",
+        is: 'node-form-route',
         properties: {
           node: {
             type: Object,
             notify: true
           },
           routeParams: {
-            observer: "_params"
+            observer: '_params'
           },
           newKind: {
             type: String,
             value: null
           }
         },
-        _params: function (params) {
+        _params: function(params) {
           if (params && params.name) {
-            this.$.route.ref = "/api/nodes/" + params.name;
+            this.$.route.ref = '/api/nodes/' + params.name;
             this.$.route.noLoad = false;
-          } else if(params && params.kind) {
+          } else if (params && params.kind) {
             this.newKind = params.kind;
           }
         }

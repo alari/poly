@@ -67,7 +67,8 @@
         <div page="change">
           <h3>Будет новый</h3>
 
-          <paper-input label="Придумайте Пароль" value="{{password}}" type="password" minlength="6" auto-validate required></paper-input>
+          <paper-input label="Придумайте Пароль" value="{{password}}" type="password" minlength="6" auto-validate
+                       required></paper-input>
 
           <div class="error" hidden$="{{!failure}}">{{failure}}</div>
 
@@ -88,7 +89,7 @@
   </template>
   <script>
     Polymer({
-      is: "recover-route",
+      is: 'recover-route',
       properties: {
         email: {
           type: String,
@@ -111,42 +112,42 @@
         }
       },
 
-      attached: function(){
-        this._page = this.queryString ? "check" : "main";
-        if(this.queryString) {
+      attached: function() {
+        this._page = this.queryString ? 'check' : 'main';
+        if (this.queryString) {
           this.$.button.act();
         }
       },
 
-      _recoveryBody: function () {
+      _recoveryBody: function() {
         return {
           email: this.email
         };
       },
 
-      _checkBody: function () {
+      _checkBody: function() {
         return {
           token: this.queryString
         };
       },
 
-      _changeBody: function () {
+      _changeBody: function() {
         return {
           token: this.queryString,
           newPass: this.password
         };
       },
 
-      _sent: function () {
-        this._page = "success";
+      _sent: function() {
+        this._page = 'success';
       },
 
       _correct: function() {
-        this._page = "change";
+        this._page = 'change';
       },
 
       _ok: function() {
-        page("/");
+        page('/');
       }
     });
   </script>

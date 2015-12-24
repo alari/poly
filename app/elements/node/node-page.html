@@ -12,7 +12,8 @@
     }
   </style>
   <template>
-    <page-info title="{{node.title}}" type="article" url="{{nodeUrl(node)}}" description="{{nodeDescription(node)}}"></page-info>
+    <page-info title="{{node.title}}" type="article" url="{{nodeUrl(node)}}"
+               description="{{nodeDescription(node)}}"></page-info>
 
     <paper-material elevation="1">
       <div class="container">
@@ -29,7 +30,7 @@
   </template>
   <script>
     Polymer({
-      is: "node-page",
+      is: 'node-page',
 
       properties: {
         node: {
@@ -38,16 +39,16 @@
         }
       },
 
-      nodeUrl: function () {
+      nodeUrl: function() {
         if (!!this.node) {
-          return "/nodes/" + this.node.id;
+          return '/nodes/' + this.node.id;
         } else {
-          return "/";
+          return '/';
         }
       },
 
       nodeDescription: function() {
-        if (!! this.node && this.node.text && this.node.text.content) {
+        if (!!this.node && this.node.text && this.node.text.content) {
           return this.node.text.content.substr(0, 255);
         } else {
           return null;

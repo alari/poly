@@ -9,8 +9,8 @@
   </template>
 
   <script>
-    (function () {
-      "use strict";
+    (function() {
+      'use strict';
 
       var md = new Remarkable('full', {
         html: false,        // Enable HTML tags in source
@@ -30,9 +30,12 @@
       // https://youtu.be/Zz7CwhjYF8o
       // http://www.youtube.com/watch?v=VotMV5vs1kQ
 
-      var parseYoutube = function (state) {
-        var ch, v = "", t = "", shortLink = false,
-            pos = state.pos;
+      var parseYoutube = function(state) {
+        var ch;
+        var v = '';
+        var t = '';
+        var shortLink = false;
+        var pos = state.pos;
 
         ch = state.src.charCodeAt(pos);
         if (ch !== 0x5B/* [ */) {
@@ -153,17 +156,19 @@
 
         while (!!ch && ch !== 0x5D/* ] */ && ch !== 0x3F/* ? */ && ch !== 0x26/* & */) {
           ch = state.src.charCodeAt(++pos);
-          if(ch !== 0x5D/* ] */ && ch !== 0x3F/* ? */ && ch !== 0x26/* & */) {
+          if (ch !== 0x5D/* ] */ && ch !== 0x3F/* ? */ && ch !== 0x26/* & */) {
             v += state.src.charAt(pos);
           }
         }
 
-        if ((ch === 0x26/* & */ || ch === 0x3F/* ? */) && state.src.charCodeAt(pos + 1) === 0x74/* t */ && state.src.charCodeAt(pos + 2) === 0x3D/* = */) {
+        if (
+            (ch === 0x26/* & */ || ch === 0x3F/* ? */) &&
+            state.src.charCodeAt(pos + 1) === 0x74/* t */ && state.src.charCodeAt(pos + 2) === 0x3D/* = */) {
           pos += 2;
           ch = state.src.charCodeAt(pos);
           while (ch !== 0x5D/* ] */ && ch !== 0x3F/* ? */ && ch !== 0x26/* & */) {
             ch = state.src.charCodeAt(++pos);
-            if(ch !== 0x5D/* ] */ && ch !== 0x3F/* ? */ && ch !== 0x26/* & */) {
+            if (ch !== 0x5D/* ] */ && ch !== 0x3F/* ? */ && ch !== 0x26/* & */) {
               t += state.src.charAt(pos);
             }
           }
@@ -183,14 +188,14 @@
 
         return true;
       };
-      var renderYoutube = function (tokens, idx) {
+      var renderYoutube = function(tokens, idx) {
         return '<google-youtube video-id="' + tokens[idx].v + '"></google-youtube>';
       };
       md.inline.ruler.push('youtube', parseYoutube);
       md.renderer.rules.youtube = renderYoutube;
 
       Polymer({
-        is: "render-remarkable",
+        is: 'render-remarkable',
         properties: {
           input: {
             type: String,
@@ -200,13 +205,16 @@
         listeners: {
           'input-changed': 'inputChanged'
         },
-        render: function () {
-          this.$.output.innerHTML = !!this.input ? md.render(this.input.replace(/https?:\/\/(www.)?(youtu.be|youtube.com)\/[^\s]+/gi, function(x){return "[" + x + "]";})) : "";
+        render: function() {
+          this.$.output.innerHTML = !!this.input ?
+              md.render(this.input.replace(/https?:\/\/(www.)?(youtu.be|youtube.com)\/[^\s]+/gi, function(x) {
+            return '[' + x + ']';
+          })) : '';
         },
-        inputChanged: function () {
+        inputChanged: function() {
           this.render();
         },
-        attached: function () {
+        attached: function() {
           this.render();
         }
       });

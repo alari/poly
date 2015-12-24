@@ -1,4 +1,4 @@
-<dom-module id="node-snippet">
+<dom-module id='node-snippet'>
   <style>
     paper-material {
       background-color: white;
@@ -6,36 +6,38 @@
       padding: .5rem;
       margin: 0 auto;
     }
+
     h2 {
       padding-left: .75rem;
     }
+
     #titleLink {
       color: #333;
       text-decoration: none;
     }
   </style>
   <template>
-    <meta-resource model="{{item}}" expand="user">
-      <paper-material elevation="1">
+    <meta-resource model='{{item}}' expand='user'>
+      <paper-material elevation='1'>
 
-        <h2><a href$="[[itemHref(item)]]" id="titleLink">{{item.title}}</a></h2>
+        <h2><a href$='[[itemHref(item)]]' id='titleLink'>{{item.title}}</a></h2>
 
-        <node-settings node="{{item}}"></node-settings>
+        <node-settings node='{{item}}'></node-settings>
 
       </paper-material>
     </meta-resource>
   </template>
   <script>
     Polymer({
-      is: "node-snippet",
+      is: 'node-snippet',
       properties: {
         item: {
           type: Object,
           notify: true
         }
       },
-      itemHref: function (item) {
-        return "/nodes/" + item.id;
+      itemHref: function(item) {
+        return '/nodes/' + item.id;
       }
     });
   </script>

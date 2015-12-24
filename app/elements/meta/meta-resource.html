@@ -8,12 +8,12 @@
   </template>
   <script>
     Polymer({
-      is: "meta-resource",
+      is: 'meta-resource',
       properties: {
         model: {
           type: Object,
           notify: true,
-          observer: "_modelChanged"
+          observer: '_modelChanged'
         },
         expand: {
           type: String
@@ -23,41 +23,41 @@
         'action': '_action'
       },
       observers: [
-        "_subscribeToIron(model.meta.href)"
+        '_subscribeToIron(model.meta.href)'
       ],
-      attached: function () {
+      attached: function() {
         this._subscribeToIron();
-        if (!!this.model && R.equals(R.keys(this.model), ["meta"])) {
+        if (!!this.model && R.equals(R.keys(this.model), ['meta'])) {
           this._action({
             detail: {
               updateModel: true,
-              method: "GET",
-              suffix: this.expand && ("expand=" + this.expand)
+              method: 'GET',
+              suffix: this.expand && ('expand=' + this.expand)
             }
           });
         }
       },
-      _modelChanged: function (n, o) {
-        if (n && (!o || n.meta !== o.meta) && R.equals(R.keys(this.model), ["meta"])) {
+      _modelChanged: function(n, o) {
+        if (n && (!o || n.meta !== o.meta) && R.equals(R.keys(this.model), ['meta'])) {
           this._action({
             detail: {
               updateModel: true,
-              method: "GET",
-              suffix: this.expand && ("expand=" + this.expand)
+              method: 'GET',
+              suffix: this.expand && ('expand=' + this.expand)
             }
           });
         }
       },
-      _subscribeToIron: function () {
+      _subscribeToIron: function() {
         if (this.model && this.model.meta && this.model.meta.href) {
-          this.$.signals.addEventListener("iron-signal-" + this.model.meta.href, this._ironSignalListener.bind(this));
+          this.$.signals.addEventListener('iron-signal-' + this.model.meta.href, this._ironSignalListener.bind(this));
         }
       },
-      _ironSignalListener: function (e) {
+      _ironSignalListener: function(e) {
         var data = e.detail;
-        var compare = function (arr) {
-          return function (v) {
-            return R.any(function (a) {
+        var compare = function(arr) {
+          return function(v) {
+            return R.any(function(a) {
               return !(a === v || (a.meta && v.meta && a.meta.href === v.meta.href));
             }, arr);
           };
@@ -65,38 +65,38 @@
         if (data.meta.href !== this.model.meta.href) {
           return;
         }
-        R.forEach(function (k) {
-          this.set("model." + k, data.$set[k]);
+        R.forEach(function(k) {
+          this.set('model.' + k, data.$set[k]);
         }.bind(this), R.keys(data.$set));
 
-        R.forEach(function (k) {
-          this.set("model." + k, false);
+        R.forEach(function(k) {
+          this.set('model.' + k, false);
         }.bind(this), R.keys(data.$unset));
 
-        R.forEach(function (k) {
+        R.forEach(function(k) {
           this.model[k] = R.filter(compare(data.$pull[k]), this.model[k]);
         }.bind(this), R.keys(data.$pull));
 
-        R.forEach(function (k) {
+        R.forEach(function(k) {
           this.model[k] = R.concat(data.$prepend[k], this.model[k]);
         }.bind(this), R.keys(data.$prepend));
 
-        R.forEach(function (k) {
+        R.forEach(function(k) {
           this.model[k] = R.concat(data.$append[k], this.model[k]);
         }.bind(this), R.keys(data.$append));
 
-        R.forEach(function (k) {
-              this.notifyPath("model." + k, this.model[k]);
+        R.forEach(function(k) {
+              this.notifyPath('model.' + k, this.model[k]);
             }.bind(this), R.uniq(
-                R.concat(
-                    R.concat(R.keys(data.$append), R.keys(data.$prepend)),
-                    R.keys(data.$pull)
-                )
+            R.concat(
+                R.concat(R.keys(data.$append), R.keys(data.$prepend)),
+                R.keys(data.$pull)
+            )
             )
         );
 
       },
-      _action: function (e) {
+      _action: function(e) {
         if (this.model && this.model.meta && (!e.detail.href || (e.detail.href === this.model.meta.href))) {
           if (!!e.stopPropagation) {
             e.stopPropagation();
@@ -108,15 +108,15 @@
               'Content-Type': 'application/json'
             }
           };
-          if (e.detail.method !== "GET") {
+          if (e.detail.method !== 'GET') {
             this.$.fetch.params.body = JSON.stringify(e.detail.body || this.model);
           }
-          this.$.fetch.url = this.model.meta.href + (Boolean(e.detail.action) ? "/actions/" + e.detail.action : "");
+          this.$.fetch.url = this.model.meta.href + (Boolean(e.detail.action) ? '/actions/' + e.detail.action : '');
           if (e.detail.suffix) {
-            this.$.fetch.url += ((this.$.fetch.url.indexOf("?") > -1 ? "&" : "?") + e.detail.suffix);
+            this.$.fetch.url += ((this.$.fetch.url.indexOf('?') > -1 ? '&' : '?') + e.detail.suffix);
           }
           if (e.detail.noContent) {
-            this.$.fetch.url += this.$.fetch.url.indexOf("?") > -1 ? "&_noContent" : "?_noContent";
+            this.$.fetch.url += this.$.fetch.url.indexOf('?') > -1 ? '&_noContent' : '?_noContent';
           }
           this.button = e.target;
           this.updateModel = e.detail.updateModel;
@@ -124,10 +124,10 @@
           this.$.fetch.generateRequest();
         }
       },
-      _handleResp: function (event, v, updateModel) {
+      _handleResp: function(event, v, updateModel) {
         if (!!this.button) {
-          this.button.fire("complete", v);
-          this.button.fire(!!v.failure ? "failure" : "success", v);
+          this.button.fire('complete', v);
+          this.button.fire(!!v.failure ? 'failure' : 'success', v);
           this.button = null;
         }
         if (updateModel) {
@@ -136,14 +136,14 @@
         this.updateErrorModel = false;
         this.updateModel = false;
       },
-      _respJson: function (e) {
-        this._handleResp("complete", e.detail, this.updateModel);
+      _respJson: function(e) {
+        this._handleResp('complete', e.detail, this.updateModel);
       },
-      _respText: function (e) {
-        this._handleResp("complete", e.detail, this.updateModel);
+      _respText: function(e) {
+        this._handleResp('complete', e.detail, this.updateModel);
       },
-      _respErrorText: function (e) {
-        this._handleResp("error", e.detail, this.updateErrorModel);
+      _respErrorText: function(e) {
+        this._handleResp('error', e.detail, this.updateErrorModel);
       }
     });
   </script>

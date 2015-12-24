@@ -68,19 +68,19 @@
   </template>
   <script>
     Polymer({
-      is: "mr-menu",
+      is: 'mr-menu',
       properties: {
         selected: {
           type: String,
-          observer: "_onSelected"
+          observer: '_onSelected'
         }
       },
-      _onSelected: function () {
+      _onSelected: function() {
         if (this.selected !== page.current) {
           page(this.selected);
         }
       },
-      _routeChanged: function () {
+      _routeChanged: function() {
         this.selected = page.current;
       }
     });

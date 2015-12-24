@@ -7,7 +7,7 @@
     <page-info title="Знание и Творчество"></page-info>
 
     <meta-route with-stream ref$="{{nodesHref(kinds.splices)}}"
-                expand="items.{text,user},agg.{count,kind.distinct.count}" model="{{lastJson}}">
+                expand="items.user,agg.{count,kind.distinct.count}" model="{{lastJson}}">
 
       <kinds-tabs values="{{kinds}}" kinds-agg="{{lastJson.agg.kind}}"></kinds-tabs>
 
@@ -19,16 +19,16 @@
 
   <script>
     Polymer({
-      is: "nodes-route",
+      is: 'nodes-route',
       properties: {
         kinds: {
           type: Array,
-          value: ["Post", "Article", "Prose", "Poetry"]
+          value: ['Post', 'Article', 'Prose', 'Poetry']
         }
       },
 
-      nodesHref: function () {
-        return "/api/nodes?kinds=" + R.join(',', R.sortBy(R.toLower, this.kinds));
+      nodesHref: function() {
+        return '/api/nodes?kinds=' + R.join(',', R.sortBy(R.toLower, this.kinds));
       }
     });
   </script>

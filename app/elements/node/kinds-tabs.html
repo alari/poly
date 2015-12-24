@@ -38,27 +38,27 @@
   </template>
 
   <script>
-    (function () {
-      "use strict";
+    (function() {
+      'use strict';
 
       var titles = {
-        Post: "Посты",
-        Article: "Статьи",
-        Prose: "Проза",
-        Poetry: "Поэзия",
-        Label: "Раздел"
+        Post: 'Посты',
+        Article: 'Статьи',
+        Prose: 'Проза',
+        Poetry: 'Поэзия',
+        Label: 'Раздел'
       };
 
       Polymer({
-        is: "kinds-tabs",
+        is: 'kinds-tabs',
         properties: {
           values: {
             type: Array,
             value: [
-              "Post",
-              "Article",
-              "Prose",
-              "Poetry"
+              'Post',
+              'Article',
+              'Prose',
+              'Poetry'
             ],
             notify: true
           },
@@ -67,15 +67,15 @@
             value: null
           }
         },
-        availableKinds: function () {
-          return this.kindsAgg && R.map(function (i) {
+        availableKinds: function() {
+          return this.kindsAgg && R.map(function(i) {
                 i.title = titles[i.value];
                 return i;
-              }, R.filter(function (v) {
-                return v.value !== "Label";
+              }, R.filter(function(v) {
+                return v.value !== 'Label';
               }, this.kindsAgg.distinct));
         },
-        hideTabs: function () {
+        hideTabs: function() {
           return this.kindsAgg && R.length(this.availableKinds()) <= 1;
         }
       });

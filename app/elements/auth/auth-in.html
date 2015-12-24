@@ -11,6 +11,7 @@
       border-color: var(--paper-orange-500);
       background-color: var(--paper-orange-50);
     }
+
     #dialog.PUT, #dialog.PUT a {
       color: var(--paper-orange-500);
     }
@@ -63,7 +64,8 @@
 
         <gold-email-input label="Email" value="{{email}}" required autofocus id="email"
                           auto-validate></gold-email-input>
-        <paper-input label="Пароль" value="{{password}}" type="password" minlength="6" auto-validate required></paper-input>
+        <paper-input label="Пароль" value="{{password}}" type="password" minlength="6" auto-validate
+                     required></paper-input>
 
         <div class="error" hidden$="{{!failure}}">{{failure}}</div>
 
@@ -83,10 +85,10 @@
 
   </template>
   <script>
-    (function () {
-      "use strict";
+    (function() {
+      'use strict';
       Polymer({
-        is: "auth-in",
+        is: 'auth-in',
         properties: {
           email: {
             type: String,
@@ -100,23 +102,23 @@
           },
           method: {
             type: String,
-            value: "PUT",
+            value: 'PUT',
             notify: true
           }
         },
 
-        _signupBody: function () {
+        _signupBody: function() {
           return {
-            provider: "email",
+            provider: 'email',
             email: this.email,
             password: this.password
           };
         },
 
-        _buttonTitle: function () {
+        _buttonTitle: function() {
           return {
-            PUT: "Зарегистрироваться",
-            POST: "Войти"
+            PUT: 'Зарегистрироваться',
+            POST: 'Войти'
           }[this.method];
         },
 
@@ -124,17 +126,17 @@
           this.$.button.act();
         },
 
-        toggle: function () {
+        toggle: function() {
           this.$.dialog.toggle();
         },
 
-        close: function () {
+        close: function() {
           this.$.dialog.close();
           this.email = null;
           this.password = null;
         },
 
-        open: function () {
+        open: function() {
           this.$.dialog.open();
         }
       });

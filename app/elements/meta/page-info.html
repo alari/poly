@@ -1,21 +1,21 @@
 <dom-module id="page-info">
   <script>
 
-    (function () {
+    (function() {
 
-      var elements = [],
-          head = Polymer.dom(document.head),
-          defaults = {
-            title: document.title,
-            url: head.querySelector('meta[property="og:url"]').getAttribute("content"),
-            type: head.querySelector('meta[property="og:type"]').getAttribute("content"),
-            image: head.querySelector('meta[property="og:image"]').getAttribute("content"),
-            description: head.querySelector('meta[property="og:description"]').getAttribute("content")
-          };
+      var elements = [];
+      var head = Polymer.dom(document.head);
+      var defaults = {
+        title: document.title,
+        url: head.querySelector('meta[property="og:url"]').getAttribute('content'),
+        type: head.querySelector('meta[property="og:type"]').getAttribute('content'),
+        image: head.querySelector('meta[property="og:image"]').getAttribute('content'),
+        description: head.querySelector('meta[property="og:description"]').getAttribute('content')
+      };
       head.removeChild(head.querySelector('meta[name="fragment"]'));
 
       Polymer({
-        is: "page-info",
+        is: 'page-info',
         properties: {
           title: {
             type: String,
@@ -53,17 +53,17 @@
           }
         },
         observers: [
-          "_notice(noBind, title, url, type, description, image)"
+          '_notice(noBind, title, url, type, description, image)'
         ],
-        attached: function () {
-          if(elements.length > 0) {
+        attached: function() {
+          if (elements.length > 0) {
             var e = elements[0];
             this.title = e.title;
           }
           elements.push(this);
           this._notice();
         },
-        detached: function () {
+        detached: function() {
           this.title = null;
           this.url = null;
           this.type = null;
@@ -71,22 +71,23 @@
           this.description = null;
           this._notice();
           var t = this;
-          elements = R.reject(function (v) {
+          elements = R.reject(function(v) {
             return v === t;
           }, elements);
         },
-        _notice: function () {
+        _notice: function() {
           if (!this.noBind) {
             document.title = this.title || defaults.title;
 
-            head.querySelector('meta[property="og:title"]').setAttribute("content", document.title);
-            head.querySelector('meta[property="og:url"]').setAttribute("content", this.url ? (defaults.url + this.url) : defaults.url);
-            head.querySelector('meta[property="og:type"]').setAttribute("content", this.type || defaults.type);
-            head.querySelector('meta[property="og:image"]').setAttribute("content", this.image || defaults.image);
-            head.querySelector('meta[property="og:description"]').setAttribute("content", this.description || defaults.description);
+            head.querySelector('meta[property="og:title"]').setAttribute('content', document.title);
+            head.querySelector('meta[property="og:url"]')
+                .setAttribute('content', this.url ? (defaults.url + this.url) : defaults.url);
+            head.querySelector('meta[property="og:type"]').setAttribute('content', this.type || defaults.type);
+            head.querySelector('meta[property="og:image"]').setAttribute('content', this.image || defaults.image);
+            head.querySelector('meta[property="og:description"]')
+                .setAttribute('content', this.description || defaults.description);
 
-
-            R.map(function (e) {
+            R.map(function(e) {
               e.title = this.title;
               e.url = this.url;
               e.type = this.type;

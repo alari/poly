@@ -4,7 +4,7 @@
   </template>
   <script>
     Polymer({
-      is: "meta-button",
+      is: 'meta-button',
       properties: {
         for: {
           type: Object,
@@ -17,7 +17,7 @@
         },
         method: {
           type: String,
-          value: "POST",
+          value: 'POST',
           reflectToAttribute: true
         },
         body: {
@@ -33,7 +33,7 @@
         },
         suffix: {
           type: String,
-          value: "",
+          value: '',
           reflectToAttribute: true
         },
         failure: {
@@ -44,8 +44,8 @@
       },
 
       listeners: {
-        click: "act",
-        failure: "_failure"
+        click: 'act',
+        failure: '_failure'
       },
 
       _failure: function(v) {
@@ -55,7 +55,7 @@
       act: function() {
         var href = (!!this.for && this.for.meta) ? this.for.meta.href : null;
         this.failure = null;
-        this.fire("action", {
+        this.fire('action', {
           href: href,
           action: this.action,
           method: this.method,

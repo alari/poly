@@ -3,6 +3,7 @@
     :root {
       display: inline;
     }
+
     a#ul {
       color: var(--link-color);
       text-decoration: none;
@@ -10,11 +11,13 @@
     }
   </style>
   <template>
-    <a id="ul" href$="{{ userHref(user.id) }}"><iron-icon icon="social:person"></iron-icon> <span>{{ user.name }}</span></a>
+    <a id="ul" href$="{{ userHref(user.id) }}">
+      <iron-icon icon="social:person"></iron-icon>
+      <span>{{ user.name }}</span></a>
   </template>
   <script>
     Polymer({
-      is: "user-link",
+      is: 'user-link',
       properties: {
         user: {
           type: Object,
@@ -22,10 +25,10 @@
         }
       },
       userHref: function(id) {
-        if(id) {
-          return "/user/"+id;
+        if (id) {
+          return '/user/' + id;
         } else {
-          return "/user";
+          return '/user';
         }
       }
     });

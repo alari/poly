@@ -30,7 +30,7 @@
   </template>
   <script>
     Polymer({
-      is: "meta-route",
+      is: 'meta-route',
       properties: {
         ref: {
           type: String,
@@ -44,7 +44,7 @@
         expand: {
           type: String,
           notify: true,
-          value: ""
+          value: ''
         },
         withStream: {
           type: Boolean,
@@ -56,7 +56,7 @@
           value: false
         },
         params: {
-          computed: "_computeParams(expand, withStream)"
+          computed: '_computeParams(expand, withStream)'
         },
         noSpinner: {
           type: Boolean,
@@ -64,34 +64,34 @@
         }
       },
       observers: [
-        "_openStream(model.meta.stream)"
+        '_openStream(model.meta.stream)'
       ],
-      _spinnerHidden: function () {
+      _spinnerHidden: function() {
         return this.noSpinner || this.noLoad || (this.model && !this.model._noPreload);
       },
-      attached: function () {
+      attached: function() {
         if (!this.model && this.ref) {
           this.model = {
             meta: {
               href: this.ref,
-              mediaType: "application/json;expand=" + this.expand
+              mediaType: 'application/json;expand=' + this.expand
             },
             _noPreload: true
           };
         }
       },
-      _computeParams: function (expand, withStream) {
+      _computeParams: function(expand, withStream) {
         if (!!expand || withStream) {
           return {
             headers: {
-              Accept: "application/json;" + (expand ? ("expand=" + expand) : "") + (withStream ? "&_withStream" : "")
+              Accept: 'application/json;' + (expand ? ('expand=' + expand) : '') + (withStream ? '&_withStream' : '')
             }
           };
         } else {
           return {};
         }
       },
-      _openStream: function () {
+      _openStream: function() {
         if (!!window.EventSource) {
           if (!!this.stream) {
             this.stream.close();
@@ -99,14 +99,14 @@
           if (this.model && this.model.meta && this.model.meta.stream) {
             this.stream = new window.EventSource(this.model.meta.stream);
             var self = this;
-            this.stream.onmessage = function (e) {
+            this.stream.onmessage = function(e) {
               var data = JSON.parse(e.data);
-              self.fire("iron-signal", {name: data.meta.href, data: data});
+              self.fire('iron-signal', {name: data.meta.href, data: data});
             };
           }
         }
       },
-      detached: function () {
+      detached: function() {
         if (!!this.stream) {
           this.stream.close();
         }

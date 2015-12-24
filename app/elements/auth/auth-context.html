@@ -11,27 +11,27 @@
 
   </template>
   <script>
-    (function () {
-      "use strict";
-      var defaultMeta = function () {
+    (function() {
+      'use strict';
+      var defaultMeta = function() {
         return {
-          href: "/api/auth",
-          mediaType: "application/auth-status+json;expand=user"
+          href: '/api/auth',
+          mediaType: 'application/auth-status+json;expand=user'
         };
       };
       Polymer({
-        is: "auth-context",
+        is: 'auth-context',
         properties: {
           _resp: {
             type: Object,
-            observer: "_authResp",
+            observer: '_authResp',
             value: null,
             notify: true
           },
           _user: {
             type: Object,
             notify: true,
-            observer: "_userSet"
+            observer: '_userSet'
           },
           user: {
             type: Object,
@@ -50,23 +50,23 @@
         },
 
         observers: [
-          "_rolesSet(_roles.splices)"
+          '_rolesSet(_roles.splices)'
         ],
 
-        _userSet: function () {
+        _userSet: function() {
           this._setUser(this._user);
         },
 
-        _rolesSet: function () {
+        _rolesSet: function() {
           this._setRoles(this._roles);
         },
 
-        _authResp: function () {
+        _authResp: function() {
           if (!!this._resp && !this._resp.failure) {
             this.$.user.setUser(this._resp.user);
             this.$.user.setRoles(this._resp.roles);
           } else {
-            if(this._resp) {
+            if (this._resp) {
               this._resp.meta = defaultMeta();
             }
             this.$.user.setUser(null);

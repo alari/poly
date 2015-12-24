@@ -1,14 +1,14 @@
 <dom-module id="auth-token">
   <script>
-    (function () {
-      "use strict";
+    (function() {
+      'use strict';
 
-      var token = "",
-          elements = [],
-          storageLoaded = false;
+      var token = '';
+      var elements = [];
+      var storageLoaded = false;
 
       new Polymer({
-        is: "auth-token",
+        is: 'auth-token',
 
         properties: {
           isEmpty: {
@@ -25,36 +25,36 @@
           }
         },
 
-        attached: function () {
+        attached: function() {
           elements.push(this);
           if (!storageLoaded && window.localStorage) {
-            this.setValue(window.localStorage.getItem("auth.token"));
+            this.setValue(window.localStorage.getItem('auth.token'));
           }
         },
 
-        detached: function () {
+        detached: function() {
           var t = this;
-          elements = R.reject(function (v) {
+          elements = R.reject(function(v) {
             return v === t;
           }, elements);
         },
 
-        getValue: function () {
+        getValue: function() {
           return token;
         },
 
-        setValue: function (v) {
+        setValue: function(v) {
           token = v;
-          R.map(function (e) {
+          R.map(function(e) {
             e._setNonEmpty(!!v);
             e._setIsEmpty(!e.nonEmpty);
           }, elements);
           if (window.localStorage) {
-            this.debounce("store-ls", function () {
+            this.debounce('store-ls', function() {
               if (!!token) {
-                window.localStorage.setItem("auth.token", token);
+                window.localStorage.setItem('auth.token', token);
               } else {
-                window.localStorage.removeItem("auth.token");
+                window.localStorage.removeItem('auth.token');
               }
             });
           }

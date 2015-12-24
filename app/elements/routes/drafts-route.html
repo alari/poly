@@ -6,7 +6,8 @@
     <page-info title="Черновики"></page-info>
     <auth-user value="{{user}}"></auth-user>
 
-    <meta-route no-load with-stream ref="{{draftsHref(kinds.splices,user)}}" id="route" expand="items.{text,user},agg.{count,kind.distinct.count}"
+    <meta-route no-load with-stream ref="{{draftsHref(kinds.splices,user)}}" id="route"
+                expand="items.user,agg.{count,kind.distinct.count}"
                 model="{{lastJson}}">
 
       <kinds-tabs values="{{kinds}}" kinds-agg="{{lastJson.agg.kind}}"></kinds-tabs>
@@ -18,37 +19,40 @@
   </template>
   <script>
     Polymer({
-      is: "drafts-route",
+      is: 'drafts-route',
       properties: {
         user: {
           type: Object,
           notify: true,
-          observer: "_userChanged"
+          observer: '_userChanged'
         },
         kinds: {
           type: Array,
-          value: ["Post", "Article", "Prose", "Poetry"]
+          value: ['Post', 'Article', 'Prose', 'Poetry']
         }
       },
-      _userChanged: function () {
+      _userChanged: function() {
         this.$.route.ref = this.draftsHref();
       },
-      attached: function () {
+      attached: function() {
         this._userChanged();
       },
-      draftsHref: function () {
-        console.log("trying to load");
+      draftsHref: function() {
+        console.log('trying to load');
         if (!!this.user && this.user.id) {
-          console.log("trying to load", this.user.id, this.$.route.noLoad, "/api/nodes?draft=true&userId=" + this.user.id + "&kinds=" + R.join(',', R.sortBy(R.toLower, this.kinds)));
+          console.log('trying to load', this.user.id, this.$.route.noLoad,
+              '/api/nodes?draft=true&userId=' + this.user.id + '&kinds=' +
+              R.join(',', R.sortBy(R.toLower, this.kinds)));
           if (this.$.route.noLoad) {
             var r = this.$.route;
-            this.async(function () {
+            this.async(function() {
               r.noLoad = false;
             });
           }
-          return "/api/nodes?draft=true&userId=" + this.user.id + "&kinds=" + R.join(',', R.sortBy(R.toLower, this.kinds));
+          return '/api/nodes?draft=true&userId=' + this.user.id + '&kinds=' +
+              R.join(',', R.sortBy(R.toLower, this.kinds));
         } else {
-          console.log("noload");
+          console.log('noload');
           this.$.route.noLoad = true;
         }
       }

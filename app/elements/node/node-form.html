@@ -55,25 +55,28 @@
 
   </template>
   <script>
-    (function () {
-      var normalizeKind = function(kind){
-        return kind && R.trim( R.toUpper(kind.substr(0,1)) + R.toLower(kind.substr(1)) );
-      }, isContentKind = function (kind) {
+    (function() {
+      var normalizeKind = function(kind) {
+        return kind && R.trim(R.toUpper(kind.substr(0, 1)) + R.toLower(kind.substr(1)));
+      };
+      var isContentKind = function(kind) {
         var k = normalizeKind(kind);
-        return R.contains(k, ["Post", "Prose", "Article", "Poetry"]);
-      }, defaultNode = function (kind) {
+        return R.contains(k, ['Post', 'Prose', 'Article', 'Poetry']);
+      };
+
+      var defaultNode = function(kind) {
         var node = {
           meta: {
-            href: "/api/nodes",
-            mediaType: "application/node+json;expand=text"
+            href: '/api/nodes',
+            mediaType: 'application/node+json;expand=text'
           },
           kind: normalizeKind(kind),
-          title: "",
+          title: '',
           draft: true
         };
         if (isContentKind(kind)) {
           node.text = {
-            content: "",
+            content: '',
             version: 1
           };
         }
@@ -81,7 +84,7 @@
       };
 
       Polymer({
-        is: "node-form",
+        is: 'node-form',
         properties: {
           node: {
             type: Object,
@@ -90,35 +93,34 @@
           },
           newKind: {
             type: String,
-            observer: "_newKind"
+            observer: '_newKind'
           }
         },
 
-        availableKinds: function () {
+        availableKinds: function() {
           if (this.node && isContentKind(this.node.kind)) {
             return [
-              {kind: "Prose", title: "Проза"},
-              {kind: "Poetry", title: "Поэзия"},
-              {kind: "Post", title: "Пост"},
-              {kind: "Article", title: "Статья"}
+              {kind: 'Prose', title: 'Проза'},
+              {kind: 'Poetry', title: 'Поэзия'},
+              {kind: 'Post', title: 'Пост'},
+              {kind: 'Article', title: 'Статья'}
             ];
           } else {
             return [
-              {kind: "Label", title: "Раздел"}
+              {kind: 'Label', title: 'Раздел'}
             ];
           }
         },
 
-        _newKind: function () {
+        _newKind: function() {
           if (!!this.newKind) {
             this.node = defaultNode(this.newKind);
           }
         },
 
-
-        _saved: function (e) {
+        _saved: function(e) {
           if (e.detail && e.detail.id) {
-            page("/nodes/" + e.detail.id);
+            page('/nodes/' + e.detail.id);
           }
         }
       });

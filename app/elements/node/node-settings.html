@@ -15,7 +15,8 @@
 
         <paper-icon-button icon="editor:mode-edit" on-tap="gotoEdit"></paper-icon-button>
         <meta-button body$="{{computeDraftMetaBody(node.draft)}}" no-content for="{{node}}">
-          <paper-icon-button icon$="{{computeDraftIcon(node.draft)}}" title$="{{computeDraftTitle(node.draft)}}"></paper-icon-button>
+          <paper-icon-button icon$="{{computeDraftIcon(node.draft)}}"
+                             title$="{{computeDraftTitle(node.draft)}}"></paper-icon-button>
         </meta-button>
 
       </is-auth>
@@ -23,35 +24,35 @@
   </template>
   <script>
     Polymer({
-      is: "node-settings",
+      is: 'node-settings',
       properties: {
         node: {
           type: Object,
           notify: true
         }
       },
-      computeDraftIcon: function (node) {
+      computeDraftIcon: function(node) {
         if (!node || node.draft) {
-          return "visibility";
+          return 'visibility';
         } else {
-          return "visibility-off";
+          return 'visibility-off';
         }
       },
 
       computeDraftTitle: function() {
-        if(!!this.node) {
-          return this.node.draft ? "Черновик" : "Чистовик";
+        if (!!this.node) {
+          return this.node.draft ? 'Черновик' : 'Чистовик';
         } else {
-          return "";
+          return '';
         }
       },
 
-      computeDraftMetaBody: function () {
+      computeDraftMetaBody: function() {
         return {draft: this.node ? !this.node.draft : true};
       },
 
-      gotoEdit: function () {
-        page("/nodes/" + this.node.id + "/edit");
+      gotoEdit: function() {
+        page('/nodes/' + this.node.id + '/edit');
       }
     });
   </script>

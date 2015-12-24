@@ -82,10 +82,10 @@ Extended Header + List Left + Card Over Toolbar
           observer: '_isMobileChanged'
         }
       },
-      _listTap: function () {
+      _listTap: function() {
         this.$.drawerPanel.closeDrawer();
       },
-      _isMobileChanged: function (isMobile) {
+      _isMobileChanged: function(isMobile) {
         this.mainMode = isMobile ? 'seamed' : 'cover';
         this.drawerWidth = isMobile ? '100%' : '320px';
         this.toolbarClass = isMobile ? '' : 'tall';

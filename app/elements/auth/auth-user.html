@@ -1,12 +1,14 @@
 <dom-module id="auth-user">
   <script>
-    (function () {
-      "use strict";
+    (function() {
+      'use strict';
 
-      var user = null, roles = [], elements = [];
+      var user = null;
+      var roles = [];
+      var elements = [];
 
       new Polymer({
-        is: "auth-user",
+        is: 'auth-user',
 
         properties: {
           value: {
@@ -24,29 +26,29 @@
           }
         },
 
-        attached: function () {
+        attached: function() {
           elements.push(this);
           this._setValue(user);
           this._setRoles(roles);
         },
 
-        detached: function () {
+        detached: function() {
           var t = this;
-          elements = R.reject(function (v) {
+          elements = R.reject(function(v) {
             return v === t;
           }, elements);
         },
 
-        setUser: function (v) {
+        setUser: function(v) {
           user = v;
-          R.map(function (u) {
+          R.map(function(u) {
             u._setValue(v);
           }, elements);
         },
 
-        setRoles: function (v) {
+        setRoles: function(v) {
           roles = v;
-          R.map(function (u) {
+          R.map(function(u) {
             u._setRoles(v);
           }, elements);
         }

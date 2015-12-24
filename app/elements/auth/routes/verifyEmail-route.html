@@ -19,7 +19,8 @@
     <paper-material>
       <h2>Подтверждаем электропочту</h2>
 
-      <meta-button id="button" action="verifyEmail" for='{"meta":{"href":"/api/auth"}}' body="{{_tokenBody(queryString)}}"
+      <meta-button id="button" action="verifyEmail" for='{"meta":{"href":"/api/auth"}}'
+                   body="{{_tokenBody(queryString)}}"
                    on-success="_success">
       </meta-button>
 
@@ -30,32 +31,32 @@
   </template>
   <script>
     Polymer({
-      is: "verifyEmail-route",
+      is: 'verifyEmail-route',
       properties: {
         queryString: {
           type: String,
           notify: true,
-          observer: "paramsBound"
+          observer: 'paramsBound'
         }
       },
 
-      paramsBound: function () {
+      paramsBound: function() {
         var b = this.$.button;
         if (!!this.queryString && !this.launched) {
           this.launched = true;
 
-          this.async(function () {
+          this.async(function() {
             b.act();
           });
         }
       },
-      _tokenBody: function () {
+      _tokenBody: function() {
         return {
           token: this.queryString
         };
       },
-      _success: function () {
-        page("/");
+      _success: function() {
+        page('/');
       }
     });
   </script>

@@ -19,7 +19,7 @@
   </template>
   <script>
     Polymer({
-      is: "mr-pager",
+      is: 'mr-pager',
       properties: {
         model: {
           type: Object,
@@ -31,32 +31,34 @@
           value: 10
         },
         page: {
-          computed: "_page(model,perPage)"
+          computed: '_page(model,perPage)'
         },
         pagesTotal: {
-          computed: "_pagesTotal(model,perPage)"
+          computed: '_pagesTotal(model,perPage)'
         }
       },
       _page: function() {
         return this.model && this.model.offset ? this.model.offset / this.perPage : 0;
       },
       _pagesTotal: function() {
-        return this.model && this.model.agg && this.model.agg.count ? Math.floor(this.model.agg.count / this.perPage) : 0;
+        return this.model && this.model.agg && this.model.agg.count ?
+            Math.floor(this.model.agg.count / this.perPage) : 0;
       },
       currPage: function() {
-        return  (this.page + 1) + " / " + (this.pagesTotal + 1);
+        return (this.page + 1) + ' / ' + (this.pagesTotal + 1);
       },
-      hideNext: function () {
+      hideNext: function() {
         return !this.model || !this.model.agg || this.model.agg.count <= (this.page + 1) * this.perPage;
       },
-      hidePrev: function () {
+      hidePrev: function() {
         return this.page <= 0;
       },
-      nextSuffix: function () {
-        return "offset=" + (this.page+1)*this.perPage + "&limit=" + this.perPage;
+      nextSuffix: function() {
+        return 'offset=' + (this.page + 1) * this.perPage + '&limit=' + this.perPage;
       },
-      prevSuffix: function () {
-        return this.filter + (this.filter ? "&" : "") + "offset=" + (this.page+1)*this.perPage + "&limit=" + this.perPage;
+      prevSuffix: function() {
+        return this.filter + (this.filter ? '&' : '') + 'offset=' + (this.page + 1) * this.perPage +
+            '&limit=' + this.perPage;
       }
     });
   </script>

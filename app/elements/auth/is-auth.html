@@ -8,16 +8,16 @@
     </template>
   </template>
   <script>
-    (function () {
-      "use strict";
+    (function() {
+      'use strict';
 
       Polymer({
-        is: "is-auth",
+        is: 'is-auth',
         properties: {
           value: {
             type: Boolean,
             notify: true,
-            computed: "computeValue(user, authUser)"
+            computed: 'computeValue(user, authUser)'
           },
           user: {
             type: Object,
@@ -30,7 +30,7 @@
             value: null
           }
         },
-        computeValue: function () {
+        computeValue: function() {
           return !!this.authUser && (!this.user || (this.user.meta.href === this.authUser.meta.href));
         }
       });

@@ -9,14 +9,14 @@
   </template>
   <script>
     Polymer({
-      is: "node-date",
+      is: 'node-date',
       properties: {
         node: {
           type: Object
         }
       },
-      nodeDate: function (item) {
-        return !!item ? new Date(item.dateCreated).toDateString() : "...";
+      nodeDate: function(item) {
+        return !!item ? new Date(item.dateCreated).toDateString() : '...';
       }
     });
   </script>
