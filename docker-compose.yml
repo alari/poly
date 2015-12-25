@@ -18,7 +18,7 @@ api:
   restart: always
 
 mongodb:
-  image: mongo:3.1
+  image: mongo:3.2
   volumes:
     - ./mongo:/data/db
   restart: always
